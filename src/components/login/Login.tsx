@@ -1,18 +1,14 @@
-import React from "react";
-import "./register.css";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { regexEmail } from "../../helpers/user";
+import { Link } from "react-router-dom";
 
 type Inputs = {
-  name: string;
   email: string;
   password: string;
-  confirmPassword: string;
 };
-const Register = () => {
+const Login = () => {
   const notifyError = (error: string) => toast.error(error);
   const notifySuccess = (success: string) =>
     toast.success(success, { icon: "🚀" });
@@ -28,20 +24,13 @@ const Register = () => {
   function checkValidated(data: Inputs): void {
     if (!regexEmail(data.email)) {
       notifyError("Please check your email again");
-    } else if (!data.name) {
-      notifyError("Please check your name again");
     } else if (!data.password) {
       notifyError("Please check your password again");
-    } else if (!data.confirmPassword) {
-      notifyError("Please check your confirm password again");
-    } else if (data.password !== data.confirmPassword) {
-      notifyError("Password incorrect");
     } else {
       notifySuccess("successfully 👌");
-      console.log(data);
+      // console.log(data);
     }
   }
-
   return (
     <div className="img js-fullheight body-container">
       <section className="ftco-section">
@@ -55,25 +44,12 @@ const Register = () => {
             <div className="col-md-6 col-lg-4">
               <div className="login-wrap p-0">
                 <h3 className="mb-4 text-center text-white hover:text-[#00ff50]">
-                  <Link to="/login">Have an account?</Link>
+                  <Link to="/register">No account?</Link>
                 </h3>
                 <form
                   onSubmit={handleSubmit(registerSubmit)}
                   className="signin-form"
                 >
-                  <div className="form-group text-center">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Name"
-                      {...register("name", { required: true, maxLength: 30 })}
-                    />
-                    {errors.name && (
-                      <span className="text-[#00ff50] font-serif text-xs block -mb-4 ">
-                        This field is required & maximum 30 characters
-                      </span>
-                    )}
-                  </div>
                   <div className="form-group text-center">
                     <input
                       type="email"
@@ -105,30 +81,12 @@ const Register = () => {
                     )}
                     <span className="fa fa-fw fa-eye field-icon toggle-password" />
                   </div>
-                  <div className="form-group text-center">
-                    <input
-                      type="password"
-                      className="form-control"
-                      placeholder="Confirm-Password"
-                      {...register("confirmPassword", {
-                        required: true,
-                        maxLength: 30,
-                        minLength: 7,
-                      })}
-                    />
-                    {errors.confirmPassword && (
-                      <span className="text-[#00ff50] font-serif text-xs block -mb-4 ">
-                        This field is required & allowed characters from 7 to 30
-                      </span>
-                    )}
-                    <span className="fa fa-fw fa-eye field-icon toggle-password" />
-                  </div>
                   <div className="form-group">
                     <button
                       type="submit"
                       className="form-control btn btn-primary submit px-3"
                     >
-                      Register
+                      Login
                     </button>
                   </div>
                 </form>
@@ -142,4 +100,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
