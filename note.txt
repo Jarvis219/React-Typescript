@@ -1,0 +1,14 @@
+userEffect 
+    - update dom
+    - call api
+    - list dom events
+    - cleaup/remove listener/unsubscribe/clear time
+
+
+userEffect(callback)
+    - callback when component re-render
+    - running after dom loaded
+userEffect(callback, [])
+    - just only call callback when component mount
+userEffect(callback, [dependencies])
+    - callback call when dependencies change
