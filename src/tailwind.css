@@ -666,14 +666,14 @@ video {
   line-height: 1rem;
 }
 
-.text-\[\#00ff50\] {
-  --tw-text-opacity: 1;
-  color: rgba(0, 255, 80, var(--tw-text-opacity));
-}
-
 .text-white {
   --tw-text-opacity: 1;
   color: rgba(255, 255, 255, var(--tw-text-opacity));
+}
+
+.text-\[\#00ff50\] {
+  --tw-text-opacity: 1;
+  color: rgba(0, 255, 80, var(--tw-text-opacity));
 }
 
 .hover\:text-\[\#00ff50\]:hover {

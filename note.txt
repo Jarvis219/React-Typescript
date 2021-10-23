@@ -12,3 +12,16 @@ userEffect(callback, [])
     - just only call callback when component mount
 userEffect(callback, [dependencies])
     - callback call when dependencies change
+
+### react redux
+
+    view->actions->store->view
+
+1 setup redux store
+    - reducers and root reducer
+    - action creators
+    -store
+2 setup redux provider
+    - allow redux store to be accessible from anywhere of the app
+3 connect to redux store from component
+    - using the two hook hehee

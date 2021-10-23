@@ -1,10 +1,9 @@
-import "./register.css";
-import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { regexEmail } from "../../helpers/user";
+import { regexEmail } from "../../../helpers/user";
+import "../css/auth.scss";
 
 type Inputs = {
   name: string;
