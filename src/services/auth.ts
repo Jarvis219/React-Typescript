@@ -14,3 +14,8 @@ export const Verify = (token: string) => {
   const url = `/verify-email?token=${token}`;
   return instance.get(url);
 };
+
+export const loginWithGoogleAccount = (user: any) => {
+  const url = `login-google`;
+  return instance.post(url, user);
+};

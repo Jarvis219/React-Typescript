@@ -17,3 +17,11 @@ export interface LoginData {
   email: string;
   password: string;
 }
+
+export interface DataGoogle {
+  uid: String;
+  photoURL: string;
+  name: string;
+  email: string;
+  confirmed: boolean;
+}

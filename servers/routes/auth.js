@@ -4,7 +4,9 @@ import {
     verifyEmail,
     verifyEmailCheck,
     signin,
-    signout
+    signout,
+    checkLoginWithGoogleAccount,
+    loginWithGoogleAccount
 } from '../controllers/auth'
 const router = express.Router();
 
@@ -16,6 +18,7 @@ router.post("/register", registerControllers);
 router.get("/verify-email", verifyEmail);
 // đăng nhập check email kích hoạt
 router.post("/login", verifyEmailCheck, signin);
+router.post("/login-google", checkLoginWithGoogleAccount, loginWithGoogleAccount);
 //đăng xuất email
 router.get('/signout', signout);
 module.exports = router

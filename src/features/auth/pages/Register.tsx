@@ -43,9 +43,8 @@ const Register = () => {
         const currentUser = unwrapResult(actionResult);
         notifySuccess(`${currentUser.message} 👌`);
         return;
-      } catch (error) {
-        console.log(error);
-        notifyError(`${error}`);
+      } catch (error: any) {
+        notifyError(error.response.data.error);
       }
     }
   };

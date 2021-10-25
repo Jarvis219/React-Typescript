@@ -10,9 +10,16 @@ const UserSchema = new mongoose.Schema({
         unique: true,
         trim: true,
     },
+    uid: {
+        type: String,
+        unique: true,
+        trim: true,
+    },
+    photoURL: {
+        type: String,
+    },
     hashed_password: {
         type: String,
-        required: true
     },
     name: {
         type: String,

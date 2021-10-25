@@ -628,3 +628,39 @@ exports.isAdmin = (req, res, next) => {
   }
   next();
 }
+
+export const checkLoginWithGoogleAccount = (req, res, next) => {
+  const {
+    uid
+  } = req.body;
+  User.findOne({
+    uid: uid
+  }).exec((err, data) => {
+    if (err) {
+      return res.status(401).json({
+        err
+      });
+    } else if (data == null) {
+      req.googleAccount = req.body;
+      next();
+    } else {
+      return res.json({
+        data,
+        message: 'Login with Google account successfully'
+      });
+    }
+  })
+}
+
+export const loginWithGoogleAccount = (req, res) => {
+  const user = new User(req.googleAccount);
+  user.save((err, data) => {
+    if (err) return res.status(401).json({
+      err
+    });
+    res.json({
+      data,
+      message: 'Login first with Google account successfully'
+    })
+  })
+}

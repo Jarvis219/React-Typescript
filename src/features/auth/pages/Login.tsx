@@ -33,10 +33,11 @@ const Login = () => {
         const actionResult: any = await dispatch(loginSlice(data));
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const currentUser = unwrapResult(actionResult);
+        // console.log(currentUser);
         notifySuccess("Login successfully 👌");
         history.push("/");
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        notifyError(error.response.data.error);
       }
     }
   };
