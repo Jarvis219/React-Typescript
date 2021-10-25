@@ -7,8 +7,7 @@ const hobbies = createSlice({
   reducers: {
     // actions
     addHobbies: (state: any, action: any) => {
-      console.log(state);
-      console.log(state.push(action.payload));
+      state.push(action.payload);
     },
   },
 });

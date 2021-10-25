@@ -1,13 +1,14 @@
-export const Hobby = (props: any) => {
-  // const { hobbies } = props;
+export const Hobby = ({ hobbies }: any) => {
+  console.log(hobbies);
   return (
     <div>
-      aa
-      {/* <ul>
+      <ul>
         {hobbies.map((item: any, index: number) => (
-          <li key={index}>{item.title}</li>
+          <li key={index}>
+            {item.name} : {item.email}
+          </li>
         ))}
-      </ul> */}
+      </ul>
     </div>
   );
 };

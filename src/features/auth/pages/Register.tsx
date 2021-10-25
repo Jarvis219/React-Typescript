@@ -3,28 +3,29 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { regexEmail } from "../../../helpers/user";
-import "../css/auth.scss";
+import "../css/auth.css";
+import { useDispatch } from "react-redux";
+import { Register as registerSlice } from "../authSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 type Inputs = {
   name: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  confirmPassword?: string;
 };
 const Register = () => {
+  const dispatch = useDispatch();
   const notifyError = (error: string) => toast.error(error);
   const notifySuccess = (success: string) =>
     toast.success(success, { icon: "🚀" });
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<Inputs>();
-  const registerSubmit: SubmitHandler<Inputs> = (data) => {
-    checkValidated(data);
-  };
 
-  function checkValidated(data: Inputs): void {
+  const registerSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     if (!regexEmail(data.email)) {
       notifyError("Please check your email again");
     } else if (!data.name) {
@@ -36,10 +37,18 @@ const Register = () => {
     } else if (data.password !== data.confirmPassword) {
       notifyError("Password incorrect");
     } else {
-      notifySuccess("successfully 👌");
-      console.log(data);
+      delete data.confirmPassword;
+      try {
+        const actionResult: any = await dispatch(registerSlice(data));
+        const currentUser = unwrapResult(actionResult);
+        notifySuccess(`${currentUser.message} 👌`);
+        return;
+      } catch (error) {
+        console.log(error);
+        notifyError(`${error}`);
+      }
     }
-  }
+  };
 
   return (
     <div className='img js-fullheight body-container'>
@@ -124,7 +133,11 @@ const Register = () => {
                   <div className='form-group'>
                     <button
                       type='submit'
-                      className='form-control btn btn-primary submit px-3'>
+                      className='form-control btn btn-primary submit px-3'
+                      disabled={isSubmitting}>
+                      {isSubmitting && (
+                        <span className='text-[#00ff50] spinner-border spinner-border-sm mr-1'></span>
+                      )}
                       Register
                     </button>
                   </div>

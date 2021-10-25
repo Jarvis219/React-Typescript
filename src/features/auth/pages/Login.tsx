@@ -2,13 +2,19 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { regexEmail } from "../../../helpers/user";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Login as loginSlice } from "../authSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { LoginGoogle } from "../../../components/loginGoogle/LoginGoogle";
 
 type Inputs = {
   email: string;
   password: string;
 };
 const Login = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const notifyError = (error: string) => toast.error(error);
   const notifySuccess = (success: string) =>
     toast.success(success, { icon: "🚀" });
@@ -17,20 +23,24 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
-  const registerSubmit: SubmitHandler<Inputs> = (data) => {
-    checkValidated(data);
-  };
-
-  function checkValidated(data: Inputs): void {
+  const registerSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     if (!regexEmail(data.email)) {
       notifyError("Please check your email again");
     } else if (!data.password) {
       notifyError("Please check your password again");
     } else {
-      notifySuccess("successfully 👌");
-      // console.log(data);
+      try {
+        const actionResult: any = await dispatch(loginSlice(data));
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const currentUser = unwrapResult(actionResult);
+        notifySuccess("Login successfully 👌");
+        history.push("/");
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }
+  };
+
   return (
     <div className='img js-fullheight body-container'>
       <section className='ftco-section'>
@@ -88,6 +98,8 @@ const Login = () => {
                     </button>
                   </div>
                 </form>
+                <p className='w-100 text-center'>— Or Sign In With —</p>
+                <LoginGoogle />
               </div>
             </div>
           </div>
