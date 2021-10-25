@@ -4,9 +4,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { regexEmail } from "../../../helpers/user";
 import "../css/auth.css";
-import { useDispatch } from "react-redux";
 import { Register as registerSlice } from "../authSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { useAppDispatch } from "../../../app/hook";
 
 type Inputs = {
   name: string;
@@ -15,7 +15,7 @@ type Inputs = {
   confirmPassword?: string;
 };
 const Register = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const notifyError = (error: string) => toast.error(error);
   const notifySuccess = (success: string) =>
     toast.success(success, { icon: "🚀" });

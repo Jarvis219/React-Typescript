@@ -1,13 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useEffect } from "react";
 import { signInWithGoogle, auth } from "../../firebase";
-import { useDispatch } from "react-redux";
 import { LoginWithGoogleAccount } from "../../features/auth/authSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { DataGoogle } from "../../models/user";
 import { useHistory } from "react-router-dom";
+import { useAppDispatch } from "../../app/hook";
 export const LoginGoogle = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const history = useHistory();
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user: any) => {

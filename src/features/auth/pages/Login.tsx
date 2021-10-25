@@ -3,17 +3,17 @@ import "react-toastify/dist/ReactToastify.css";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { regexEmail } from "../../../helpers/user";
 import { Link, useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { Login as loginSlice } from "../authSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { LoginGoogle } from "../../../components/loginGoogle/LoginGoogle";
+import { useAppDispatch } from "../../../app/hook";
 
 type Inputs = {
   email: string;
   password: string;
 };
 const Login = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const history = useHistory();
   const notifyError = (error: string) => toast.error(error);
   const notifySuccess = (success: string) =>
