@@ -4,11 +4,11 @@ import { signInWithGoogle, auth } from "../../firebase";
 import { LoginWithGoogleAccount } from "../../features/auth/authSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { DataGoogle } from "../../models/user";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import { useAppDispatch } from "../../app/hook";
 export const LoginGoogle = () => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  // const history = useHistory();
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user: any) => {
       if (!user) return;
@@ -26,7 +26,7 @@ export const LoginGoogle = () => {
           LoginWithGoogleAccount(dataGoogle)
         );
         unwrapResult(actionResult);
-        history.push("/");
+        // history.push("/");
       } catch (error) {
         console.log(error);
       }

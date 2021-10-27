@@ -8,7 +8,7 @@ const User = require('../model/userModel');
 const nodemailer = require('nodemailer');
 const expressJwt = require('express-jwt');
 
-// đăng ký gửi from về email
+// register send email
 export const registerControllers = async (req, res) => {
   const {
     name,
@@ -462,7 +462,7 @@ export const registerControllers = async (req, res) => {
 
 }
 
-// xác thực kích hoạt email
+// verify email account
 export const verifyEmail = async (req, res) => {
   try {
     const token = req.query.token;
@@ -493,13 +493,12 @@ export const verifyEmail = async (req, res) => {
     console.log(error);
   }
 }
-// kiểm tra trạng thái email đã kích hoạt hay chưa
+// check status email active 
 export const verifyEmailCheck = async (req, res, next) => {
   try {
     const user = await User.findOne({
       email: req.body.email
     })
-    // console.log(user);
     if (user.confirmed) {
       next();
     } else {
@@ -508,14 +507,13 @@ export const verifyEmailCheck = async (req, res, next) => {
       })
     }
   } catch (error) {
-    // console.log(1);
     return res.status(401).json({
       error: "Please check user or password"
     })
   }
 }
 
-// đăng nhập, check  thông tin truyền vào
+// login check data
 exports.signin = (req, res) => {
   const {
     email,
@@ -559,47 +557,15 @@ exports.signin = (req, res) => {
     })
   })
 }
-// đăng xuất 
+// logout
 export const signout = (req, res) => {
   res.clearCookie('token');
   res.json({
     message: "Singout succsessfully"
   });
 }
-// export const accountActivation = (req,res)=>{
-//     console.log(req.body);
-//     const {token} = req.body;
-//     if(token){
-//         jwt.verify(token, process.env.JWT_ACCOUNT_ACCTIVATION, function(err, decode){
-//             if(err){
-//                 return res.status(400).json({
-//                     error:"Expired link. Signup again"
-//                 })
-//             }
-//             const {name, email, hashed_password}= jwt.decode(token);
-//             const user = new User({name, email, hashed_password});
-//             user.save((error, user)=>{
-//                 if(error){
-//                     return res.status(400).json({
-//                         error:"Cannot register account"
-//                     })
-//                 }
-//                 user.salt = undefined;
-//                 user.hashed_password= undefined;
-//                 res.join({user})
-//             })
-//         }
-//     }
-// }
 
 
-
-// export const signout = (req, res)=>{
-//     res.clearCookie('user');
-//     res.json({
-//         message: "signout successfully"
-//     })
-// }
 
 export const requireSignin = expressJwt({
   secret: process.env.JWT_SECRET,
@@ -608,10 +574,7 @@ export const requireSignin = expressJwt({
 })
 
 export const isAuth = (req, res, next) => {
-  // console.log(req.profile);
-  // console.log(req.auth);
   let user = req.profile && req.auth && req.profile._id === req.auth._id;
-  // console.log(user);
   if (!user) {
     return res.status(403).json({
       error: "Access Denied"
@@ -623,7 +586,7 @@ export const isAuth = (req, res, next) => {
 exports.isAdmin = (req, res, next) => {
   if (req.profile.permission === 0) {
     return res.status(403).json({
-      error: "Admin resource! Access Denined"
+      error: "Admin resource! Access Denied"
     })
   }
   next();
@@ -641,6 +604,7 @@ export const checkLoginWithGoogleAccount = (req, res, next) => {
         err
       });
     } else if (data == null) {
+      // chua co tai khoan google (null uid)-> check email da ton tai hay chua->neu da ton tai->update tk google->dang ky moi
       req.googleAccount = req.body;
       next();
     } else {
@@ -648,6 +612,37 @@ export const checkLoginWithGoogleAccount = (req, res, next) => {
         data,
         message: 'Login with Google account successfully'
       });
+    }
+  })
+}
+
+export const checkLoginWithGoogleAccountEmail = (req, res, next) => {
+  const {
+    email
+  } = req.googleAccount;
+  User.findOne({
+    email: email
+  }).exec((err, data) => {
+    if (err) {
+      return res.status(401).json({
+        err
+      });
+    } else if (data == null) {
+      req.accountGoogle = req.googleAccount;
+      next()
+    } else {
+      const account = Object.assign(data, req.googleAccount);
+      account.save((err, data) => {
+        if (err) {
+          return res.status(401).json({
+            err
+          });
+        }
+        res.json({
+          data,
+          message: 'Login and update successfully'
+        })
+      })
     }
   })
 }
