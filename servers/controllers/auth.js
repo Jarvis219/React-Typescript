@@ -1,56 +1,50 @@
-import jwt from 'jsonwebtoken';
-import _ from 'lodash';
+import jwt from "jsonwebtoken";
+import _ from "lodash";
 
-import {
-  v4 as uuidv4
-} from 'uuid';
-const User = require('../model/userModel');
-const nodemailer = require('nodemailer');
-const expressJwt = require('express-jwt');
+import { v4 as uuidv4 } from "uuid";
+const User = require("../model/userModel");
+const nodemailer = require("nodemailer");
+const expressJwt = require("express-jwt");
 
 // register send email
 export const registerControllers = async (req, res) => {
-  const {
-    name,
-    email,
-    password
-  } = req.body;
+  const { name, email, password } = req.body;
   const users = new User({
     name,
     email,
     password,
-    emailToken: uuidv4()
+    emailToken: uuidv4(),
   });
 
   if (!users.email || !users.hashed_password || !users.name) {
     return res.status(400).json({
       error: false,
-      message: 'register false'
+      message: "register false",
     });
   }
 
   User.findOne({
-    email: email
+    email: email,
   }).exec((err, data) => {
     if (data) {
       return res.status(401).json({
-        error: `${data.email} already exist!`
-      })
+        error: `${data.email} already exist!`,
+      });
     } else {
       let transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
+        host: "smtp.gmail.com",
         port: 465,
         secure: true,
         auth: {
           user: process.env.EMAIL_FROM,
-          pass: process.env.EMAIL_PASS
-        }
+          pass: process.env.EMAIL_PASS,
+        },
       });
 
       let emailDetail = {
         from: `Verify your email ${process.env.EMAIL_FROM}`,
         to: users.email,
-        subject: 'Verify your email',
+        subject: "Verify your email",
         html: `
           <style type="text/css">
               @media screen {
@@ -444,8 +438,8 @@ export const registerControllers = async (req, res) => {
             </tr>
           </table>
         </body>
-          `
-      }
+          `,
+      };
       transporter.sendMail(emailDetail, async function (err) {
         if (err) {
           return res.status(401).json(err);
@@ -453,155 +447,149 @@ export const registerControllers = async (req, res) => {
         await users.save();
         res.json({
           emailToken: users.emailToken,
-          message: 'Verification email is sent to your gmail account'
-        })
-      })
+          message: "Verification email is sent to your gmail account",
+        });
+      });
     }
-  })
-
-
-}
+  });
+};
 
 // verify email account
 export const verifyEmail = async (req, res) => {
   try {
     const token = req.query.token;
     let user = await User.findOne({
-      emailToken: token
+      emailToken: token,
     });
 
     if (user) {
       let dataNew = {
         emailToken: null,
-        confirmed: true
-      }
+        confirmed: true,
+      };
       dataNew = _.assignIn(user, dataNew);
       dataNew.save((err, data) => {
         if (err) {
           return res.status(400).json({
-            error: 'active user failure'
-          })
+            error: "active user failure",
+          });
         }
         res.json(data);
-      })
+      });
     } else {
       return res.status(403).json({
-        error: "Email is not verified"
-      })
+        error: "Email is not verified",
+      });
     }
   } catch (error) {
     console.log(error);
   }
-}
-// check status email active 
+};
+// check status email active
 export const verifyEmailCheck = async (req, res, next) => {
   try {
     const user = await User.findOne({
-      email: req.body.email
-    })
+      email: req.body.email,
+    });
     if (user.confirmed) {
       next();
     } else {
       return res.status(400).json({
-        error: "Please check your email to verify your account"
-      })
+        error: "Please check your email to verify your account",
+      });
     }
   } catch (error) {
     return res.status(401).json({
-      error: "Please check user or password"
-    })
+      error: "Please check user or password",
+    });
   }
-}
+};
 
 // login check data
 exports.signin = (req, res) => {
-  const {
-    email,
-    password
-  } = req.body;
-  User.findOne({
-    email
-  }, (err, user) => {
-    if (err || !user) {
-      return res.status(400).json({
-        error: "User with that email does not exist. Please signup"
-      })
-    }
-    if (!user.authenticate(password)) {
-      return res.status(401).json({
-        error: "Email and password not match"
-      })
-    }
-    const token = jwt.sign({
-      _id: user._id
-    }, process.env.JWT_SECRET, {
-      expiresIn: '36000s'
-    });
-    res.cookie('token', token, {
-      expire: new Date() + 9999
-    });
-    const {
-      _id,
-      name,
+  const { email, password } = req.body;
+  User.findOne(
+    {
       email,
-      permission
-    } = user;
-    return res.json({
-      token,
-      user: {
-        _id,
-        email,
-        name,
-        permission
+    },
+    (err, user) => {
+      if (err || !user) {
+        return res.status(400).json({
+          error: "User with that email does not exist. Please signup",
+        });
       }
-    })
-  })
-}
+      if (!user.authenticate(password)) {
+        return res.status(401).json({
+          error: "Email and password not match",
+        });
+      }
+      const token = jwt.sign(
+        {
+          _id: user._id,
+        },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "36000s",
+        }
+      );
+      res.cookie("token", token, {
+        expire: new Date() + 9999,
+      });
+      const { _id, name, email, permission, photoURL } = user;
+      return res.json({
+        token,
+        user: {
+          _id,
+          email,
+          name,
+          permission,
+          photoURL,
+        },
+      });
+    }
+  );
+};
 // logout
 export const signout = (req, res) => {
-  res.clearCookie('token');
+  res.clearCookie("token");
   res.json({
-    message: "Singout succsessfully"
+    message: "Singout succsessfully",
   });
-}
-
-
+};
 
 export const requireSignin = expressJwt({
   secret: process.env.JWT_SECRET,
   algorithms: ["HS256"],
   userProperty: "auth",
-})
+});
 
 export const isAuth = (req, res, next) => {
   let user = req.profile && req.auth && req.profile._id === req.auth._id;
   if (!user) {
     return res.status(403).json({
-      error: "Access Denied"
-    })
+      error: "Access Denied",
+    });
   }
   next();
-}
+};
 
 exports.isAdmin = (req, res, next) => {
   if (req.profile.permission === 0) {
     return res.status(403).json({
-      error: "Admin resource! Access Denied"
-    })
+      error: "Admin resource! Access Denied",
+    });
   }
   next();
-}
+};
 
 export const checkLoginWithGoogleAccount = (req, res, next) => {
-  const {
-    uid
-  } = req.body;
+  const { uid } = req.body;
   User.findOne({
-    uid: uid
+    uid: uid,
   }).exec((err, data) => {
     if (err) {
       return res.status(401).json({
-        err
+        err,
       });
     } else if (data == null) {
       // chua co tai khoan google (null uid)-> check email da ton tai hay chua->neu da ton tai->update tk google->dang ky moi
@@ -610,52 +598,51 @@ export const checkLoginWithGoogleAccount = (req, res, next) => {
     } else {
       return res.json({
         data,
-        message: 'Login with Google account successfully'
+        message: "Login with Google account successfully",
       });
     }
-  })
-}
+  });
+};
 
 export const checkLoginWithGoogleAccountEmail = (req, res, next) => {
-  const {
-    email
-  } = req.googleAccount;
+  const { email } = req.googleAccount;
   User.findOne({
-    email: email
+    email: email,
   }).exec((err, data) => {
     if (err) {
       return res.status(401).json({
-        err
+        err,
       });
     } else if (data == null) {
       req.accountGoogle = req.googleAccount;
-      next()
+      next();
     } else {
       const account = Object.assign(data, req.googleAccount);
       account.save((err, data) => {
         if (err) {
           return res.status(401).json({
-            err
+            err,
           });
         }
         res.json({
           data,
-          message: 'Login and update successfully'
-        })
-      })
+          message: "Login and update successfully",
+        });
+      });
     }
-  })
-}
+  });
+};
 
 export const loginWithGoogleAccount = (req, res) => {
   const user = new User(req.googleAccount);
   user.save((err, data) => {
-    if (err) return res.status(401).json({
-      err
-    });
+    if (err)
+      return res.status(401).json({
+        err,
+      });
     res.json({
       data,
-      message: 'Login first with Google account successfully'
-    })
-  })
-}
+      message: "Login first with Google account successfully",
+    });
+  });
+};

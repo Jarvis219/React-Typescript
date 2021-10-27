@@ -1,9 +1,10 @@
 export interface DataUser {
   email: string;
-  id: string;
-  password: string;
+  _id: string;
+  password?: string;
   name: string;
   permission: number;
+  photoURL: string;
 }
 
 export interface RegisterData {
