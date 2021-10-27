@@ -7,6 +7,7 @@ import { Login as loginSlice } from "../authSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { LoginGoogle } from "../../../components/loginGoogle/LoginGoogle";
 import { useAppDispatch } from "../../../app/hook";
+import { setToken, setUser } from "utils.ts/utils";
 
 type Inputs = {
   email: string;
@@ -33,7 +34,8 @@ const Login = () => {
         const actionResult: any = await dispatch(loginSlice(data));
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const currentUser = unwrapResult(actionResult);
-        // console.log(currentUser);
+        setToken(currentUser.token);
+        setUser(currentUser.user);
         notifySuccess("Login successfully 👌");
         history.push("/");
       } catch (error: any) {
@@ -43,41 +45,42 @@ const Login = () => {
   };
 
   return (
-    <div className='img js-fullheight body-container'>
-      <section className='ftco-section'>
-        <div className='container'>
-          <div className='row justify-content-center'>
-            <div className='col-md-6 text-center mb-5'>
-              <h2 className='heading-section'>Register</h2>
+    <div className="img js-fullheight body-container">
+      <section className="ftco-section">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-md-6 text-center mb-5">
+              <h2 className="heading-section">Register</h2>
             </div>
           </div>
-          <div className='row justify-content-center'>
-            <div className='col-md-6 col-lg-4'>
-              <div className='login-wrap p-0'>
-                <h3 className='mb-4 text-center text-white hover:text-[#00ff50]'>
-                  <Link to='/register'>No account?</Link>
+          <div className="row justify-content-center">
+            <div className="col-md-6 col-lg-4">
+              <div className="login-wrap p-0">
+                <h3 className="mb-4 text-center text-white hover:text-[#00ff50]">
+                  <Link to="/register">No account?</Link>
                 </h3>
                 <form
                   onSubmit={handleSubmit(registerSubmit)}
-                  className='signin-form'>
-                  <div className='form-group text-center'>
+                  className="signin-form"
+                >
+                  <div className="form-group text-center">
                     <input
-                      type='email'
-                      className='form-control'
-                      placeholder='Email'
+                      type="email"
+                      className="form-control"
+                      placeholder="Email"
                       {...register("email", { required: true, maxLength: 30 })}
                     />
                     {errors.email && (
-                      <span className='text-[#00ff50] font-serif text-xs block -mb-4 '>
+                      <span className="text-[#00ff50] font-serif text-xs block -mb-4 ">
                         This field is required & maximum 30 characters
                       </span>
                     )}
                   </div>
-                  <div className='form-group text-center'>
+                  <div className="form-group text-center">
                     <input
-                      type='password'
-                      className='form-control'
-                      placeholder='Password'
+                      type="password"
+                      className="form-control"
+                      placeholder="Password"
                       {...register("password", {
                         required: true,
                         maxLength: 30,
@@ -85,21 +88,22 @@ const Login = () => {
                       })}
                     />
                     {errors.password && (
-                      <span className='text-[#00ff50] font-serif text-xs block -mb-4 '>
+                      <span className="text-[#00ff50] font-serif text-xs block -mb-4 ">
                         This field is required & allowed characters from 7 to 30
                       </span>
                     )}
-                    <span className='fa fa-fw fa-eye field-icon toggle-password' />
+                    <span className="fa fa-fw fa-eye field-icon toggle-password" />
                   </div>
-                  <div className='form-group'>
+                  <div className="form-group">
                     <button
-                      type='submit'
-                      className='form-control btn btn-primary submit px-3'>
+                      type="submit"
+                      className="form-control btn btn-primary submit px-3"
+                    >
                       Login
                     </button>
                   </div>
                 </form>
-                <p className='w-100 text-center'>— Or Sign In With —</p>
+                <p className="w-100 text-center">— Or Sign In With —</p>
                 <LoginGoogle />
               </div>
             </div>
