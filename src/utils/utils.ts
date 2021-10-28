@@ -23,3 +23,14 @@ export const logout = (): void => {
   sessionStorage.removeItem("token");
   sessionStorage.removeItem("user");
 };
+// logout();
+
+export const setRefreshToken = (refreshToken: string): void => {
+  sessionStorage.setItem("refreshToken", refreshToken);
+};
+
+export const getRefreshToken = (): string | null => {
+  return !sessionStorage.getItem("refreshToken")
+    ? null
+    : sessionStorage.getItem("refreshToken")!;
+};

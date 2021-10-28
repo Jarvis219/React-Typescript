@@ -6,7 +6,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { DataGoogle } from "../../models/user";
 import { useHistory } from "react-router-dom";
 import { useAppDispatch } from "../../app/hook";
-import { setToken, setUser } from "utils.ts/utils";
+import { setToken, setUser } from "utils/utils";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -56,21 +56,19 @@ export const LoginGoogle = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="social d-flex text-center">
+    <div className='social d-flex text-center'>
       <a
         onClick={signInWithGoogle}
-        className="px-2 py-2 mr-md-1 rounded cursor-pointer"
-      >
-        <span className="ion-logo-facebook mr-2" /> Google
+        className='px-2 py-2 mr-md-1 rounded cursor-pointer'>
+        <span className='ion-logo-facebook mr-2' /> Google
       </a>
-      {/* <a
+      <a
         onClick={() => {
           auth.signOut();
         }}
-        className="px-2 py-2 mr-md-1 rounded cursor-pointer"
-      >
-        <span className="ion-logo-facebook mr-2" /> Out
-      </a> */}
+        className='px-2 py-2 mr-md-1 rounded cursor-pointer'>
+        <span className='ion-logo-facebook mr-2' /> Out
+      </a>
       <ToastContainer />
     </div>
   );

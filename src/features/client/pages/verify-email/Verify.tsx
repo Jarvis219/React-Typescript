@@ -2,7 +2,7 @@ import "./verify.css";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { ActiveAccount } from "../../auth/authSlice";
+import { ActiveAccount } from "../../../auth/authSlice";
 
 export const Verify = () => {
   const dispatch = useDispatch();

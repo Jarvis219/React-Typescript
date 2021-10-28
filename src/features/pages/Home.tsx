@@ -4,7 +4,7 @@ import { AddHobby } from "../components/hobby/addHobby";
 import { Hobby } from "../components/hobby/Hobby";
 import { addHobbies } from "./hobbySlice";
 
-export const Home = () => {
+const Home = () => {
   const hobbies = useSelector((state: any) => state.hobbies);
   // const [hobby, setHobby] = useState(hobbies);
   const dispatch = useDispatch();
@@ -19,3 +19,5 @@ export const Home = () => {
     </div>
   );
 };
+
+export default Home;

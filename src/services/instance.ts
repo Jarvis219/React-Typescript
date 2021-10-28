@@ -1,4 +1,4 @@
-import { getToken } from "./../utils.ts/utils";
+import { getToken } from "../utils/utils";
 import axios from "axios";
 import { api } from "../contants/api";
 const instance = axios.create({
