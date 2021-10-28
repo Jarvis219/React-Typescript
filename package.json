@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@babel/core": "7.12.3",
+    "@headlessui/react": "^1.4.1",
+    "@heroicons/react": "^1.0.5",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@reduxjs/toolkit": "^1.6.2",
     "@svgr/webpack": "5.5.0",

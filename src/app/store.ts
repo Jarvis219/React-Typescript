@@ -1,5 +1,5 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import hobbyReducer from "../features/pages/hobbySlice";
+import hobbyReducer from "../features/client/pages/hobbySlice";
 import authSlice from "../features/auth/authSlice";
 
 const rootReducer = {
