@@ -10,15 +10,15 @@ const ClientPage = lazy(() => import("./features/client/pages/ClientPage"));
 const AdminPage = lazy(() => import("./features/admin/pages/AdminPage"));
 function App() {
   return (
-    <div className='App'>
+    <div className="App">
       <AuthProvider>
         <BrowserRouter>
           <Suspense fallback={<Loading />}>
             <Switch>
-              <Route path='/register' exact component={Register} />
-              <Route path='/login' exact component={Login} />
-              <PrivateRoute path='/admin' render={() => <AdminPage />} />
-              <Route path='/' render={() => <ClientPage />} />
+              <Route path="/register" exact component={Register} />
+              <Route path="/login" exact component={Login} />
+              <PrivateRoute path="/admin" render={() => <AdminPage />} />
+              <Route path="/" render={() => <ClientPage />} />
             </Switch>
           </Suspense>
         </BrowserRouter>

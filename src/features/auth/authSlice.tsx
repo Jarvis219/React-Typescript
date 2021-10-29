@@ -91,7 +91,7 @@ const authSlice = createSlice({
     builder.addCase(
       Register.fulfilled,
       (state: initialStateSlice, action: any) => {
-        state.current = action;
+        state.current = action.payload;
         state.loading = false;
       }
     );
