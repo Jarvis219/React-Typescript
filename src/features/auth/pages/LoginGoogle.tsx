@@ -54,12 +54,11 @@ export const LoginGoogle = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="social d-flex text-center">
+    <div className='social d-flex text-center'>
       <a
         onClick={signInWithGoogle}
-        className="px-2 py-2 mr-md-1 rounded cursor-pointer"
-      >
-        <span className="ion-logo-facebook mr-2" /> Google
+        className='px-2 py-2 mr-md-1 rounded cursor-pointer'>
+        <span className='ion-logo-facebook mr-2' /> Google
       </a>
       <ToastContainer />
     </div>

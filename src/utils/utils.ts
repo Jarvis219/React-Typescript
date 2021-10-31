@@ -1,5 +1,5 @@
 import { DataUser } from "models/user";
-
+import { auth } from "firebase";
 export const setToken = (token: string): void => {
   sessionStorage.setItem("token", token);
 };
@@ -22,6 +22,7 @@ export const getUser = (): void => {
 export const logout = (): void => {
   sessionStorage.removeItem("token");
   sessionStorage.removeItem("user");
+  auth.signOut();
 };
 // logout();
 
