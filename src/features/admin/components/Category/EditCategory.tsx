@@ -1,16 +1,16 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 
-const CreateCategory = ({ handleShowFromCreate }: any) => {
+const EditCategory = ({ handleShowFromEdit }: any) => {
   return (
     <Fragment>
       <div
-        onClick={() => handleShowFromCreate(false)}
+        onClick={() => handleShowFromEdit(false)}
         className="absolute inset-0 opacity-25 bg-[#0c1402] "
       ></div>
       <div className=" absolute w-[80%] top-40 md:left-20 lg:left-24 xl:left-32">
         <section className="max-w-4xl p-6 mx-auto bg-[#9df0a8] rounded-md shadow-md dark:bg-gray-800 mt-20">
           <h1 className="uppercase text-center text-xl font-bold text-white  dark:text-white">
-            create category
+            update category
           </h1>
           <form>
             <div className=" mt-4 ">
@@ -27,7 +27,7 @@ const CreateCategory = ({ handleShowFromCreate }: any) => {
             </div>
             <div className="flex justify-end gap-3 mt-6">
               <button
-                onClick={() => handleShowFromCreate(false)}
+                onClick={() => handleShowFromEdit(false)}
                 className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600"
               >
                 Cancel
@@ -42,4 +42,4 @@ const CreateCategory = ({ handleShowFromCreate }: any) => {
     </Fragment>
   );
 };
-export default CreateCategory;
+export default EditCategory;

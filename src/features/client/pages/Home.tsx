@@ -3,11 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { AddHobby } from "../components/hobby/addHobby";
 import { Hobby } from "../components/hobby/Hobby";
 import { addHobbies } from "./hobbySlice";
-import { auth } from "../../../firebase";
 import { logout } from "utils/utils";
 import { useHistory } from "react-router";
 
-const Home = () => {
+const HomeTest = () => {
   const hobbies = useSelector((state: any) => state.hobbies);
   const history = useHistory();
   // const [hobby, setHobby] = useState(hobbies);
@@ -19,7 +18,6 @@ const Home = () => {
 
   const handerLogout = () => {
     logout();
-    auth.signOut();
     history.push("/login");
   };
   return (
@@ -36,4 +34,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeTest;

@@ -50,6 +50,7 @@ const ProductSchema = new mongoose.Schema(
     size: {
       type: Array,
     },
+    status: { type: String },
     classify: {
       type: String,
     },

@@ -1,10 +1,10 @@
 import { Fragment } from "react";
 
-const CreateProduct = ({ handleShowFromCreate }: any) => {
+const EditProduct = ({ handleShowFromEdit }: any) => {
   return (
     <Fragment>
       <div
-        onClick={() => handleShowFromCreate(false)}
+        onClick={() => handleShowFromEdit(false)}
         className="absolute inset-0 opacity-25 bg-[#0c1402] "
       ></div>
       <div className="absolute w-[80%] top-0  md:left-20 lg:left-24 xl:left-32">
@@ -132,7 +132,7 @@ const CreateProduct = ({ handleShowFromCreate }: any) => {
             </div>
             <div className="flex justify-end gap-3 mt-6">
               <button
-                onClick={() => handleShowFromCreate(false)}
+                onClick={() => handleShowFromEdit(false)}
                 className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600"
               >
                 Cancel
@@ -147,5 +147,4 @@ const CreateProduct = ({ handleShowFromCreate }: any) => {
     </Fragment>
   );
 };
-
-export default CreateProduct;
+export default EditProduct;

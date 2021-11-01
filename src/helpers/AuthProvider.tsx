@@ -1,10 +1,10 @@
 import { createContext } from "react";
-import { getToken } from "../utils/utils";
+import { getPermission } from "../utils/utils";
 
-export const AuthContext = createContext<string | null>(null);
+export const AuthContext = createContext<number | null>(null);
 
 const AuthProvider = ({ children }: any) => {
-  let auth = getToken();
+  let auth = getPermission();
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
 

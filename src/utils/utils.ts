@@ -24,7 +24,6 @@ export const logout = (): void => {
   sessionStorage.removeItem("user");
   auth.signOut();
 };
-// logout();
 
 export const setRefreshToken = (refreshToken: string): void => {
   sessionStorage.setItem("refreshToken", refreshToken);
@@ -34,4 +33,8 @@ export const getRefreshToken = (): string | null => {
   return !sessionStorage.getItem("refreshToken")
     ? null
     : sessionStorage.getItem("refreshToken")!;
+};
+
+export const getPermission = (): number => {
+  return JSON.parse(sessionStorage.getItem("user")!).permission;
 };

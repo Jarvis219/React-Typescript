@@ -8,6 +8,7 @@ const hobbies = createSlice({
     // actions
     addHobbies: (state: any, action: any) => {
       state.push(action.payload);
+      console.log(state);
     },
   },
 });
