@@ -1,0 +1,16 @@
+import instance from "./instance";
+
+export const createCategoryAPI = (data: any) => {
+  const url = "/create-category";
+  return instance.post(url, data);
+};
+
+export const listCategoryAPI = () => {
+  const url = "/list-category";
+  return instance.get(url);
+};
+
+export const updateCategoryAPI = (id: string, name: string) => {
+  const url = `/update-category/${id}`;
+  return instance.put(url, name);
+};

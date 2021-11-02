@@ -1,5 +1,5 @@
 import "./App.css";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import AuthProvider from "./helpers/AuthProvider";
 import PrivateRoute from "helpers/PrivateRoute";
@@ -7,17 +7,31 @@ import { Loading } from "utils/loading/Loading";
 import clientLayout from "./features/client/ClientLayout";
 import adminLayout from "./features/admin/AdminLayout";
 import Page404 from "features/client/pages/Page404/Page404";
+import { useAppDispatch } from "app/hook";
+import { listCategory } from "features/admin/pages/Categories/CategorySlice";
 const Login = lazy(() => import("./features/auth/pages/Login"));
 const Register = lazy(() => import("./features/auth/pages/Register"));
 function App() {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        await dispatch(listCategory());
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getCategories();
+  }, [dispatch]);
+
   return (
-    <div className='App'>
+    <div className="App">
       <AuthProvider>
         <BrowserRouter>
           <Suspense fallback={<Loading />}>
             <Switch>
-              <Route path='/register' exact component={Register} />
-              <Route path='/login' exact component={Login} />
+              <Route path="/register" exact component={Register} />
+              <Route path="/login" exact component={Login} />
               {adminLayout.map(({ path, component, exact }, index) => {
                 return (
                   <PrivateRoute
@@ -38,7 +52,7 @@ function App() {
                   />
                 );
               })}
-              <Route path='*' exact component={Page404} />
+              <Route path="*" exact component={Page404} />
             </Switch>
           </Suspense>
         </BrowserRouter>
