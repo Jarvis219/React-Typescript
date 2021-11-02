@@ -1,6 +1,6 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, memo } from "react";
 import { Link } from "react-router-dom";
-export const SideBar = () => {
+const SideBar = () => {
   useEffect(() => {});
   return (
     <Fragment>
@@ -51,3 +51,5 @@ export const SideBar = () => {
     </Fragment>
   );
 };
+
+export default memo(SideBar);

@@ -35,6 +35,7 @@ export const getRefreshToken = (): string | null => {
     : sessionStorage.getItem("refreshToken")!;
 };
 
-export const getPermission = (): number => {
+export const getPermission = (): number | null => {
+  if (!sessionStorage.getItem("user")) return null;
   return JSON.parse(sessionStorage.getItem("user")!).permission;
 };

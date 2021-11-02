@@ -1,5 +1,5 @@
 import { lazy, useState } from "react";
-import ConfirmButton from "features/admin/components/ConfirmButton/ConfirmButton";
+import ConfirmButton from "features/admin/components/DiaLog/ConfirmButton";
 
 const CategoryList = lazy(
   () => import("features/admin/components/Category/Category")

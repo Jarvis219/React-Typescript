@@ -1,4 +1,4 @@
-import ConfirmButton from "features/admin/components/ConfirmButton/ConfirmButton";
+import ConfirmButton from "features/admin/components/DiaLog/ConfirmButton";
 import { lazy, useState } from "react";
 const ProductList = lazy(
   () => import("features/admin/components/Product/Product")
