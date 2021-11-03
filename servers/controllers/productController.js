@@ -68,7 +68,7 @@ export const createProduct = (req, res) => {
         error: err,
       });
     }
-    res.json(data);
+    res.json({ data, message: "Create product successfully" });
   });
 };
 // cập nhật sản phẩm

@@ -1,6 +1,7 @@
+import { CategoryModel } from "./../models/category";
 import instance from "./instance";
 
-export const createCategoryAPI = (data: any) => {
+export const createCategoryAPI = (data: CategoryModel) => {
   const url = "/create-category";
   return instance.post(url, data);
 };

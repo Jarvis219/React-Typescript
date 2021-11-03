@@ -1,5 +1,8 @@
 import { useHistory } from "react-router";
 import { logout } from "utils/utils";
+import "froala-editor/css/froala_style.min.css";
+import "froala-editor/css/froala_editor.pkgd.min.css";
+
 export default function Home() {
   const history = useHistory();
   const handerLogout = () => {
@@ -11,8 +14,9 @@ export default function Home() {
       home client
       <button
         onClick={handerLogout}
-        className='px-2 py-2 mr-md-1 rounded cursor-pointer'>
-        <span className='ion-logo-facebook mr-2 text-[#701a29]'> Out</span>
+        className="px-2 py-2 mr-md-1 rounded cursor-pointer"
+      >
+        <span className="ion-logo-facebook mr-2 text-[#701a29]"> Out</span>
       </button>
       {/* <Button color='lightBlue' ripple='light'>
         Button

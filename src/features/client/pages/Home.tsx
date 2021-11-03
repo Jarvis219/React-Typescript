@@ -1,20 +1,10 @@
 // import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AddHobby } from "../components/hobby/addHobby";
-import { Hobby } from "../components/hobby/Hobby";
-import { addHobbies } from "./hobbySlice";
+
 import { logout } from "utils/utils";
 import { useHistory } from "react-router";
 
 const HomeTest = () => {
-  const hobbies = useSelector((state: any) => state.hobbies);
   const history = useHistory();
-  // const [hobby, setHobby] = useState(hobbies);
-  const dispatch = useDispatch();
-
-  const handleSubmit = (data: any) => {
-    dispatch(addHobbies(data));
-  };
 
   const handerLogout = () => {
     logout();
@@ -22,8 +12,6 @@ const HomeTest = () => {
   };
   return (
     <div>
-      <AddHobby handler={handleSubmit} />
-      <Hobby hobbies={hobbies} />
       <button
         onClick={handerLogout}
         className="px-2 py-2 mr-md-1 rounded cursor-pointer"

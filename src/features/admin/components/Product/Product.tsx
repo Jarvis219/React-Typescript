@@ -7,7 +7,7 @@ const ProductList = ({
 }: any) => {
   return (
     <Fragment>
-      <div className="flex flex-1  flex-col md:flex-row lg:flex-row mx-2">
+      <div className="flex flex-1  flex-col md:flex-row lg:flex-row mx-2 text-center">
         <div className="mb-2 border-solid border-gray-300 rounded border shadow-sm w-full">
           <div className="bg-gray-200 px-2 py-3 border-solid border-gray-200 border-b uppercase text-center">
             Products
@@ -47,7 +47,7 @@ const ProductList = ({
                     </svg>
                   </td>
                   <td className="border px-4 py-2">
-                    <div className="flex">
+                    <div className="flex justify-center items-center">
                       <span className="cursor-pointer  mx-1 ">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
