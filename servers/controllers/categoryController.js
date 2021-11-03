@@ -44,14 +44,14 @@ export const readCategory = (req, res) => {
 
 export const removeCategory = (req, res) => {
   let category = req.category;
-  category.remove((err, deleteCategory) => {
+  category.remove((err, data) => {
     if (err || !category) {
       return res.status(400).json({
         error: "Delete category failure",
       });
     }
     res.json({
-      deleteCategory,
+      data,
       message: "Category deleted successfully",
     });
   });
@@ -75,8 +75,10 @@ export const updateCategory = (req, res) => {
 
 export const listRelatedCate = (req, res) => {
   Category.find({
-    _id: { $ne: req.category },
-  })
+      _id: {
+        $ne: req.category
+      },
+    })
     .populate("category", "_id name")
     .exec((err, cate) => {
       if (err) {

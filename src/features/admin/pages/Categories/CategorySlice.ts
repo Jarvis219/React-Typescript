@@ -3,6 +3,7 @@ import {
   createCategoryAPI,
   listCategoryAPI,
   updateCategoryAPI,
+  removeCategoryAPI,
 } from "services/category";
 export const CreateCategory = createAsyncThunk(
   "create-category",
@@ -29,7 +30,7 @@ export const listCategory = createAsyncThunk(
 );
 
 export const updateCategory = createAsyncThunk(
-  "list-category",
+  "update-category",
   async (category: any, thunkApi) => {
     try {
       const { data }: any = await updateCategoryAPI(category.id, category.name);
@@ -40,14 +41,26 @@ export const updateCategory = createAsyncThunk(
   }
 );
 
+export const removeCategory = createAsyncThunk(
+  "remove-category",
+  async (id: string, thunkApi) => {
+    try {
+      const { data }: any = await removeCategoryAPI(id);
+      return data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+
 type initialStateSlice = {
-  current: Object;
+  current: any;
   error: string | null;
   loading: boolean;
 };
 
 const initialState: initialStateSlice = {
-  current: {},
+  current: [],
   error: null,
   loading: false,
 };
@@ -71,7 +84,7 @@ const categorySlice = createSlice({
       CreateCategory.fulfilled,
       (state: initialStateSlice, action: any) => {
         state.loading = false;
-        state.current = action.payload;
+        state.current.push(action.payload.data);
       }
     );
 
@@ -93,23 +106,39 @@ const categorySlice = createSlice({
       }
     );
 
-    // builder.addCase(updateCategory.pending, (state: initialStateSlice) => {
-    //   state.loading = true;
-    // });
-    // builder.addCase(
-    //   updateCategory.rejected,
-    //   (state: initialStateSlice, action: any) => {
-    //     state.loading = false;
-    //     state.error = action.error;
-    //   }
-    // );
-    // builder.addCase(
-    //   updateCategory.fulfilled,
-    //   (state: initialStateSlice, action: any) => {
-    //     state.loading = false;
-    //     state.current = action.payload;
-    //   }
-    // );
+    builder.addCase(updateCategory.pending, (state: initialStateSlice) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      updateCategory.rejected,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
+        state.error = action.error;
+      }
+    );
+    builder.addCase(
+      updateCategory.fulfilled,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
+      }
+    );
+
+    builder.addCase(removeCategory.pending, (state: initialStateSlice) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      removeCategory.rejected,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
+        state.error = action.error;
+      }
+    );
+    builder.addCase(
+      removeCategory.fulfilled,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
+      }
+    );
   },
 });
 

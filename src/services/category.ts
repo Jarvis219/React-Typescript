@@ -12,5 +12,10 @@ export const listCategoryAPI = () => {
 
 export const updateCategoryAPI = (id: string, name: string) => {
   const url = `/update-category/${id}`;
-  return instance.put(url, name);
+  return instance.put(url, { name });
+};
+
+export const removeCategoryAPI = (id: string) => {
+  const url = `/remove-category/${id}`;
+  return instance.delete(url);
 };

@@ -7,7 +7,8 @@ const app = express();
 dotenv.config();
 
 const authRouters = require("./routes/auth");
-const categoryRourters = require("./routes/category");
+const categoryRouters = require("./routes/category");
+const productRouters = require("./routes/product");
 
 //db connection
 mongoose
@@ -31,7 +32,8 @@ app.use(
 );
 
 app.use("/api", authRouters);
-app.use("/api", categoryRourters);
+app.use("/api", categoryRouters);
+app.use("/api", productRouters);
 
 const port = process.env.PORT || 8000;
 app.listen(port, () => {

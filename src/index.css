@@ -774,6 +774,9 @@ video {
 }.text-gray-700{
 	--tw-text-opacity: 1;
 	color: rgba(55, 65, 81, var(--tw-text-opacity));
+}.text-\[\#f12424\]{
+	--tw-text-opacity: 1;
+	color: rgba(241, 36, 36, var(--tw-text-opacity));
 }.text-gray-200{
 	--tw-text-opacity: 1;
 	color: rgba(229, 231, 235, var(--tw-text-opacity));
@@ -789,9 +792,6 @@ video {
 }.text-purple-400{
 	--tw-text-opacity: 1;
 	color: rgba(167, 139, 250, var(--tw-text-opacity));
-}.text-\[\#f12424\]{
-	--tw-text-opacity: 1;
-	color: rgba(241, 36, 36, var(--tw-text-opacity));
 }.no-underline{
 	text-decoration: none;
 }.opacity-25{
