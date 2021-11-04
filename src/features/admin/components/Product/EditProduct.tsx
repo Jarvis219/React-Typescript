@@ -1,17 +1,62 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import CategoryItem from "../Category/CategoryItem";
 
-const EditProduct = ({ handleShowFromEdit }: any) => {
+type Inputs = {
+  name: string;
+  price: number;
+  quantity: number;
+  sale: number;
+  category: string;
+  description: string;
+  status: string;
+  photo: File;
+};
+const EditProduct = ({
+  handleShowFromEdit,
+  dataEdit,
+  handleEditSubmit,
+  loading,
+}: any) => {
+  let { data } = dataEdit;
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<Inputs>();
+  const onSubmit: SubmitHandler<Inputs> = async (dataForm: Inputs) => {
+    const { photo }: any = dataForm;
+    if (photo.length === 0) {
+      dataForm.photo = data.photo;
+      handleEditSubmit(Object.assign({}, data, dataForm));
+    } else {
+      handleEditSubmit(Object.assign({}, data, dataForm));
+    }
+  };
+
+  useEffect(() => {
+    reset({
+      name: data.name,
+      price: data.price,
+      sale: data.sale,
+      quantity: data.quantity,
+      description: data.description,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
   return (
     <Fragment>
       <div
         onClick={() => handleShowFromEdit(false)}
-        className='absolute inset-0 opacity-25 bg-[#0c1402] '></div>
+        className=' fixed inset-0 opacity-25 bg-[#0c1402]  '></div>
       <div className='absolute w-[70%]  top-[7%] left-20  md:left-32 lg:left-40 xl:left-56'>
         <section className=' p-6  bg-[#9df0a8] rounded-md shadow-md dark:bg-gray-800 '>
           <h1 className='uppercase text-center text-xl font-bold text-white  dark:text-white'>
             create product
           </h1>
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className='grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2'>
               <div>
                 <label className='text-white dark:text-gray-200' htmlFor='name'>
@@ -20,8 +65,14 @@ const EditProduct = ({ handleShowFromEdit }: any) => {
                 <input
                   id='name'
                   type='text'
+                  {...register("name", { required: true, maxLength: 50 })}
                   className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring'
                 />
+                {errors.name && (
+                  <span className='text-[#f33d25] pt-3 font-serif text-xs block -mb-4 '>
+                    This field is required & maximum 50 characters
+                  </span>
+                )}
               </div>
               <div>
                 <label
@@ -32,8 +83,14 @@ const EditProduct = ({ handleShowFromEdit }: any) => {
                 <input
                   id='price'
                   type='number'
+                  {...register("price", { required: true, min: 0 })}
                   className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring'
                 />
+                {errors.price && (
+                  <span className='text-[#f33d25] pt-3 font-serif text-xs block -mb-4 '>
+                    This field is required & minimum value is 0
+                  </span>
+                )}
               </div>
               <div>
                 <label
@@ -44,8 +101,14 @@ const EditProduct = ({ handleShowFromEdit }: any) => {
                 <input
                   id='quantity'
                   type='number'
+                  {...register("quantity", { required: true, min: 1 })}
                   className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring'
                 />
+                {errors.quantity && (
+                  <span className='text-[#f33d25] pt-3 font-serif text-xs block -mb-4 '>
+                    This field is required & minimum value is 1
+                  </span>
+                )}
               </div>
               <div>
                 <label className='text-white dark:text-gray-200' htmlFor='sale'>
@@ -53,42 +116,73 @@ const EditProduct = ({ handleShowFromEdit }: any) => {
                 </label>
                 <input
                   id='sale'
-                  type='password'
+                  type='number'
+                  {...register("sale", { min: 0 })}
                   className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring'
                 />
+                {errors.sale && (
+                  <span className='text-[#f33d25] pt-3 font-serif text-xs block -mb-4 '>
+                    {" "}
+                    Minimum value is 0
+                  </span>
+                )}
               </div>
-
               <div>
                 <label
                   className='text-white dark:text-gray-200'
                   htmlFor='category'>
                   Category
                 </label>
-                <select className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring'>
-                  <option>Surabaya</option>
-                  <option>Jakarta</option>
-                  <option>Tangerang</option>
-                  <option>Bandung</option>
+
+                <select
+                  autoFocus
+                  {...register("category", { required: true })}
+                  className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring'>
+                  <CategoryItem itemCategory={data.category} />
                 </select>
+                {errors.category && (
+                  <span className='text-[#f33d25] pt-3 font-serif text-xs block -mb-4 '>
+                    This field is required
+                  </span>
+                )}
               </div>
               <div>
                 <label
                   className='text-white dark:text-gray-200'
-                  htmlFor='passwordConfirmation'>
-                  Text Area
+                  htmlFor='description'>
+                  Description
                 </label>
                 <textarea
-                  id='textarea'
+                  id='description'
+                  {...register("description", {
+                    required: true,
+                    maxLength: 2000,
+                  })}
                   className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring'
                   defaultValue={""}
                 />
+                {errors.category && (
+                  <span className='text-[#f33d25] pt-3 font-serif text-xs block -mb-4 '>
+                    This field is required & Maxlength 2000 characters!!
+                  </span>
+                )}
               </div>
-              <div>
+              <div className='col-span-2'>
                 <label className='block text-sm font-medium text-white'>
                   Image
                 </label>
-                <div className='mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md'>
-                  <div className='space-y-1 text-center'>
+                <div className='relative mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md'>
+                  {data.photo ? (
+                    <img
+                      src={data.photo}
+                      className='absolute top-1 xl:left-[42%]'
+                      style={{ maxWidth: "70px" }}
+                      alt=''
+                    />
+                  ) : (
+                    ""
+                  )}
+                  <div className=' space-y-1 text-center'>
                     <svg
                       className='mx-auto h-12 w-12 text-white'
                       stroke='currentColor'
@@ -109,11 +203,12 @@ const EditProduct = ({ handleShowFromEdit }: any) => {
                         <span>Upload a file</span>
                         <input
                           id='file-upload'
-                          name='file-upload'
-                          type='file'
                           className='sr-only'
+                          type='file'
+                          {...register("photo")}
                         />
                       </label>
+
                       <p className='pl-1 text-white'>or drag and drop</p>
                     </div>
                     <p className='text-xs text-white'>
@@ -129,8 +224,15 @@ const EditProduct = ({ handleShowFromEdit }: any) => {
                 className='px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600'>
                 Cancel
               </button>
-              <button className='px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-[#26f0b3] rounded-md hover:bg-[#d9f82be5] focus:outline-none focus:bg-gray-600'>
-                Save
+              <button
+                disabled={loading}
+                className='px-8 py-2 leading-5 text-white transition-colors duration-200 transform bg-[#26f0b3] rounded-md hover:bg-[#d9f82be5] focus:outline-none focus:bg-gray-600'>
+                {loading && (
+                  <div className='flex items-center justify-center absolute top-2 left-2'>
+                    <div className='w-5 h-5 border-t-2 border-b-2 border-red-600 rounded-full animate-spin'></div>
+                  </div>
+                )}
+                Update
               </button>
             </div>
           </form>

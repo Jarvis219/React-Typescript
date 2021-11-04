@@ -1,12 +1,40 @@
 import { ProductModel } from "models/product";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { createProductAPI } from "services/products";
+import {
+  createProductAPI,
+  listProductAPI,
+  updateProductAPI,
+} from "services/products";
 
 export const CreateProduct = createAsyncThunk(
   "create-product",
   async (product: ProductModel, thunkApi) => {
     try {
       const { data }: any = await createProductAPI(product);
+      return data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+
+export const ListProduct = createAsyncThunk(
+  "list-product",
+  async (thunkApi) => {
+    try {
+      const { data }: any = await listProductAPI();
+      return data;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
+export const UpdateProduct = createAsyncThunk(
+  "update-product",
+  async (product: any, thunkApi) => {
+    try {
+      const { data }: any = await updateProductAPI(product._id, product);
       return data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
@@ -45,7 +73,42 @@ const productSlice = createSlice({
       CreateProduct.fulfilled,
       (state: initialStateSlice, action: any) => {
         state.loading = false;
+        state.current.push(action.payload.data);
+      }
+    );
+
+    builder.addCase(ListProduct.pending, (state: initialStateSlice) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      ListProduct.rejected,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
+        state.error = action.error;
+      }
+    );
+    builder.addCase(
+      ListProduct.fulfilled,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
         state.current = action.payload;
+      }
+    );
+
+    builder.addCase(UpdateProduct.pending, (state: initialStateSlice) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      UpdateProduct.rejected,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
+        state.error = action.error;
+      }
+    );
+    builder.addCase(
+      UpdateProduct.fulfilled,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
       }
     );
   },

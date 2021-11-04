@@ -1,6 +1,6 @@
-import { getToken } from "../utils/utils";
+import { getToken } from "utils/utils";
 import axios from "axios";
-import { api } from "../contants/api";
+import { api } from "constants/api";
 const instance = axios.create({
   baseURL: api,
   headers: {

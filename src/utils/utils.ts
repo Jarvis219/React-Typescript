@@ -39,3 +39,11 @@ export const getPermission = (): number | null => {
   if (!sessionStorage.getItem("user")) return null;
   return JSON.parse(sessionStorage.getItem("user")!).permission;
 };
+
+export const arrayMove = (arr: any, fromIndex: number, toIndex: number = 0) => {
+  let array = [...arr];
+  let element = arr[fromIndex];
+  array.splice(fromIndex, 1);
+  array.splice(toIndex, 0, element);
+  return array;
+};

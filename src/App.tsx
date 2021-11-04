@@ -9,6 +9,7 @@ import adminLayout from "./features/admin/AdminLayout";
 import Page404 from "features/client/pages/Page404/Page404";
 import { useAppDispatch } from "app/hook";
 import { listCategory } from "features/admin/pages/Categories/CategorySlice";
+import { ListProduct } from "features/admin/pages/Products/ProductSlice";
 const Login = lazy(() => import("./features/auth/pages/Login"));
 const Register = lazy(() => import("./features/auth/pages/Register"));
 function App() {
@@ -21,7 +22,15 @@ function App() {
         console.log(error);
       }
     };
+    const getProducts = async () => {
+      try {
+        await dispatch(ListProduct());
+      } catch (error) {
+        console.log(error);
+      }
+    };
     getCategories();
+    getProducts();
   }, [dispatch]);
 
   return (

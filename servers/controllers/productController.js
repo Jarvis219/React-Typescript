@@ -4,24 +4,26 @@ import _ from "lodash";
 // danh sách sản phẩm
 export const listProduct = (req, res) => {
   let limit = req.query.limit ? +req.query.limit : 100;
-  let classify = req.query.classify ? req.query.classify : "male";
-  let skip = req.query.skip ? req.query.skip : 1;
-  // console.log(classify);
-  Product.find({
-    classify: new RegExp(classify),
-  })
+  // let classify = req.query.classify ? req.query.classify : "";
+
+  // {
+  //   classify: new RegExp(classify),
+  // }
+  let skip = req.query.skip ? req.query.skip : 0;
+
+  Product.find()
     .limit(limit)
     .skip(skip)
     .populate("category", "name")
-    .exec((err, product) => {
+    .exec((err, data) => {
       if (err) {
         return res.status(400).json({
           error: "product does not exit",
         });
       }
-      res.json({
-        product,
-      });
+      res.json(
+        data
+      );
     });
 };
 
@@ -68,10 +70,14 @@ export const createProduct = (req, res) => {
         error: err,
       });
     }
-    res.json({ data, message: "Create product successfully" });
+    res.json({
+      data,
+      message: "Create product successfully"
+    });
   });
 };
-// cập nhật sản phẩm
+
+
 export const updateProduct = (req, res) => {
   let products = req.product;
   products = _.assignIn(products, req.body);
@@ -82,7 +88,10 @@ export const updateProduct = (req, res) => {
         error: "update product success",
       });
     }
-    res.json(data);
+    res.json({
+      data,
+      message: 'Update product successfully'
+    });
   });
 };
 
@@ -91,11 +100,11 @@ export const updateProduct = (req, res) => {
 export const listRelated = (req, res) => {
   let limit = req.query.limit ? req.query.limit : 4;
   Product.find({
-    _id: {
-      $ne: req.product, // loại trừ
-    },
-    category: req.product.category, // lấy theo thể loại
-  })
+      _id: {
+        $ne: req.product, // loại trừ
+      },
+      category: req.product.category, // lấy theo thể loại
+    })
     .limit(limit)
     .populate("category", "_id name")
     .exec((err, data) => {
@@ -114,12 +123,12 @@ export const listSearch = (req, res) => {
   let limit = req.query.limit ? req.query.limit : 12;
   let q = req.query.q ? req.query.q : "";
   Product.find({
-    // name: new RegExp(q)
-    name: {
-      $regex: `${q}`,
-      $options: "$i",
-    },
-  })
+      // name: new RegExp(q)
+      name: {
+        $regex: `${q}`,
+        $options: "$i",
+      },
+    })
     .limit(limit)
     .exec((err, data) => {
       if (err) {
