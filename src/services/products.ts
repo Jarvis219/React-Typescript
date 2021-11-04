@@ -15,3 +15,8 @@ export const updateProductAPI = (id: string, data: string) => {
   const url = `/update-product/${id}`;
   return instance.put(url, data);
 };
+
+export const removeProductAPI = (id: string) => {
+  const url = `/remove-product/${id}`;
+  return instance.delete(url);
+};

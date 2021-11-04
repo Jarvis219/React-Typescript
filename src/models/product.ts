@@ -8,5 +8,5 @@ export interface ProductModel {
   sold?: number;
   photo?: string | File;
   album?: Array<string>;
-  status?: 0 | 1 | 2;
+  status?: string;
 }

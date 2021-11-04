@@ -1,27 +1,35 @@
 /* eslint-disable array-callback-return */
+import { useAppDispatch, useAppSelector } from "app/hook";
 import { ProductStatus } from "constants/product";
+import ConfirmButton from "features/admin/components/DiaLog/ConfirmButton";
+import { DeletePhotoUpload } from "helpers/filebaseUpload";
 import { ProductModel } from "models/product";
 import { Fragment, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { removeEmtyArray } from "utils/utils";
-import StatusProduct from "./StatusProduct";
-const ProductList = ({
-  handleShowFromCreate,
-  handleShowFromEdit,
-  handleShowDialogDelete,
-  handleUpdateStatusProduct,
-  products,
-}: any) => {
-  const getDataStatus = (data: ProductModel): void => {
-    handleUpdateStatusProduct(data);
-  };
-  const [productShow, setProductShow] = useState<ProductModel>();
-  const [result, setResult] = useState<any>();
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ListProduct, RemoveProduct, UpdateProduct } from "./ProductSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
 
+const TrashProduct = () => {
+  const dispatch = useAppDispatch();
+  const products = useAppSelector((state: any) => {
+    return state.product.current;
+  });
+  const notifyError = (error: string) => toast.error(error);
+  const notifySuccess = (success: string) =>
+    toast.success(success, { icon: "🚀" });
+
+  const [trashProduct, setTrashProduct] = useState<ProductModel>();
+  const [removeEmty, setRemoveEmty] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [diaLog, setDialog] = useState<boolean>(false);
+  const [idDelete, setIdDelete] = useState<string | null>(null);
+  const [photo, setPhoto] = useState<string | null>(null);
   useEffect(() => {
-    setProductShow(
-      products.map((item: any) => {
-        if (item.status !== ProductStatus.delete) {
+    setTrashProduct(
+      products.map((item: ProductModel) => {
+        if (item.status === ProductStatus.delete) {
           return item;
         }
       })
@@ -29,36 +37,81 @@ const ProductList = ({
   }, [products]);
 
   useEffect(() => {
-    if (productShow) {
-      setResult(removeEmtyArray(productShow));
+    if (trashProduct) {
+      setRemoveEmty(removeEmtyArray(trashProduct));
     }
-  }, [productShow]);
+  }, [trashProduct]);
+
+  const handleShowDialogDelete = (status: boolean, data: ProductModel) => {
+    const { _id, photo }: any = data;
+    setIdDelete(_id);
+    setPhoto(photo);
+    setDialog(status);
+  };
+
+  const handleConFirm = async (data: boolean): Promise<void> => {
+    if (data) {
+      deleteProduct();
+    }
+    setDialog(false);
+  };
+
+  const undoTrashProduct = (data: ProductModel) => {
+    updateStatusFromTrash(
+      Object.assign({}, data, { status: ProductStatus.public })
+    );
+  };
+
+  const deleteProduct = async (): Promise<void> => {
+    try {
+      if (!idDelete) return;
+      setLoading(true);
+      if (photo && photo !== null) {
+        try {
+          await DeletePhotoUpload(photo);
+          notifySuccess("Delete image to firebase succsessfully 👌");
+        } catch (error) {
+          notifyError("Delete image failure !!!");
+        }
+      }
+      const actionResult: any = await dispatch(RemoveProduct(idDelete));
+      const currentCategory = unwrapResult(actionResult);
+      getProducts();
+      setLoading(false);
+      notifySuccess(currentCategory.message + " 👌");
+    } catch (error) {
+      setLoading(false);
+      notifyError("Delete product failure !!!");
+    }
+  };
+
+  const getProducts = async () => {
+    try {
+      await dispatch(ListProduct());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateStatusFromTrash = async (data: ProductModel): Promise<void> => {
+    try {
+      setLoading(true);
+      const actionResult: any = await dispatch(UpdateProduct(data));
+      const currentCategory = unwrapResult(actionResult);
+      getProducts();
+      notifySuccess(currentCategory.message + " 👌");
+    } catch (error) {
+      notifyError("Update product failure !!!");
+    }
+  };
+
   return (
     <Fragment>
       <div className="flex flex-1  flex-col md:flex-row lg:flex-row mx-2 text-center">
         <div className="mb-2 border-solid border-gray-300 rounded border shadow-sm w-full">
-          <div className="relative bg-gray-200 px-2 py-3 border-solid border-gray-200 border-b uppercase text-center">
+          <div className="bg-gray-200 px-2 py-3 border-solid border-gray-200 border-b uppercase text-center">
             Products
-            <div className="absolute top-3 right-[5%]">
-              <Link to="/admin/trash-products">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 hover:text-[#3ae734] text-[#dd4b27]"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
-              </Link>
-            </div>
           </div>
-
           <div className="p-3">
             <table className="table-responsive w-full rounded">
               <thead>
@@ -70,13 +123,12 @@ const ProductList = ({
                   <th className="border w-1/6 px-4 py-2">Sale</th>
                   <th className="border w-1/6 px-4 py-2">Quantity</th>
                   <th className="border w-1/6 px-4 py-2">Sold</th>
-                  <th className="border w-1/7 px-4 py-2">Status</th>
                   <th className="border w-1/5 px-4 py-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {result ? (
-                  result.map((item: any, index: number) => {
+                {removeEmty ? (
+                  removeEmty.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
                         <td className="border px-4 py-2">{item.name}</td>
@@ -90,20 +142,16 @@ const ProductList = ({
                         <td className="border px-4 py-2">{item.sale} $</td>
                         <td className="border px-4 py-2">{item.quantity} $</td>
                         <td className="border px-4 py-2">{item.sold} $</td>
-                        <td className="border px-4 py-2">
-                          <StatusProduct
-                            getDataStatus={getDataStatus}
-                            data={item}
-                            statusItem={item.status}
-                          />
-                        </td>
 
                         <td className="border px-4 py-2">
                           <div className="flex justify-center items-center">
-                            <span className="cursor-pointer  mx-1 ">
+                            <span
+                              onClick={() => undoTrashProduct(item)}
+                              className="cursor-pointer  mx-1 "
+                            >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="h-7 w-7"
+                                className="h-6 w-6"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="#0CE943"
@@ -112,39 +160,11 @@ const ProductList = ({
                                   strokeLinecap="round"
                                   strokeLinejoin="round"
                                   strokeWidth={2}
-                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                />
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                  d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z"
                                 />
                               </svg>
                             </span>
-                            <span
-                              onClick={() =>
-                                handleShowFromEdit({
-                                  status: true,
-                                  data: item,
-                                })
-                              }
-                              className="cursor-pointer  mx-1 "
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-6 w-6"
-                                viewBox="0 0 20 20"
-                                fill="#0CE943"
-                              >
-                                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                <path
-                                  fillRule="evenodd"
-                                  d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                            </span>
+
                             <span
                               onClick={() => handleShowDialogDelete(true, item)}
                               className="cursor-pointer  mx-1 "
@@ -170,21 +190,14 @@ const ProductList = ({
                     );
                   })
                 ) : (
-                  <tr>
-                    <td>not product</td>
-                  </tr>
+                  <tr></tr>
                 )}
               </tbody>
             </table>
           </div>
         </div>
       </div>
-      <div className="ml-[1%] flex gap-[60%] lg:gap-[70%] xl:gap-[81%]">
-        <div onClick={() => handleShowFromCreate(true)}>
-          <button className="bg-transparent hover:bg-green-500 text-[#48bb78] font-semibold hover:text-white py-2 px-4 border border-green hover:border-transparent rounded">
-            Create
-          </button>
-        </div>
+      <div className=" ml-[1%] flex justify-end gap-[60%] lg:gap-[70%] xl:gap-[81%]">
         <div className="inline-flex ">
           <button className="bg-gray-200 hover:bg-gray-500 text-gray-900 font-bold py-2 px-4 rounded-l shadow">
             Prev
@@ -194,8 +207,17 @@ const ProductList = ({
           </button>
         </div>
       </div>
+      {diaLog ? (
+        <ConfirmButton
+          loading={loading}
+          handleConFirm={handleConFirm}
+          handleShowDialogDelete={handleShowDialogDelete}
+        />
+      ) : (
+        ""
+      )}
+      <ToastContainer />
     </Fragment>
   );
 };
-
-export default ProductList;
+export default TrashProduct;

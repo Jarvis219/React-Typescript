@@ -4,6 +4,7 @@ import {
   createProductAPI,
   listProductAPI,
   updateProductAPI,
+  removeProductAPI,
 } from "services/products";
 
 export const CreateProduct = createAsyncThunk(
@@ -35,6 +36,18 @@ export const UpdateProduct = createAsyncThunk(
   async (product: any, thunkApi) => {
     try {
       const { data }: any = await updateProductAPI(product._id, product);
+      return data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+
+export const RemoveProduct = createAsyncThunk(
+  "remove-category",
+  async (id: string, thunkApi) => {
+    try {
+      const { data }: any = await removeProductAPI(id);
       return data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
@@ -107,6 +120,23 @@ const productSlice = createSlice({
     );
     builder.addCase(
       UpdateProduct.fulfilled,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
+      }
+    );
+
+    builder.addCase(RemoveProduct.pending, (state: initialStateSlice) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      RemoveProduct.rejected,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
+        state.error = action.error;
+      }
+    );
+    builder.addCase(
+      RemoveProduct.fulfilled,
       (state: initialStateSlice, action: any) => {
         state.loading = false;
       }

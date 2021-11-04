@@ -3,6 +3,7 @@ import { lazy } from "react";
 const Product = lazy(() => import("./pages/Products/Product"));
 const Category = lazy(() => import("./pages/Categories/Category"));
 const DashboardPage = lazy(() => import("./pages/Dashboard/Dashboard"));
+const TrashProduct = lazy(() => import("./pages/Products/TrashProduct"));
 
 const adminLayout = [
   {
@@ -18,6 +19,11 @@ const adminLayout = [
   {
     path: "/products",
     component: Product,
+    exact: true,
+  },
+  {
+    path: "/trash-products",
+    component: TrashProduct,
     exact: true,
   },
 ];

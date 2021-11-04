@@ -21,9 +21,7 @@ export const listProduct = (req, res) => {
           error: "product does not exit",
         });
       }
-      res.json(
-        data
-      );
+      res.json(data);
     });
 };
 
@@ -55,7 +53,7 @@ export const removeProduct = (req, res) => {
       });
     }
     res.json({
-      message: "delete product success",
+      message: "Delete product successfully",
     });
   });
 };
@@ -72,11 +70,10 @@ export const createProduct = (req, res) => {
     }
     res.json({
       data,
-      message: "Create product successfully"
+      message: "Create product successfully",
     });
   });
 };
-
 
 export const updateProduct = (req, res) => {
   let products = req.product;
@@ -90,7 +87,7 @@ export const updateProduct = (req, res) => {
     }
     res.json({
       data,
-      message: 'Update product successfully'
+      message: "Update product successfully",
     });
   });
 };
@@ -100,11 +97,11 @@ export const updateProduct = (req, res) => {
 export const listRelated = (req, res) => {
   let limit = req.query.limit ? req.query.limit : 4;
   Product.find({
-      _id: {
-        $ne: req.product, // loại trừ
-      },
-      category: req.product.category, // lấy theo thể loại
-    })
+    _id: {
+      $ne: req.product, // loại trừ
+    },
+    category: req.product.category, // lấy theo thể loại
+  })
     .limit(limit)
     .populate("category", "_id name")
     .exec((err, data) => {
@@ -123,12 +120,12 @@ export const listSearch = (req, res) => {
   let limit = req.query.limit ? req.query.limit : 12;
   let q = req.query.q ? req.query.q : "";
   Product.find({
-      // name: new RegExp(q)
-      name: {
-        $regex: `${q}`,
-        $options: "$i",
-      },
-    })
+    // name: new RegExp(q)
+    name: {
+      $regex: `${q}`,
+      $options: "$i",
+    },
+  })
     .limit(limit)
     .exec((err, data) => {
       if (err) {

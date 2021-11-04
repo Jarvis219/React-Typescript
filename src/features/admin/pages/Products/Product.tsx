@@ -11,6 +11,7 @@ import {
   UpdateProduct,
 } from "./ProductSlice";
 import { FirebaseUploadPhoto } from "helpers/filebaseUpload";
+import { ProductStatus } from "constants/product";
 
 const ProductList = lazy(
   () => import("features/admin/components/Product/Product")
@@ -38,6 +39,8 @@ const Product = () => {
   const [diaLog, setDialog] = useState<boolean>(false);
   const [dataEdit, setDataEdit] = useState<any>(null);
 
+  const [dataDetele, setDataDelete] = useState<ProductModel>();
+
   const handleShowFromCreate = (data: boolean): void => {
     setShowFormCreate(data);
   };
@@ -48,12 +51,39 @@ const Product = () => {
     setShowFormEdit(data.status);
     setDataEdit(data);
   };
-  const handleShowDialogDelete = (data: boolean) => {
-    setDialog(data);
+  const handleShowDialogDelete = (status: boolean, data: ProductModel) => {
+    setDialog(status);
+
+    setDataDelete(data);
   };
-  const handleConFirm = (data: boolean) => {
-    console.log(data);
+
+  const handleConFirm = async (data: boolean): Promise<void> => {
+    if (data) {
+      if (dataDetele?.status === ProductStatus.public) {
+        updateStatusFromTrash(
+          Object.assign({}, dataDetele, { status: ProductStatus.private })
+        );
+      } else {
+        updateStatusFromTrash(
+          Object.assign({}, dataDetele, { status: ProductStatus.delete })
+        );
+      }
+      // deleteProduct();
+    }
     setDialog(false);
+  };
+
+  const updateStatusFromTrash = async (data: ProductModel): Promise<void> => {
+    try {
+      setLoading(true);
+      const actionResult: any = await dispatch(UpdateProduct(data));
+      const currentProduct = unwrapResult(actionResult);
+      getProducts();
+      setShowFormEdit(false);
+      notifySuccess(currentProduct.message + " 👌");
+    } catch (error) {
+      notifyError("Update product failure !!!");
+    }
   };
 
   const handleCreateSubmit = async (data: ProductModel): Promise<void> => {
@@ -64,11 +94,11 @@ const Product = () => {
         const actionResult: any = await dispatch(
           createProductSlice(Object.assign(data, { photo: null }))
         );
-        const currentCategory = unwrapResult(actionResult);
+        const currentProduct = unwrapResult(actionResult);
         getProducts();
         setLoading(false);
         setShowFormCreate(false);
-        notifySuccess(currentCategory.message + " 👌");
+        notifySuccess(currentProduct.message + " 👌");
       } catch (error) {
         setLoading(false);
         notifyError("Create product failure !!!");
@@ -83,11 +113,11 @@ const Product = () => {
         createProductSlice(Object.assign(data, { photo }))
       );
       setLoading(false);
-      const currentCategory = unwrapResult(actionResult);
+      const currentProduct = unwrapResult(actionResult);
       getProducts();
       setLoading(false);
       setShowFormCreate(false);
-      notifySuccess(currentCategory.message + " 👌");
+      notifySuccess(currentProduct.message + " 👌");
     } catch (error) {
       setLoading(false);
       notifyError("Create product failure !!!");
@@ -100,10 +130,10 @@ const Product = () => {
       try {
         setLoading(true);
         const actionResult: any = await dispatch(UpdateProduct(data));
-        const currentCategory = unwrapResult(actionResult);
+        const currentProduct = unwrapResult(actionResult);
         getProducts();
         setShowFormEdit(false);
-        notifySuccess(currentCategory.message + " 👌");
+        notifySuccess(currentProduct.message + " 👌");
       } catch (error) {
         setShowFormEdit(false);
         notifyError("Create product failure !!!");
@@ -118,13 +148,26 @@ const Product = () => {
         UpdateProduct(Object.assign(data, { photo }))
       );
       setLoading(false);
-      const currentCategory = unwrapResult(actionResult);
+      const currentProduct = unwrapResult(actionResult);
       getProducts();
       setShowFormEdit(false);
-      notifySuccess(currentCategory.message + " 👌");
+      notifySuccess(currentProduct.message + " 👌");
     } catch (error) {
       setShowFormEdit(false);
       notifyError("Create product failure !!!");
+    }
+  };
+
+  const handleUpdateStatusProduct = async (
+    data: ProductModel
+  ): Promise<void> => {
+    try {
+      const actionResult: any = await dispatch(UpdateProduct(data));
+      const currentProduct = unwrapResult(actionResult);
+      getProducts();
+      notifySuccess(currentProduct.message + " 👌");
+    } catch (error) {
+      notifyError("Update product failure !!!");
     }
   };
 
@@ -140,12 +183,14 @@ const Product = () => {
     <div>
       <ProductList
         products={products}
+        handleUpdateStatusProduct={handleUpdateStatusProduct}
         handleShowFromEdit={handleShowFromEdit}
         handleShowFromCreate={handleShowFromCreate}
         handleShowDialogDelete={handleShowDialogDelete}
       />
       {diaLog ? (
         <ConfirmButton
+          loading={loading}
           handleConFirm={handleConFirm}
           handleShowDialogDelete={handleShowDialogDelete}
         />

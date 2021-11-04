@@ -47,3 +47,10 @@ export const arrayMove = (arr: any, fromIndex: number, toIndex: number = 0) => {
   array.splice(toIndex, 0, element);
   return array;
 };
+
+export const removeEmtyArray = (array: any): any => {
+  const filtered = array.filter(function (el: any) {
+    return el != null;
+  });
+  return filtered;
+};
