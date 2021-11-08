@@ -5,7 +5,10 @@ import {
   listProductAPI,
   updateProductAPI,
   removeProductAPI,
+  filterCategory,
+  listSearchAPI,
 } from "services/products";
+import { Pagination, setCountProduct } from "utils/utils";
 
 export const CreateProduct = createAsyncThunk(
   "create-product",
@@ -21,10 +24,14 @@ export const CreateProduct = createAsyncThunk(
 
 export const ListProduct = createAsyncThunk(
   "list-product",
-  async (thunkApi) => {
+  async (pagination: Pagination, thunkApi) => {
     try {
-      const { data }: any = await listProductAPI();
-      return data;
+      const { data }: any = await listProductAPI(
+        pagination.limit,
+        pagination.skip
+      );
+      setCountProduct(data.count);
+      return data.data;
     } catch (error) {
       return error;
     }
@@ -44,10 +51,34 @@ export const UpdateProduct = createAsyncThunk(
 );
 
 export const RemoveProduct = createAsyncThunk(
-  "remove-category",
+  "remove-product",
   async (id: string, thunkApi) => {
     try {
       const { data }: any = await removeProductAPI(id);
+      return data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+
+export const FilterCategory = createAsyncThunk(
+  "filter-category",
+  async (id: string, thunkApi) => {
+    try {
+      const { data }: any = await filterCategory(id);
+      return data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+
+export const ListSearch = createAsyncThunk(
+  "list-search",
+  async (name: string, thunkApi) => {
+    try {
+      const { data }: any = await listSearchAPI(name);
       return data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
@@ -102,6 +133,24 @@ const productSlice = createSlice({
     );
     builder.addCase(
       ListProduct.fulfilled,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
+        state.current = action.payload;
+      }
+    );
+
+    builder.addCase(ListSearch.pending, (state: initialStateSlice) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      ListSearch.rejected,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
+        state.error = action.error;
+      }
+    );
+    builder.addCase(
+      ListSearch.fulfilled,
       (state: initialStateSlice, action: any) => {
         state.loading = false;
         state.current = action.payload;

@@ -1,10 +1,9 @@
-import { Fragment, memo, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, memo } from "react";
 import { ProductStatus } from "constants/product";
 
 const StatusProduct = ({ statusItem, data, getDataStatus }: any) => {
   const [status, setStatus] = useState<Array<string>>([]);
-
-  const checkStatus = () => {
+  useEffect(() => {
     if (statusItem === ProductStatus.public) {
       setStatus([
         ProductStatus.public,
@@ -20,22 +19,19 @@ const StatusProduct = ({ statusItem, data, getDataStatus }: any) => {
     } else {
       setStatus([ProductStatus.delete]);
     }
-  };
-  useEffect(() => {
-    checkStatus();
+    return () => setStatus([]);
   }, [statusItem]);
 
   const setDataStatus = async (e: any) => {
     await getDataStatus(Object.assign({}, data, { status: e.target.value }));
-    checkStatus();
   };
-  console.log(status);
+
   return (
     <Fragment>
       <select
-        className="rounded py-2 px-3 bg-blue-100 text-gray-700"
+        className='rounded py-2 px-3 bg-blue-100 text-gray-700'
         onChange={(e) => setDataStatus(e)}
-      >
+        value=''>
         {status.map((item: string, index: number) => {
           return (
             <option key={index} value={item}>

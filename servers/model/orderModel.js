@@ -45,8 +45,8 @@ const orderSchema = mongoose.Schema({
     maxLength: 50,
   },
   status: {
-    type: String | Number,
-    trim: true,
+    type: Number,
+    default: 0,
     required: true,
   },
 }, {

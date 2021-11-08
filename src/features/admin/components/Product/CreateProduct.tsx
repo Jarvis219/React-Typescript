@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ProductStatus } from "constants/product";
 import CategoryItem from "../Category/CategoryItem";
@@ -19,6 +19,7 @@ const CreateProduct = ({
   handleCreateSubmit,
   loading,
 }: any) => {
+  const [avatar, setAvatar] = useState<any>();
   const {
     register,
     handleSubmit,
@@ -26,6 +27,18 @@ const CreateProduct = ({
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     handleCreateSubmit(data);
+  };
+
+  useEffect(() => {
+    return () => {
+      avatar && URL.revokeObjectURL(avatar.preview);
+    };
+  }, [avatar]);
+
+  const handlePreviewPhoto = (e: any) => {
+    const file = e.target.files[0];
+    file.preview = URL.createObjectURL(file);
+    setAvatar(file);
   };
 
   return (
@@ -47,12 +60,12 @@ const CreateProduct = ({
                 <input
                   id='name'
                   type='text'
-                  {...register("name", { required: true, maxLength: 50 })}
+                  {...register("name", { required: true, maxLength: 80 })}
                   className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring'
                 />
                 {errors.name && (
                   <span className='text-[#f33d25] pt-3 font-serif text-xs block -mb-4 '>
-                    This field is required & maximum 50 characters
+                    This field is required & maximum 80 characters
                   </span>
                 )}
               </div>
@@ -176,7 +189,17 @@ const CreateProduct = ({
                 <label className='block text-sm font-medium text-white'>
                   Image
                 </label>
-                <div className='mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md'>
+                <div className='relative mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md'>
+                  {avatar ? (
+                    <img
+                      src={avatar.preview}
+                      className='absolute top-1 xl:left-[42%]'
+                      style={{ maxWidth: "70px" }}
+                      alt=''
+                    />
+                  ) : (
+                    ""
+                  )}
                   <div className='space-y-1 text-center'>
                     <svg
                       className='mx-auto h-12 w-12 text-white'
@@ -201,6 +224,7 @@ const CreateProduct = ({
                           className='sr-only'
                           type='file'
                           {...register("photo")}
+                          onChange={handlePreviewPhoto}
                         />
                       </label>
                       <p className='pl-1 text-white'>or drag and drop</p>

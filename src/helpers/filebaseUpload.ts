@@ -30,7 +30,7 @@ export const FirebaseUploadMultiplePhoto = (image: File): Promise<string> => {
 };
 
 export const FirebaseUploadPhoto = (image: File): Promise<string> => {
-  return new Promise<any>((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
     const storage = getStorage();
     const storageRef = ref(storage, `images/${image.name}`);
     // 'file' comes from the Blob or File API

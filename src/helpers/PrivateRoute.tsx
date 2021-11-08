@@ -2,6 +2,7 @@ import { Redirect, Route } from "react-router-dom";
 import { Header } from "../features/admin/components/Header/Header";
 import SideBar from "features/admin/components/SideBar/SideBar";
 import useAuth from "./useAuth";
+import { ToastContainer } from "react-toastify";
 
 const PrivateRoute = ({ ...rest }) => {
   const auth = useAuth();
@@ -17,6 +18,7 @@ const PrivateRoute = ({ ...rest }) => {
           </main>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

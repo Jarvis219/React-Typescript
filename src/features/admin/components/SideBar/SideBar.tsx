@@ -46,6 +46,26 @@ const SideBar = () => {
               <span className='mx-[10%]'>Products</span>
             </Link>
           </li>
+          <li className='bg-[#ecf0f1] w-full h-full py-3 px-2 border-b border-[#bee3f8]'>
+            <Link
+              to='/admin/orders'
+              className='flex cursor-pointer font-sans font-hairline hover:font-normal text-sm text-nav-item no-underline '>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                className='h-6 w-6'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'>
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'
+                />
+              </svg>
+              <span className='mx-[10%]'>Orders</span>
+            </Link>
+          </li>
         </ul>
       </aside>
     </Fragment>

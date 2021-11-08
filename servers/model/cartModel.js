@@ -13,38 +13,12 @@ const cartSchema = mongoose.Schema({
     ref: "Product",
     require: true,
   },
-  size: {
-    type: Array,
-    trim: true,
-    required: true,
-  },
-  image: {
-    type: String,
-    require: true,
-    maxLength: 1000,
-    trim: true,
-  },
-  price: {
-    type: Number,
-    require: true,
-    maxLength: 10,
-    trim: true,
-  },
-  sale: {
-    type: Number,
-    maxLength: 10,
-  },
-  totalMoney: {
-    type: Number,
-    maxLength: 10,
-    require: true,
-    trim: true,
-  },
   amount: {
     type: Number,
     maxLength: 10,
     require: true,
     trim: true,
+    default: 1
   },
 }, {
   timestamps: true,

@@ -7,11 +7,13 @@ import {
     removeProduct,
     readProduct,
     listRelated,
-    listSearch
+    listSearch,
+    filterCategory
 } from "../controllers/productController";
 const router = express.Router();
 
 router.get("/list-search", listSearch);
+router.get("/filter-category", filterCategory);
 router.get("/list-product", listProduct);
 router.get("/list-related-product", listRelated);
 router.get("/read-product/:id", readProduct);

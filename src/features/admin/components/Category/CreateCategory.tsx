@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 type Inputs = {
@@ -10,8 +10,10 @@ const CreateCategory = ({ handleShowFromCreate, handleSubmitCreate }: any) => {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+  const [checkName, setCheckName] = useState<string>("");
+
   const createCategory: SubmitHandler<Inputs> = (data: Inputs) => {
-    handleSubmitCreate(data);
+    handleSubmitCreate(data, checkName);
   };
 
   return (
@@ -33,6 +35,7 @@ const CreateCategory = ({ handleShowFromCreate, handleSubmitCreate }: any) => {
                 <input
                   id='name'
                   type='text'
+                  onKeyUp={(e: any) => setCheckName(e.target.value)}
                   className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring'
                   {...register("name", { required: true, maxLength: 30 })}
                 />

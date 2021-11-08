@@ -4,7 +4,7 @@ const Product = lazy(() => import("./pages/Products/Product"));
 const Category = lazy(() => import("./pages/Categories/Category"));
 const DashboardPage = lazy(() => import("./pages/Dashboard/Dashboard"));
 const TrashProduct = lazy(() => import("./pages/Products/TrashProduct"));
-
+const Order = lazy(() => import("./pages/Order/Order"));
 const adminLayout = [
   {
     path: "/",
@@ -19,6 +19,11 @@ const adminLayout = [
   {
     path: "/products",
     component: Product,
+    exact: true,
+  },
+  {
+    path: "/orders",
+    component: Order,
     exact: true,
   },
   {

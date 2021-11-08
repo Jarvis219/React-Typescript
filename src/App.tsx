@@ -3,6 +3,7 @@ import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import AuthProvider from "./helpers/AuthProvider";
 import PrivateRoute from "helpers/PrivateRoute";
+import PublicRoute from "helpers/PublicRoute";
 import { Loading } from "utils/loading/Loading";
 import clientLayout from "./features/client/ClientLayout";
 import adminLayout from "./features/admin/AdminLayout";
@@ -10,6 +11,8 @@ import Page404 from "features/client/pages/Page404/Page404";
 import { useAppDispatch } from "app/hook";
 import { listCategory } from "features/admin/pages/Categories/CategorySlice";
 import { ListProduct } from "features/admin/pages/Products/ProductSlice";
+import { ListCartUser } from "features/admin/pages/Cart/CartSlice";
+import { getUser } from "utils/utils";
 const Login = lazy(() => import("./features/auth/pages/Login"));
 const Register = lazy(() => import("./features/auth/pages/Register"));
 function App() {
@@ -24,13 +27,25 @@ function App() {
     };
     const getProducts = async () => {
       try {
-        await dispatch(ListProduct());
+        await dispatch(ListProduct({ limit: 0, skip: 0 }));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const getCartUser = async () => {
+      try {
+        if (!getUser()) return;
+        sessionStorage.removeItem("total");
+        const { _id } = getUser();
+        await dispatch(ListCartUser(_id));
       } catch (error) {
         console.log(error);
       }
     };
     getCategories();
     getProducts();
+    getCartUser();
   }, [dispatch]);
 
   return (
@@ -53,7 +68,7 @@ function App() {
               })}
               {clientLayout.map(({ path, component, exact }, index) => {
                 return (
-                  <Route
+                  <PublicRoute
                     exact={exact}
                     key={index}
                     path={path}

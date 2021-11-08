@@ -1,17 +1,25 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector } from "app/hook";
 import ConfirmButton from "features/admin/components/DiaLog/ConfirmButton";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { ProductModel } from "models/product";
-import { lazy, useState } from "react";
+import {
+  ProductModel,
+  ProductPaginationType,
+  DisabledProductPaginationType,
+} from "models/product";
+import { lazy, useEffect, useState } from "react";
 import {
   CreateProduct as createProductSlice,
   ListProduct,
   UpdateProduct,
 } from "./ProductSlice";
 import { FirebaseUploadPhoto } from "helpers/filebaseUpload";
-import { ProductStatus } from "constants/product";
+import { ProductPagination, ProductStatus } from "constants/product";
+import {
+  getCountProduct,
+  notifyError,
+  notifySuccess,
+  Pagination,
+} from "utils/utils";
 
 const ProductList = lazy(
   () => import("features/admin/components/Product/Product")
@@ -28,16 +36,22 @@ const Product = () => {
   const products = useAppSelector((state: any) => {
     return state.product.current;
   });
-
-  const notifyError = (error: string) => toast.error(error);
-  const notifySuccess = (success: string) =>
-    toast.success(success, { icon: "🚀" });
+  const countProduct = getCountProduct();
 
   const [showFormCreate, setShowFormCreate] = useState<boolean>(false);
   const [showFormEdit, setShowFormEdit] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [diaLog, setDialog] = useState<boolean>(false);
   const [dataEdit, setDataEdit] = useState<any>(null);
+  const [pagination, setPagination] = useState<Pagination>({
+    limit: 3,
+    skip: 0,
+  });
+  const [disablePagination, setDisablePagination] =
+    useState<DisabledProductPaginationType>({
+      action: ProductPagination.minus,
+      status: true,
+    });
 
   const [dataDetele, setDataDelete] = useState<ProductModel>();
 
@@ -53,7 +67,6 @@ const Product = () => {
   };
   const handleShowDialogDelete = (status: boolean, data: ProductModel) => {
     setDialog(status);
-
     setDataDelete(data);
   };
 
@@ -68,8 +81,8 @@ const Product = () => {
           Object.assign({}, dataDetele, { status: ProductStatus.delete })
         );
       }
-      // deleteProduct();
     }
+    setLoading(false);
     setDialog(false);
   };
 
@@ -78,7 +91,7 @@ const Product = () => {
       setLoading(true);
       const actionResult: any = await dispatch(UpdateProduct(data));
       const currentProduct = unwrapResult(actionResult);
-      getProducts();
+      await getProducts();
       setShowFormEdit(false);
       notifySuccess(currentProduct.message + " 👌");
     } catch (error) {
@@ -95,7 +108,7 @@ const Product = () => {
           createProductSlice(Object.assign(data, { photo: null }))
         );
         const currentProduct = unwrapResult(actionResult);
-        getProducts();
+        await getProducts();
         setLoading(false);
         setShowFormCreate(false);
         notifySuccess(currentProduct.message + " 👌");
@@ -114,7 +127,7 @@ const Product = () => {
       );
       setLoading(false);
       const currentProduct = unwrapResult(actionResult);
-      getProducts();
+      await getProducts();
       setLoading(false);
       setShowFormCreate(false);
       notifySuccess(currentProduct.message + " 👌");
@@ -126,12 +139,13 @@ const Product = () => {
 
   const handleEditSubmit = async (data: ProductModel): Promise<void> => {
     let { photo }: any = data;
-    if (photo.length === null) {
+    if (photo === null) {
       try {
         setLoading(true);
         const actionResult: any = await dispatch(UpdateProduct(data));
         const currentProduct = unwrapResult(actionResult);
-        getProducts();
+        setLoading(false);
+        await getProducts();
         setShowFormEdit(false);
         notifySuccess(currentProduct.message + " 👌");
       } catch (error) {
@@ -143,13 +157,19 @@ const Product = () => {
 
     try {
       setLoading(true);
-      photo = await FirebaseUploadPhoto(photo[0]);
-      const actionResult: any = await dispatch(
-        UpdateProduct(Object.assign(data, { photo }))
-      );
+      let currentProduct;
+      if (typeof photo === "string") {
+        const actionResult: any = await dispatch(UpdateProduct(data));
+        currentProduct = unwrapResult(actionResult);
+      } else {
+        photo = await FirebaseUploadPhoto(photo[0]);
+        const actionResult: any = await dispatch(
+          UpdateProduct(Object.assign(data, { photo }))
+        );
+        currentProduct = unwrapResult(actionResult);
+      }
       setLoading(false);
-      const currentProduct = unwrapResult(actionResult);
-      getProducts();
+      await getProducts();
       setShowFormEdit(false);
       notifySuccess(currentProduct.message + " 👌");
     } catch (error) {
@@ -164,18 +184,54 @@ const Product = () => {
     try {
       const actionResult: any = await dispatch(UpdateProduct(data));
       const currentProduct = unwrapResult(actionResult);
-      getProducts();
+      await getProducts();
       notifySuccess(currentProduct.message + " 👌");
     } catch (error) {
       notifyError("Update product failure !!!");
     }
   };
 
-  const getProducts = async () => {
+  const getProducts = async (): Promise<void> => {
     try {
-      await dispatch(ListProduct());
+      await dispatch(ListProduct(pagination));
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagination]);
+
+  const handlePagination = (action: ProductPaginationType): void => {
+    if (action.type === ProductPagination.plus) {
+      setPagination((pre): any => {
+        setDisablePagination({
+          action: ProductPagination.minus,
+          status: false,
+        });
+
+        if (pre.skip >= countProduct! - 6) {
+          setDisablePagination({
+            action: ProductPagination.plus,
+            status: true,
+          });
+        }
+        return Object.assign({}, pre, { skip: pre.skip + 3 });
+      });
+    } else {
+      setPagination((pre): any => {
+        if (pre.skip <= 0) {
+          setDisablePagination({
+            action: ProductPagination.minus,
+            status: true,
+          });
+          pre.skip = 0;
+          return pre;
+        }
+        return Object.assign({}, pre, { skip: pre.skip - 3 });
+      });
     }
   };
 
@@ -183,10 +239,12 @@ const Product = () => {
     <div>
       <ProductList
         products={products}
+        handlePagination={handlePagination}
         handleUpdateStatusProduct={handleUpdateStatusProduct}
         handleShowFromEdit={handleShowFromEdit}
         handleShowFromCreate={handleShowFromCreate}
         handleShowDialogDelete={handleShowDialogDelete}
+        disablePagination={disablePagination}
       />
       {diaLog ? (
         <ConfirmButton
@@ -216,7 +274,6 @@ const Product = () => {
       ) : (
         ""
       )}
-      <ToastContainer />
     </div>
   );
 };

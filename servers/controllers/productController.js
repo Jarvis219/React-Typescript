@@ -9,19 +9,27 @@ export const listProduct = (req, res) => {
   // {
   //   classify: new RegExp(classify),
   // }
-  let skip = req.query.skip ? req.query.skip : 0;
+  let skip = req.query.skip ? +req.query.skip : 0;
 
   Product.find()
     .limit(limit)
     .skip(skip)
+    .sort({
+      updatedAt: -1
+    })
     .populate("category", "name")
     .exec((err, data) => {
-      if (err) {
-        return res.status(400).json({
-          error: "product does not exit",
+      Product.countDocuments((err, count) => {
+        if (err) {
+          return res.status(400).json({
+            error: "product does not exit",
+          });
+        }
+        res.json({
+          data,
+          count
         });
-      }
-      res.json(data);
+      })
     });
 };
 
@@ -97,11 +105,11 @@ export const updateProduct = (req, res) => {
 export const listRelated = (req, res) => {
   let limit = req.query.limit ? req.query.limit : 4;
   Product.find({
-    _id: {
-      $ne: req.product, // loại trừ
-    },
-    category: req.product.category, // lấy theo thể loại
-  })
+      _id: {
+        $ne: req.product, // loại trừ
+      },
+      category: req.product.category, // lấy theo thể loại
+    })
     .limit(limit)
     .populate("category", "_id name")
     .exec((err, data) => {
@@ -116,16 +124,14 @@ export const listRelated = (req, res) => {
 
 // tìm kiếm theo name
 export const listSearch = (req, res) => {
-  // console.log(1);
   let limit = req.query.limit ? req.query.limit : 12;
-  let q = req.query.q ? req.query.q : "";
+  let name = req.query.name ? req.query.name : "";
   Product.find({
-    // name: new RegExp(q)
-    name: {
-      $regex: `${q}`,
-      $options: "$i",
-    },
-  })
+      name: {
+        $regex: `${name}`,
+        $options: "$i",
+      },
+    })
     .limit(limit)
     .exec((err, data) => {
       if (err) {
@@ -136,3 +142,24 @@ export const listSearch = (req, res) => {
       res.json(data);
     });
 };
+
+
+
+export const filterCategory = (req, res) => {
+  let category = req.query.category ? req.query.category : '';
+  const ObjectId = require('mongodb').ObjectId;
+  const id = new ObjectId(category)
+  Product.findOne({
+    "category": id
+  }).exec((err, like) => {
+    if (err) {
+      return res.status(400).json({
+        err,
+        error: "like does not exist"
+      })
+    }
+    res.json(
+      like
+    )
+  })
+}

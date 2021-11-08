@@ -6,8 +6,18 @@ export const createProductAPI = (data: ProductModel) => {
   return instance.post(url, data);
 };
 
-export const listProductAPI = () => {
-  const url = "/list-product";
+export const listProductAPI = (limit?: number, skip?: number) => {
+  const url = `/list-product?limit=${limit}&skip=${skip}`;
+  return instance.get(url);
+};
+
+export const listSearchAPI = (name: string) => {
+  const url = `/list-search?name=${name}`;
+  return instance.get(url);
+};
+
+export const filterCategory = (id: string) => {
+  const url = `/filter-category?category=${id}`;
   return instance.get(url);
 };
 

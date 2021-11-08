@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import CategoryItem from "../Category/CategoryItem";
 
@@ -19,7 +19,7 @@ const EditProduct = ({
   loading,
 }: any) => {
   let { data } = dataEdit;
-
+  const [avatar, setAvatar] = useState<any>();
   const {
     register,
     handleSubmit,
@@ -34,6 +34,17 @@ const EditProduct = ({
     } else {
       handleEditSubmit(Object.assign({}, data, dataForm));
     }
+  };
+  useEffect(() => {
+    return () => {
+      avatar && URL.revokeObjectURL(avatar.preview);
+    };
+  }, [avatar]);
+
+  const handlePreviewPhoto = (e: any) => {
+    const file = e.target.files[0];
+    file.preview = URL.createObjectURL(file);
+    setAvatar(file);
   };
 
   useEffect(() => {
@@ -65,12 +76,12 @@ const EditProduct = ({
                 <input
                   id='name'
                   type='text'
-                  {...register("name", { required: true, maxLength: 50 })}
+                  {...register("name", { required: true, maxLength: 80 })}
                   className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring'
                 />
                 {errors.name && (
                   <span className='text-[#f33d25] pt-3 font-serif text-xs block -mb-4 '>
-                    This field is required & maximum 50 characters
+                    This field is required & maximum 80 characters
                   </span>
                 )}
               </div>
@@ -172,15 +183,20 @@ const EditProduct = ({
                   Image
                 </label>
                 <div className='relative mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md'>
-                  {data.photo ? (
+                  {avatar ? (
+                    <img
+                      src={avatar.preview}
+                      className='absolute top-1 xl:left-[42%]'
+                      style={{ maxWidth: "70px" }}
+                      alt=''
+                    />
+                  ) : (
                     <img
                       src={data.photo}
                       className='absolute top-1 xl:left-[42%]'
                       style={{ maxWidth: "70px" }}
                       alt=''
                     />
-                  ) : (
-                    ""
                   )}
                   <div className=' space-y-1 text-center'>
                     <svg
@@ -206,6 +222,7 @@ const EditProduct = ({
                           className='sr-only'
                           type='file'
                           {...register("photo")}
+                          onChange={handlePreviewPhoto}
                         />
                       </label>
 
