@@ -65,6 +65,16 @@ export const setCountProduct = (count: string): void => {
   sessionStorage.setItem("countProduct", count);
 };
 
+export const setCountOrder = (count: string): void => {
+  sessionStorage.setItem("countOrder", count);
+};
+
+export const getCountOrder = (): void => {
+  if (sessionStorage.getItem("countOrder")) {
+    return JSON.parse(sessionStorage.getItem("countOrder")!);
+  }
+};
+
 export const getCountProduct = (): void => {
   if (sessionStorage.getItem("countProduct")) {
     return JSON.parse(sessionStorage.getItem("countProduct")!);

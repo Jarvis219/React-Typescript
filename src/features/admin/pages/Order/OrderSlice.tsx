@@ -1,12 +1,58 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { OrderModel } from "models/order";
-import { createOrderAPI } from "services/order";
+import {
+  createOrderAPI,
+  listOrderAPI,
+  removeOrderAPI,
+  updateOrderAPI,
+} from "services/order";
+import { Pagination, setCountOrder } from "utils/utils";
 
 export const CreateOrder = createAsyncThunk(
   "create-order",
   async (order: OrderModel, thunkApi) => {
     try {
       const { data }: any = await createOrderAPI(order);
+      return data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+
+export const ListOrder = createAsyncThunk(
+  "list-order",
+  async (pagination: Pagination, thunkApi) => {
+    try {
+      const { data }: any = await listOrderAPI(
+        pagination.limit,
+        pagination.skip
+      );
+      setCountOrder(data.count);
+      return data.data;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
+export const UpdateOrder = createAsyncThunk(
+  "update-order",
+  async (order: any, thunkApi) => {
+    try {
+      const { data }: any = await updateOrderAPI(order._id, order);
+      return data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+
+export const RemoveOrder = createAsyncThunk(
+  "remove-order",
+  async (id: string, thunkApi) => {
+    try {
+      const { data }: any = await removeOrderAPI(id);
       return data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
@@ -46,6 +92,58 @@ const orderSlice = createSlice({
       (state: initialStateSlice, action: any) => {
         state.loading = false;
         state.current.push(action.payload.data);
+      }
+    );
+
+    builder.addCase(ListOrder.pending, (state: initialStateSlice) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      ListOrder.rejected,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
+        state.error = action.error;
+      }
+    );
+    builder.addCase(
+      ListOrder.fulfilled,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
+        state.current = action.payload;
+      }
+    );
+
+    builder.addCase(UpdateOrder.pending, (state: initialStateSlice) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      UpdateOrder.rejected,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
+        state.error = action.error;
+      }
+    );
+    builder.addCase(
+      UpdateOrder.fulfilled,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
+      }
+    );
+
+    builder.addCase(RemoveOrder.pending, (state: initialStateSlice) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      RemoveOrder.rejected,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
+        state.error = action.error;
+      }
+    );
+    builder.addCase(
+      RemoveOrder.fulfilled,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
       }
     );
   },

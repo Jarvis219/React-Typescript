@@ -1,14 +1,18 @@
 import express from "express";
 import {
-    addOrder
+  addOrder,
+  listOrder,
+  orderByID,
+  updateOrder,
+  removeOrder,
 } from "../controllers/order";
 const router = express.Router();
 
-// router.get("/list-category", listCategory);
+router.get("/list-order", listOrder);
 // router.get("/read-category/:id", readCategory);
 router.post("/order", addOrder);
-// router.put("/update-category/:id", updateCategory);
-// router.delete("/remove-category/:id", removeCategory);
+router.put("/update-order/:id", updateOrder);
+router.delete("/remove-order/:id", removeOrder);
 
-// router.param("id", categoryByID);
+router.param("id", orderByID);
 module.exports = router;

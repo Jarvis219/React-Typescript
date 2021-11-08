@@ -4,8 +4,8 @@ export enum OrderPay {
 }
 
 export enum OrderStatus {
-  unconfirmed = 0, // chưa xác nhận
-  confirmed = 1, // xác nhận
-  cancelled = 2, // đã hủy
-  complete = 3, // hoàn thành
+  unconfirmed = "unconfirmed", // chưa xác nhận
+  confirmed = "confirmed", // xác nhận
+  cancelled = "cancelled", // đã hủy
+  complete = "complete", // hoàn thành
 }

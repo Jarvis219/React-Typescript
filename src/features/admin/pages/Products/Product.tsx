@@ -187,7 +187,7 @@ const Product = () => {
       await getProducts();
       notifySuccess(currentProduct.message + " 👌");
     } catch (error) {
-      notifyError("Update product failure !!!");
+      notifyError("Update status product failure !!!");
     }
   };
 

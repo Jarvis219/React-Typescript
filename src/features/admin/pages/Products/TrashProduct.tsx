@@ -5,9 +5,7 @@ import ConfirmButton from "features/admin/components/DiaLog/ConfirmButton";
 import { DeletePhotoUpload } from "helpers/filebaseUpload";
 import { ProductModel } from "models/product";
 import { Fragment, useEffect, useState } from "react";
-import { removeEmptyArray } from "utils/utils";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { notifyError, notifySuccess, removeEmptyArray } from "utils/utils";
 import { ListProduct, RemoveProduct, UpdateProduct } from "./ProductSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 
@@ -22,10 +20,6 @@ const TrashProduct = () => {
   const products = useAppSelector((state: any) => {
     return state.product.current;
   });
-
-  const notifyError = (error: string) => toast.error(error);
-  const notifySuccess = (success: string) =>
-    toast.success(success, { icon: "🚀" });
 
   const [trashProduct, setTrashProduct] = useState<ProductModel>();
   const [removeEmpty, setRemoveEmpty] = useState<any>();
@@ -120,23 +114,23 @@ const TrashProduct = () => {
 
   return (
     <Fragment>
-      <div className='flex flex-1  flex-col md:flex-row lg:flex-row mx-2 text-center'>
-        <div className='mb-2 border-solid border-gray-300 rounded border shadow-sm w-full'>
-          <div className='bg-gray-200 px-2 py-3 border-solid border-gray-200 border-b uppercase text-center'>
-            Products
+      <div className="flex flex-1  flex-col md:flex-row lg:flex-row mx-2 text-center">
+        <div className="mb-2 border-solid border-gray-300 rounded border shadow-sm w-full">
+          <div className="bg-gray-200 px-2 py-3 border-solid border-gray-200 border-b uppercase text-center">
+            Products trash
           </div>
-          <div className='p-3'>
-            <table className='table-responsive w-full rounded'>
+          <div className="p-3">
+            <table className="table-responsive w-full rounded">
               <thead>
                 <tr>
-                  <th className='border w-1/4 px-4 py-2'>Name</th>
-                  <th className='border w-1/6 px-4 py-2'>Category</th>
-                  <th className='border w-1/6 px-4 py-2'>Photo</th>
-                  <th className='border w-1/6 px-4 py-2'>Price</th>
-                  <th className='border w-1/6 px-4 py-2'>Sale</th>
-                  <th className='border w-1/6 px-4 py-2'>Quantity</th>
-                  <th className='border w-1/6 px-4 py-2'>Sold</th>
-                  <th className='border w-1/5 px-4 py-2'>Actions</th>
+                  <th className="border w-1/4 px-4 py-2">Name</th>
+                  <th className="border w-1/6 px-4 py-2">Category</th>
+                  <th className="border w-1/6 px-4 py-2">Photo</th>
+                  <th className="border w-1/6 px-4 py-2">Price</th>
+                  <th className="border w-1/6 px-4 py-2">Sale</th>
+                  <th className="border w-1/6 px-4 py-2">Quantity</th>
+                  <th className="border w-1/6 px-4 py-2">Sold</th>
+                  <th className="border w-1/5 px-4 py-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -144,52 +138,56 @@ const TrashProduct = () => {
                   removeEmpty.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
-                        <td className='border px-4 py-2'>{item.name}</td>
-                        <td className='border px-4 py-2'>
+                        <td className="border px-4 py-2">{item.name}</td>
+                        <td className="border px-4 py-2">
                           {item.category.name}
                         </td>
-                        <td className='border px-4 py-2'>
-                          <img src={item.photo} width='100' alt='isphoto' />
+                        <td className="border px-4 py-2">
+                          <img src={item.photo} width="100" alt="isphoto" />
                         </td>
-                        <td className='border px-4 py-2'>{item.price} $</td>
-                        <td className='border px-4 py-2'>{item.sale} $</td>
-                        <td className='border px-4 py-2'>{item.quantity} $</td>
-                        <td className='border px-4 py-2'>{item.sold} $</td>
+                        <td className="border px-4 py-2">{item.price} $</td>
+                        <td className="border px-4 py-2">{item.sale} $</td>
+                        <td className="border px-4 py-2">{item.quantity} $</td>
+                        <td className="border px-4 py-2">{item.sold} $</td>
 
-                        <td className='border px-4 py-2'>
-                          <div className='flex justify-center items-center'>
+                        <td className="border px-4 py-2">
+                          <div className="flex justify-center items-center">
                             <span
                               onClick={() => undoTrashProduct(item)}
-                              className='cursor-pointer  mx-1 '>
+                              className="cursor-pointer  mx-1 "
+                            >
                               <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                className='h-6 w-6'
-                                fill='none'
-                                viewBox='0 0 24 24'
-                                stroke='#0CE943'>
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-6 w-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="#0CE943"
+                              >
                                 <path
-                                  strokeLinecap='round'
-                                  strokeLinejoin='round'
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
                                   strokeWidth={2}
-                                  d='M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z'
+                                  d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z"
                                 />
                               </svg>
                             </span>
 
                             <span
                               onClick={() => handleShowDialogDelete(true, item)}
-                              className='cursor-pointer  mx-1 '>
+                              className="cursor-pointer  mx-1 "
+                            >
                               <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                className='h-6 w-6'
-                                fill='none'
-                                viewBox='0 0 24 24'
-                                stroke='red'>
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-6 w-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="red"
+                              >
                                 <path
-                                  strokeLinecap='round'
-                                  strokeLinejoin='round'
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
                                   strokeWidth={2}
-                                  d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
+                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                 />
                               </svg>
                             </span>
@@ -206,12 +204,12 @@ const TrashProduct = () => {
           </div>
         </div>
       </div>
-      <div className=' ml-[1%] flex justify-end gap-[60%] lg:gap-[70%] xl:gap-[81%]'>
-        <div className='inline-flex '>
-          <button className='bg-gray-200 hover:bg-gray-500 text-gray-900 font-bold py-2 px-4 rounded-l shadow'>
+      <div className=" ml-[1%] flex justify-end gap-[60%] lg:gap-[70%] xl:gap-[81%]">
+        <div className="inline-flex ">
+          <button className="bg-gray-200 hover:bg-gray-500 text-gray-900 font-bold py-2 px-4 rounded-l shadow">
             Prev
           </button>
-          <button className='bg-gray-200 hover:bg-gray-500 text-gray-900 font-bold py-2 px-4 rounded-r shadow'>
+          <button className="bg-gray-200 hover:bg-gray-500 text-gray-900 font-bold py-2 px-4 rounded-r shadow">
             Next
           </button>
         </div>
@@ -225,7 +223,6 @@ const TrashProduct = () => {
       ) : (
         ""
       )}
-      <ToastContainer />
     </Fragment>
   );
 };
