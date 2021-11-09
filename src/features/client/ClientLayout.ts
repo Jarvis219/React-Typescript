@@ -8,6 +8,9 @@ const ProductCategories = lazy(
   () => import("./pages/Products/ProductCategories")
 );
 const Checkout = lazy(() => import("./pages/Checkout/Checkout"));
+const ProductViewCheck = lazy(
+  () => import("./pages/Products/ProductViewCheck")
+);
 
 const clientLayout = [
   {
@@ -33,6 +36,12 @@ const clientLayout = [
   {
     path: "/check-out",
     component: Checkout,
+    exact: true,
+  },
+
+  {
+    path: "/product-view-check/:id",
+    component: ProductViewCheck,
     exact: true,
   },
   {

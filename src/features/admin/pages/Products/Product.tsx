@@ -245,7 +245,6 @@ const Product = () => {
   };
 
   const isCheckNameProduct = (name: string): Array<string> => {
-    console.log(products);
     return products.filter(
       (item: any) =>
         item.name.toLocaleLowerCase() === name.toLocaleLowerCase().trim()
