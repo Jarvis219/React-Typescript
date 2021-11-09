@@ -5,7 +5,7 @@ export interface OrderModel {
   address: string;
   note?: string;
   phone: string;
-  product: Object;
+  product: Object[];
   price: number;
   pay: string;
   status?: string;

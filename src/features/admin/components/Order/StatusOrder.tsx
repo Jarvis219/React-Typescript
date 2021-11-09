@@ -18,6 +18,7 @@ const StatusOrder = ({ statusItem, data, getDataStatus }: any) => {
         OrderStatus.cancelled,
       ]);
     }
+    return () => setStatus([]);
   }, [statusItem]);
 
   const setDataStatus = async (e: any) => {
@@ -26,9 +27,10 @@ const StatusOrder = ({ statusItem, data, getDataStatus }: any) => {
   return (
     <Fragment>
       <select
-        className='rounded py-2 px-3 bg-blue-100 text-gray-700'
+        className="rounded py-2 px-3 bg-blue-100 text-gray-700"
         onChange={(e) => setDataStatus(e)}
-        value=''>
+        value=""
+      >
         {status.map((item: string, index: number) => {
           return (
             <option key={index} value={item}>
