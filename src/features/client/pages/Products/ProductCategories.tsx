@@ -29,7 +29,7 @@ const ProductCategories = () => {
   useEffect(() => {
     if (!localStorage.getItem("search")) return;
     localStorage.removeItem("search");
-    dispatch(ListProduct({ limit: 0, skip: 0 }));
+    dispatch(ListProduct());
   }, [dispatch]);
   return (
     <Fragment>

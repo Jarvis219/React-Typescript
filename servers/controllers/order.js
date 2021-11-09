@@ -23,7 +23,9 @@ export const listOrder = (req, res) => {
   Order.find()
     .limit(limit)
     .skip(skip)
-    .sort({ updateAt: -1 })
+    .sort({
+      updateAt: -1
+    })
     .exec((err, data) => {
       Order.countDocuments((err, count) => {
         if (err) {
@@ -56,13 +58,14 @@ export const readOrder = (req, res) => {
 };
 export const removeOrder = (req, res) => {
   let order = req.order;
-  order.remove((err) => {
+  order.remove((err, data) => {
     if (err || !order) {
       return res.status(400).json({
         error: "Delete order failure",
       });
     }
     res.json({
+      data,
       message: "Order delete successfully",
     });
   });
@@ -90,8 +93,7 @@ export const listTotal = (req, res) => {
   var data;
   if (q) {
     data = Order.find({
-      $or: [
-        {
+      $or: [{
           name: {
             $regex: `${q}`,
             $options: "$i",

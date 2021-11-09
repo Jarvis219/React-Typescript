@@ -22,6 +22,7 @@ const ProductList = ({
 
   useEffect(() => {
     try {
+      if (!products) return;
       setProductShow(
         products.map((item: any) => {
           if (item.status !== ProductStatus.delete) {

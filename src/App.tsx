@@ -12,12 +12,21 @@ import { useAppDispatch } from "app/hook";
 import { listCategory } from "features/admin/pages/Categories/CategorySlice";
 import { ListProduct } from "features/admin/pages/Products/ProductSlice";
 import { ListCartUser } from "features/admin/pages/Cart/CartSlice";
-import { getUser } from "utils/utils";
+import { getPermission, getUser } from "utils/utils";
+import { ListOrder } from "features/admin/pages/Order/OrderSlice";
 const Login = lazy(() => import("./features/auth/pages/Login"));
 const Register = lazy(() => import("./features/auth/pages/Register"));
 function App() {
   const dispatch = useAppDispatch();
   useEffect(() => {
+    const auth = getPermission();
+    const getOrder = async (): Promise<void> => {
+      try {
+        await dispatch(ListOrder());
+      } catch (error) {
+        console.log(error);
+      }
+    };
     const getCategories = async () => {
       try {
         await dispatch(listCategory());
@@ -27,7 +36,7 @@ function App() {
     };
     const getProducts = async () => {
       try {
-        await dispatch(ListProduct({ limit: 0, skip: 0 }));
+        await dispatch(ListProduct());
       } catch (error) {
         console.log(error);
       }
@@ -46,6 +55,9 @@ function App() {
     getCategories();
     getProducts();
     getCartUser();
+    if (auth && auth === 1) {
+      getOrder();
+    }
   }, [dispatch]);
 
   return (

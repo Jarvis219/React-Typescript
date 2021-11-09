@@ -54,13 +54,14 @@ export const readProduct = (req, res) => {
 // xóa sp theo id
 export const removeProduct = (req, res) => {
   let product = req.product;
-  product.remove((err) => {
+  product.remove((err, data) => {
     if (err) {
       return res.status(400).json({
         error: "delete product failure",
       });
     }
     res.json({
+      data,
       message: "Delete product successfully",
     });
   });

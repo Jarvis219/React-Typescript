@@ -20,13 +20,14 @@ const CreateProduct = ({
   loading,
 }: any) => {
   const [avatar, setAvatar] = useState<any>();
+  const [checkName, setCheckName] = useState<string>("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
-    handleCreateSubmit(data);
+    handleCreateSubmit(data, checkName);
   };
 
   useEffect(() => {
@@ -60,6 +61,7 @@ const CreateProduct = ({
                 <input
                   id='name'
                   type='text'
+                  onKeyUp={(e: any) => setCheckName(e.target.value)}
                   {...register("name", { required: true, maxLength: 80 })}
                   className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring'
                 />

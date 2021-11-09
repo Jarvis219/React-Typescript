@@ -12,7 +12,7 @@ const Store = () => {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        await dispatch(ListProduct({ limit: 0, skip: 0 }));
+        await dispatch(ListProduct());
       } catch (error) {
         console.log(error);
       }

@@ -9,17 +9,11 @@ import {
 import { lazy, useEffect, useState } from "react";
 import {
   CreateProduct as createProductSlice,
-  ListProduct,
   UpdateProduct,
 } from "./ProductSlice";
 import { FirebaseUploadPhoto } from "helpers/filebaseUpload";
 import { ProductPagination, ProductStatus } from "constants/product";
-import {
-  getCountProduct,
-  notifyError,
-  notifySuccess,
-  Pagination,
-} from "utils/utils";
+import { notifyError, notifySuccess, Pagination } from "utils/utils";
 
 const ProductList = lazy(
   () => import("features/admin/components/Product/Product")
@@ -36,24 +30,34 @@ const Product = () => {
   const products = useAppSelector((state: any) => {
     return state.product.current;
   });
-  const countProduct = getCountProduct();
 
   const [showFormCreate, setShowFormCreate] = useState<boolean>(false);
   const [showFormEdit, setShowFormEdit] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [diaLog, setDialog] = useState<boolean>(false);
   const [dataEdit, setDataEdit] = useState<any>(null);
+  const [dataDetele, setDataDelete] = useState<ProductModel>();
   const [pagination, setPagination] = useState<Pagination>({
-    limit: 3,
-    skip: 0,
+    limit: 0,
+    skip: 3,
   });
+  const [productState, setProductState] = useState<ProductModel>();
   const [disablePagination, setDisablePagination] =
     useState<DisabledProductPaginationType>({
       action: ProductPagination.minus,
       status: true,
     });
+  const [countPage, setCountPage] = useState<number>(products.length);
 
-  const [dataDetele, setDataDelete] = useState<ProductModel>();
+  useEffect(() => {
+    const arr: any = [];
+    products.forEach((item: any) => {
+      if (item.status !== ProductStatus.delete) {
+        arr.push(item);
+      }
+    });
+    setProductState(arr.slice(pagination.limit, pagination.skip));
+  }, [pagination, countPage, products]);
 
   const handleShowFromCreate = (data: boolean): void => {
     setShowFormCreate(data);
@@ -89,9 +93,12 @@ const Product = () => {
   const updateStatusFromTrash = async (data: ProductModel): Promise<void> => {
     try {
       setLoading(true);
+
       const actionResult: any = await dispatch(UpdateProduct(data));
       const currentProduct = unwrapResult(actionResult);
-      await getProducts();
+      if (data.status === ProductStatus.delete) {
+        setCountPage((pre) => (pre -= 1));
+      }
       setShowFormEdit(false);
       notifySuccess(currentProduct.message + " 👌");
     } catch (error) {
@@ -99,7 +106,16 @@ const Product = () => {
     }
   };
 
-  const handleCreateSubmit = async (data: ProductModel): Promise<void> => {
+  const handleCreateSubmit = async (
+    data: ProductModel,
+    name: string
+  ): Promise<void> => {
+    console.log(products);
+    const nameProduct: number = isCheckNameProduct(name).length;
+    if (nameProduct !== 0) {
+      notifyError("Product already exists!!");
+      return;
+    }
     let { photo }: any = data;
     if (photo.length === 0) {
       try {
@@ -108,9 +124,9 @@ const Product = () => {
           createProductSlice(Object.assign(data, { photo: null }))
         );
         const currentProduct = unwrapResult(actionResult);
-        await getProducts();
         setLoading(false);
         setShowFormCreate(false);
+        setCountPage((pre) => (pre += 1));
         notifySuccess(currentProduct.message + " 👌");
       } catch (error) {
         setLoading(false);
@@ -127,7 +143,6 @@ const Product = () => {
       );
       setLoading(false);
       const currentProduct = unwrapResult(actionResult);
-      await getProducts();
       setLoading(false);
       setShowFormCreate(false);
       notifySuccess(currentProduct.message + " 👌");
@@ -145,7 +160,6 @@ const Product = () => {
         const actionResult: any = await dispatch(UpdateProduct(data));
         const currentProduct = unwrapResult(actionResult);
         setLoading(false);
-        await getProducts();
         setShowFormEdit(false);
         notifySuccess(currentProduct.message + " 👌");
       } catch (error) {
@@ -169,7 +183,6 @@ const Product = () => {
         currentProduct = unwrapResult(actionResult);
       }
       setLoading(false);
-      await getProducts();
       setShowFormEdit(false);
       notifySuccess(currentProduct.message + " 👌");
     } catch (error) {
@@ -184,25 +197,14 @@ const Product = () => {
     try {
       const actionResult: any = await dispatch(UpdateProduct(data));
       const currentProduct = unwrapResult(actionResult);
-      await getProducts();
+      if (currentProduct.data.status === ProductStatus.delete) {
+        setCountPage((pre) => (pre -= 1));
+      }
       notifySuccess(currentProduct.message + " 👌");
     } catch (error) {
       notifyError("Update status product failure !!!");
     }
   };
-
-  const getProducts = async (): Promise<void> => {
-    try {
-      await dispatch(ListProduct(pagination));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getProducts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagination]);
 
   const handlePagination = (action: ProductPaginationType): void => {
     if (action.type === ProductPagination.plus) {
@@ -212,33 +214,48 @@ const Product = () => {
           status: false,
         });
 
-        if (pre.skip >= countProduct! - 6) {
+        if (pre.skip >= countPage - 1) {
           setDisablePagination({
             action: ProductPagination.plus,
             status: true,
           });
         }
-        return Object.assign({}, pre, { skip: pre.skip + 3 });
+        return Object.assign({}, pre, {
+          skip: pre.skip + 3,
+          limit: pre.limit + 3,
+        });
       });
     } else {
       setPagination((pre): any => {
-        if (pre.skip <= 0) {
+        if (pre.limit <= 2) {
           setDisablePagination({
             action: ProductPagination.minus,
             status: true,
           });
-          pre.skip = 0;
+          pre.limit = 0;
+          pre.skip = 3;
           return pre;
         }
-        return Object.assign({}, pre, { skip: pre.skip - 3 });
+        return Object.assign({}, pre, {
+          skip: pre.skip - 3,
+          limit: pre.limit - 3,
+        });
       });
     }
+  };
+
+  const isCheckNameProduct = (name: string): Array<string> => {
+    console.log(products);
+    return products.filter(
+      (item: any) =>
+        item.name.toLocaleLowerCase() === name.toLocaleLowerCase().trim()
+    );
   };
 
   return (
     <div>
       <ProductList
-        products={products}
+        products={productState}
         handlePagination={handlePagination}
         handleUpdateStatusProduct={handleUpdateStatusProduct}
         handleShowFromEdit={handleShowFromEdit}

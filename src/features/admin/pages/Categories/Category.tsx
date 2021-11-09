@@ -1,7 +1,6 @@
 import { lazy, useState } from "react";
 import {
   CreateCategory as CreateCategorySlice,
-  listCategory,
   removeCategory,
   updateCategory,
 } from "./CategorySlice";
@@ -53,6 +52,10 @@ const Category = () => {
   };
 
   const handleConFirm = async (data: any) => {
+    if (!data) {
+      setDialog(false);
+      return;
+    }
     if (!dataDelete) return;
     try {
       const actionResult: any = await dispatch(FilterCategory(dataDelete));
@@ -62,7 +65,6 @@ const Category = () => {
         try {
           const actionResult: any = await dispatch(removeCategory(dataDelete));
           const currentCategory = unwrapResult(actionResult);
-          await getCategories();
           notifySuccess(currentCategory.message + " 👌");
         } catch (error) {
           notifyError("Delete category failure !!!");
@@ -87,21 +89,11 @@ const Category = () => {
       try {
         const actionResult: any = await dispatch(updateCategory(category));
         const currentCategory = unwrapResult(actionResult);
-        await getCategories();
+        setShowFormEdit(false);
         notifySuccess(currentCategory.message + " 👌");
       } catch (error) {
-        console.log(error);
         notifyError("Please check your name category again");
       }
-    }
-  };
-
-  const getCategories = async () => {
-    try {
-      await dispatch(listCategory());
-      setShowFormEdit(false);
-    } catch (error) {
-      console.log(error);
     }
   };
 

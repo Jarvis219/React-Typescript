@@ -6,7 +6,7 @@ import {
   removeOrderAPI,
   updateOrderAPI,
 } from "services/order";
-import { Pagination, setCountOrder } from "utils/utils";
+import { setCountOrder } from "utils/utils";
 
 export const CreateOrder = createAsyncThunk(
   "create-order",
@@ -20,21 +20,15 @@ export const CreateOrder = createAsyncThunk(
   }
 );
 
-export const ListOrder = createAsyncThunk(
-  "list-order",
-  async (pagination: Pagination, thunkApi) => {
-    try {
-      const { data }: any = await listOrderAPI(
-        pagination.limit,
-        pagination.skip
-      );
-      setCountOrder(data.count);
-      return data.data;
-    } catch (error) {
-      return error;
-    }
+export const ListOrder = createAsyncThunk("list-order", async (thunkApi) => {
+  try {
+    const { data }: any = await listOrderAPI();
+    setCountOrder(data.count);
+    return data.data;
+  } catch (error) {
+    return error;
   }
-);
+});
 
 export const UpdateOrder = createAsyncThunk(
   "update-order",
@@ -127,6 +121,13 @@ const orderSlice = createSlice({
       UpdateOrder.fulfilled,
       (state: initialStateSlice, action: any) => {
         state.loading = false;
+        const index = state.current.findIndex((tutorial: any) => {
+          return tutorial._id === action.payload.data._id;
+        });
+        state.current[index] = {
+          ...state.current[index],
+          ...action.payload.data,
+        };
       }
     );
 
@@ -144,6 +145,10 @@ const orderSlice = createSlice({
       RemoveOrder.fulfilled,
       (state: initialStateSlice, action: any) => {
         state.loading = false;
+        let index = state.current.findIndex((tutorial: any) => {
+          return tutorial._id === action.payload.data._id;
+        });
+        state.current.splice(index, 1);
       }
     );
   },

@@ -120,6 +120,13 @@ const categorySlice = createSlice({
       updateCategory.fulfilled,
       (state: initialStateSlice, action: any) => {
         state.loading = false;
+        const index = state.current.findIndex((tutorial: any) => {
+          return tutorial._id === action.payload.data._id;
+        });
+        state.current[index] = {
+          ...state.current[index],
+          ...action.payload.data,
+        };
       }
     );
 
@@ -137,6 +144,11 @@ const categorySlice = createSlice({
       removeCategory.fulfilled,
       (state: initialStateSlice, action: any) => {
         state.loading = false;
+
+        let index = state.current.findIndex(
+          (tutorial: any) => tutorial._id === action.payload.data._id
+        );
+        state.current.splice(index, 1);
       }
     );
   },

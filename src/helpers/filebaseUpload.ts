@@ -44,8 +44,10 @@ export const FirebaseUploadPhoto = (image: File): Promise<string> => {
 
 export const DeletePhotoUpload = (url: string) => {
   const storage = getStorage();
+  // console.log(url);
   const photoURL = url.split("%")[1].split("2F")[1].split("?")[0].toLowerCase();
   // Create a reference to the file to delete
+  // console.log(photoURL);
   const desertRef = ref(storage, `images/${photoURL}`);
   // Delete the file
   deleteObject(desertRef)

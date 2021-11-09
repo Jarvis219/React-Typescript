@@ -8,7 +8,7 @@ import {
   filterCategory,
   listSearchAPI,
 } from "services/products";
-import { Pagination, setCountProduct } from "utils/utils";
+import { setCountProduct } from "utils/utils";
 
 export const CreateProduct = createAsyncThunk(
   "create-product",
@@ -24,12 +24,9 @@ export const CreateProduct = createAsyncThunk(
 
 export const ListProduct = createAsyncThunk(
   "list-product",
-  async (pagination: Pagination, thunkApi) => {
+  async (thunkApi) => {
     try {
-      const { data }: any = await listProductAPI(
-        pagination.limit,
-        pagination.skip
-      );
+      const { data }: any = await listProductAPI();
       setCountProduct(data.count);
       return data.data;
     } catch (error) {
@@ -171,6 +168,13 @@ const productSlice = createSlice({
       UpdateProduct.fulfilled,
       (state: initialStateSlice, action: any) => {
         state.loading = false;
+        const index = state.current.findIndex((tutorial: any) => {
+          return tutorial._id === action.payload.data._id;
+        });
+        state.current[index] = {
+          ...state.current[index],
+          ...action.payload.data,
+        };
       }
     );
 
@@ -188,6 +192,10 @@ const productSlice = createSlice({
       RemoveProduct.fulfilled,
       (state: initialStateSlice, action: any) => {
         state.loading = false;
+        let index = state.current.findIndex((tutorial: any) => {
+          return tutorial._id === action.payload.data._id;
+        });
+        state.current.splice(index, 1);
       }
     );
   },
