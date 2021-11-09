@@ -41,6 +41,13 @@ const Product = () => {
               <div className='relative lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0'>
                 <h1 className='text-gray-900 text-3xl title-font font-medium mb-1'>
                   {productDetail.name}
+                  <span className='text-lg pl-2 text-gray-800 font-serif '>
+                    (There are{" "}
+                    <span className='text-red-500'>
+                      {productDetail.quantity}
+                    </span>{" "}
+                    products left)
+                  </span>
                 </h1>
                 <div className='flex mb-4'>
                   <span className='flex items-center'>

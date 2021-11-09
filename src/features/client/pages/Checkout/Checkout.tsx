@@ -17,6 +17,7 @@ import { OrderPay } from "constants/order";
 import { CreateOrder } from "features/admin/pages/Order/OrderSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { ListCartUser, RemoveCart } from "features/admin/pages/Cart/CartSlice";
+import { UpdateProduct } from "features/admin/pages/Products/ProductSlice";
 
 const Checkout = () => {
   const history = useHistory();
@@ -59,11 +60,27 @@ const Checkout = () => {
           )
         )
       );
-      const currentCategory = unwrapResult(actionResult);
+      const currentCategory = await unwrapResult(actionResult);
+      await updateAmountProducts(dataProducts);
       clearCart(currentCategory.message + " 👌");
     } catch (error) {
       notifyError("Check out failure !!!");
     }
+  };
+
+  const updateAmountProducts = async (data: any): Promise<void> => {
+    data.forEach(async (item: any) => {
+      try {
+        await dispatch(
+          UpdateProduct({
+            _id: item.product._id,
+            quantity: item.product.quantity - item.amount,
+          })
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    });
   };
 
   const filterProductToCart = () => {

@@ -8,6 +8,7 @@ import {
   UpdateCart,
 } from "features/admin/pages/Cart/CartSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { FindProduct } from "features/admin/pages/Products/ProductSlice";
 
 export const AddToCart = ({ product, id }: any) => {
   const dispatch = useAppDispatch();
@@ -53,6 +54,13 @@ export const AddToCart = ({ product, id }: any) => {
       notifyError("Please login before purchasing!");
       return;
     }
+    if (!cart) return;
+    const quantity = await checkAmountProduct(cart?.product);
+    if (quantity <= 0) {
+      notifyError("The product is out of stock");
+      setLoading(false);
+      return;
+    }
     if (!cart) {
       return;
     } else {
@@ -63,6 +71,17 @@ export const AddToCart = ({ product, id }: any) => {
       }
     }
     setLoading(false);
+  };
+
+  const checkAmountProduct = async (id: string): Promise<number> => {
+    try {
+      const actionResult: any = await dispatch(FindProduct(id));
+      const currentCategory = unwrapResult(actionResult);
+      return currentCategory.quantity;
+    } catch (error) {
+      console.log(error);
+      return 0;
+    }
   };
 
   const createCart = async (data: CartModel): Promise<void> => {

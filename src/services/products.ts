@@ -11,6 +11,11 @@ export const listProductAPI = (limit?: number, skip?: number) => {
   return instance.get(url);
 };
 
+export const findById = (id: string) => {
+  const url = `/read-product/${id}`;
+  return instance.get(url);
+};
+
 export const listSearchAPI = (name: string) => {
   const url = `/list-search?name=${name}`;
   return instance.get(url);

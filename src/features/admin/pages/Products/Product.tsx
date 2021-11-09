@@ -47,7 +47,15 @@ const Product = () => {
       action: ProductPagination.minus,
       status: true,
     });
-  const [countPage, setCountPage] = useState<number>(products.length);
+  const [countPage, setCountPage] = useState<number>(() => {
+    let sum = 0;
+    products.forEach((item: any) => {
+      if (item.status !== ProductStatus.delete) {
+        sum += 1;
+      }
+    });
+    return sum;
+  });
 
   useEffect(() => {
     const arr: any = [];
@@ -214,7 +222,7 @@ const Product = () => {
           status: false,
         });
 
-        if (pre.skip >= countPage - 1) {
+        if (pre.skip >= countPage - 3) {
           setDisablePagination({
             action: ProductPagination.plus,
             status: true,

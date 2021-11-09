@@ -1,5 +1,5 @@
 import { Fragment, useEffect, memo } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 const SideBar = () => {
   useEffect(() => {});
   return (
@@ -9,7 +9,8 @@ const SideBar = () => {
         className='bg-[#fafafa] w-1/2 md:w-1/6 lg:w-1/6 hidden md:block lg:block shadow'>
         <ul className=' flex flex-col'>
           <li className=' bg-[#ecf0f1] w-full h-full py-3 px-2 border-b border-[#bee3f8]'>
-            <Link
+            <NavLink
+              activeClassName='active'
               to='/admin/categories'
               className='flex  cursor-pointer font-sans font-hairline hover:font-normal text-sm text-nav-item no-underline'>
               <svg
@@ -24,10 +25,11 @@ const SideBar = () => {
                 />
               </svg>
               <span className='mx-[10%]'>Categories</span>
-            </Link>
+            </NavLink>
           </li>
           <li className='bg-[#ecf0f1] w-full h-full py-3 px-2 border-b border-[#bee3f8]'>
-            <Link
+            <NavLink
+              activeClassName='active'
               to='/admin/products'
               className='flex cursor-pointer font-sans font-hairline hover:font-normal text-sm text-nav-item no-underline '>
               <svg
@@ -44,10 +46,11 @@ const SideBar = () => {
                 />
               </svg>
               <span className='mx-[10%]'>Products</span>
-            </Link>
+            </NavLink>
           </li>
           <li className='bg-[#ecf0f1] w-full h-full py-3 px-2 border-b border-[#bee3f8]'>
-            <Link
+            <NavLink
+              activeClassName='active'
               to='/admin/orders'
               className='flex cursor-pointer font-sans font-hairline hover:font-normal text-sm text-nav-item no-underline '>
               <svg
@@ -64,7 +67,7 @@ const SideBar = () => {
                 />
               </svg>
               <span className='mx-[10%]'>Orders</span>
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </aside>

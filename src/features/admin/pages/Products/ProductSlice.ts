@@ -7,6 +7,7 @@ import {
   removeProductAPI,
   filterCategory,
   listSearchAPI,
+  findById,
 } from "services/products";
 import { setCountProduct } from "utils/utils";
 
@@ -71,6 +72,18 @@ export const FilterCategory = createAsyncThunk(
   }
 );
 
+export const FindProduct = createAsyncThunk(
+  "find-product",
+  async (id: string, thunkApi) => {
+    try {
+      const { data }: any = await findById(id);
+      return data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+
 export const ListSearch = createAsyncThunk(
   "list-search",
   async (name: string, thunkApi) => {
@@ -115,6 +128,23 @@ const productSlice = createSlice({
       (state: initialStateSlice, action: any) => {
         state.loading = false;
         state.current.push(action.payload.data);
+      }
+    );
+
+    builder.addCase(FindProduct.pending, (state: initialStateSlice) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      FindProduct.rejected,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
+        state.error = action.error;
+      }
+    );
+    builder.addCase(
+      FindProduct.fulfilled,
+      (state: initialStateSlice, action: any) => {
+        state.loading = false;
       }
     );
 
