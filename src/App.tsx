@@ -54,20 +54,23 @@ function App() {
     };
     getCategories();
     getProducts();
-    getCartUser();
+
+    if (auth) {
+      getCartUser();
+    }
     if (auth && auth === 1) {
       getOrder();
     }
   }, [dispatch]);
 
   return (
-    <div className='App'>
+    <div className="App">
       <AuthProvider>
         <BrowserRouter>
           <Suspense fallback={<Loading />}>
             <Switch>
-              <Route path='/register' exact component={Register} />
-              <Route path='/login' exact component={Login} />
+              <Route path="/register" exact component={Register} />
+              <Route path="/login" exact component={Login} />
               {adminLayout.map(({ path, component, exact }, index) => {
                 return (
                   <PrivateRoute
@@ -88,7 +91,7 @@ function App() {
                   />
                 );
               })}
-              <Route path='*' exact component={Page404} />
+              <Route path="*" exact component={Page404} />
             </Switch>
           </Suspense>
         </BrowserRouter>

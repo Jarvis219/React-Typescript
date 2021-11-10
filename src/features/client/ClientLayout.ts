@@ -11,6 +11,7 @@ const Checkout = lazy(() => import("./pages/Checkout/Checkout"));
 const ProductViewCheck = lazy(
   () => import("./pages/Products/ProductViewCheck")
 );
+const Order = lazy(() => import("./pages/Order/Order"));
 
 const clientLayout = [
   {
@@ -31,6 +32,11 @@ const clientLayout = [
   {
     path: "/about",
     component: About,
+    exact: true,
+  },
+  {
+    path: "/order",
+    component: Order,
     exact: true,
   },
   {

@@ -7,12 +7,12 @@ import { UserAuth } from "constants/user";
 
 const ProductViewCheck = () => {
   const { id }: any = useParams();
+  // console.log(auth);
   const history = useHistory();
   const search = useLocation().search;
   const auth: any = new URLSearchParams(search).get("auth");
-  console.log(auth);
+
   useEffect(() => {
-    console.log(auth);
     if (!auth || +auth !== UserAuth.admin) {
       history.push("/page404");
       return;

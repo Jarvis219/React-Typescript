@@ -20,6 +20,7 @@ export const AddToCart = ({ product, id }: any) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [checkProductCart, setCheckProductCart] = useState<boolean>(false);
   const [idCart, setIdCart] = useState<string>("");
+  const [countAdd, setCountAdd] = useState<number>(0);
   const amount = useRef<number>(0);
 
   useEffect(() => {
@@ -56,7 +57,7 @@ export const AddToCart = ({ product, id }: any) => {
     }
     if (!cart) return;
     const quantity = await checkAmountProduct(cart?.product);
-    if (quantity <= 0) {
+    if (quantity <= 0 || countAdd >= quantity) {
       notifyError("The product is out of stock");
       setLoading(false);
       return;
@@ -70,6 +71,7 @@ export const AddToCart = ({ product, id }: any) => {
         updateCart({ _id: idCart, amount: (amount.current += 1) });
       }
     }
+    setCountAdd((pre) => pre + 1);
     setLoading(false);
   };
 
@@ -121,10 +123,11 @@ export const AddToCart = ({ product, id }: any) => {
       <button
         disabled={loading}
         onClick={handleAddToCart}
-        className='relative flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-gradient-to-r from-green-400 to-blue-500 rounded'>
+        className="relative flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-gradient-to-r from-green-400 to-blue-500 rounded"
+      >
         {loading && (
-          <div className='flex items-center justify-center absolute top-[10px] left-1'>
-            <div className='w-5 h-5 border-t-2 border-b-2 border-green-300 rounded-full animate-spin'></div>
+          <div className="flex items-center justify-center absolute top-[10px] left-1">
+            <div className="w-5 h-5 border-t-2 border-b-2 border-green-300 rounded-full animate-spin"></div>
           </div>
         )}
         ADD TO CART

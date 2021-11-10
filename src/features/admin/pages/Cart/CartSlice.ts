@@ -7,7 +7,6 @@ import {
   removeCartAPI,
   listCartUserAPI,
 } from "services/cart";
-import { Pagination } from "utils/utils";
 import { setCountProduct } from "utils/utils";
 
 export const CreateCart = createAsyncThunk(
@@ -22,21 +21,15 @@ export const CreateCart = createAsyncThunk(
   }
 );
 
-export const ListCart = createAsyncThunk(
-  "list-cart",
-  async (pagination: Pagination, thunkApi) => {
-    try {
-      const { data }: any = await listCartAPI(
-        pagination.limit,
-        pagination.skip
-      );
-      setCountProduct(data.count);
-      return data.data;
-    } catch (error) {
-      return error;
-    }
+export const ListCart = createAsyncThunk("list-cart", async (thunkApi) => {
+  try {
+    const { data }: any = await listCartAPI();
+    setCountProduct(data.count);
+    return data;
+  } catch (error) {
+    return error;
   }
-);
+});
 
 export const ListCartUser = createAsyncThunk(
   "list-cart-user",
@@ -123,7 +116,7 @@ const cartSlice = createSlice({
       ListCartUser.fulfilled,
       (state: initialStateSlice, action: any) => {
         state.loading = false;
-        state.current = action.payload;
+        state.current = action.payload.data;
       }
     );
 
