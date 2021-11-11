@@ -5,6 +5,10 @@ import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getPermission, getUser, removeEmptyArray } from "utils/utils";
 import StatusProduct from "./StatusProduct";
+import ImageUI from 'components/Image/Image'
+
+
+
 const ProductList = ({
   handleShowFromCreate,
   handleShowFromEdit,
@@ -43,6 +47,8 @@ const ProductList = ({
   return (
     <Fragment>
       <div className="flex flex-1  flex-col md:flex-row lg:flex-row mx-2 text-center">
+
+                        
         <div className="mb-2 border-solid border-gray-300 rounded border shadow-sm w-full">
           <div className="relative bg-gray-200 px-2 py-3 border-solid border-gray-200 border-b uppercase text-center">
             Products
@@ -91,7 +97,7 @@ const ProductList = ({
                           {item.category.name}
                         </td>
                         <td className="border px-4 py-2">
-                          <img src={item.photo} width="100" alt="isphoto" />
+                          <ImageUI photo={item.photo} />
                         </td>
                         <td className="border px-4 py-2">{item.price} $</td>
                         <td className="border px-4 py-2">
@@ -194,7 +200,7 @@ const ProductList = ({
           </div>
         </div>
       </div>
-      <div className="absolute xl:bottom-[23%] xl:right-[2%]   sm:bottom-[7%] sm:right-[1.5%] sm:w-[80%] flex justify-between">
+      <div className="absolute xl:bottom-[10%] xl:right-[2%]   sm:bottom-[7%] sm:right-[1.5%] sm:w-[80%] flex justify-between">
         <div onClick={() => handleShowFromCreate(true)}>
           <button className="bg-transparent hover:bg-green-500 text-[#48bb78] font-semibold hover:text-white py-2 px-4 border border-green hover:border-transparent rounded">
             Create
@@ -208,7 +214,7 @@ const ProductList = ({
                 : false
             }
             onClick={() => handlePagination({ type: ProductPagination.minus })}
-            className="bg-gray-200 hover:bg-gray-500 text-gray-900 font-bold py-2 px-4 rounded-l shadow"
+            className="bg-blue-500 mx-1 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow"
           >
             Prev
           </button>
@@ -219,7 +225,7 @@ const ProductList = ({
                 : false
             }
             onClick={() => handlePagination({ type: ProductPagination.plus })}
-            className="bg-gray-200 hover:bg-gray-500 text-gray-900 font-bold py-2 px-4 rounded-r shadow"
+            className="bg-blue-500 mx-1 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow"
           >
             Next
           </button>

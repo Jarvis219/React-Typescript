@@ -1,5 +1,6 @@
 /* eslint-disable array-callback-return */
 import { Fragment } from "react";
+import ButtonUI1 from 'components/Button/Button'
 
 const CategoryList = ({
   categories,
@@ -90,19 +91,15 @@ const CategoryList = ({
           </div>
         </div>
       </div>
-      <div className='ml-[1%] flex gap-[55%] md:gap-[65%] lg:gap-[77%] xl:gap-[81%]'>
+      <div className='ml-[1%] flex gap-[50%] md:gap-[60%] lg:gap-[70%] xl:gap-[75%]'>
         <div onClick={() => handleShowFromCreate(true)}>
           <button className='bg-transparent hover:bg-green-500 text-[#48bb78] font-semibold hover:text-white py-2 px-4 border border-green hover:border-transparent rounded'>
             Create
           </button>
         </div>
         <div className='inline-flex '>
-          <button className='bg-gray-200 hover:bg-gray-500 text-gray-900 font-bold py-2 px-4 rounded-l shadow'>
-            Prev
-          </button>
-          <button className='bg-gray-200 hover:bg-gray-500 text-gray-900 font-bold py-2 px-4 rounded-r shadow'>
-            Next
-          </button>
+        <ButtonUI1 size={'sm'} color={'lightBlue'} className={'mx-1'} text={'Prev'} />
+        <ButtonUI1 size={'sm'} color={'lightBlue'} className={'mx-1'} text={'Next'} />
         </div>
       </div>
     </Fragment>
