@@ -8,7 +8,7 @@ const PrivateRoute = ({ ...rest }) => {
   const auth = useAuth();
   if (auth === null || auth === 0) return <Redirect to='/login' />;
   return (
-    <div className='mx-auto bg-grey-400'>
+    <div className='mx-auto bg-grey-400 font-serif'>
       <div className='min-h-screen flex flex-col'>
         <Header />
         <div className='flex flex-1'>

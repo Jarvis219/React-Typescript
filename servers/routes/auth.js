@@ -9,6 +9,10 @@ import {
   loginWithGoogleAccount,
   checkLoginWithGoogleAccountEmail,
 } from "../controllers/auth";
+import {
+  userID,
+  updateUser
+} from "../controllers/userControllers"
 // import { authToken } from "../middleware/authToken";
 const router = express.Router();
 
@@ -27,4 +31,7 @@ router.post(
 );
 //đăng xuất email
 router.get("/signout", signout);
+router.put("/update-token/:id", updateUser)
+
+router.param("id", userID)
 module.exports = router;

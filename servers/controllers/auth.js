@@ -1,7 +1,9 @@
 import jwt from "jsonwebtoken";
 import _ from "lodash";
 
-import { v4 as uuidv4 } from "uuid";
+import {
+  v4 as uuidv4
+} from "uuid";
 const User = require("../model/userModel");
 const nodemailer = require("nodemailer");
 const expressJwt = require("express-jwt");
@@ -10,7 +12,11 @@ export const tokenList = {};
 
 // register send email
 export const registerControllers = async (req, res) => {
-  const { name, email, password } = req.body;
+  const {
+    name,
+    email,
+    password
+  } = req.body;
   const users = new User({
     name,
     email,
@@ -509,9 +515,11 @@ export const verifyEmailCheck = async (req, res, next) => {
 
 // login check data
 exports.signin = (req, res) => {
-  const { email, password } = req.body;
-  User.findOne(
-    {
+  const {
+    email,
+    password
+  } = req.body;
+  User.findOne({
       email,
     },
     (err, user) => {
@@ -525,23 +533,19 @@ exports.signin = (req, res) => {
           error: "Email and password not match",
         });
       }
-      const token = jwt.sign(
-        {
+      const token = jwt.sign({
           _id: user._id,
         },
-        process.env.JWT_SECRET,
-        {
+        process.env.JWT_SECRET, {
           expiresIn: "36000s",
         }
       );
 
       // create refreshToken
-      const refreshToken = jwt.sign(
-        {
+      const refreshToken = jwt.sign({
           _id: user._id,
         },
-        process.env.JWT_REFRESH_TOKEN,
-        {
+        process.env.JWT_REFRESH_TOKEN, {
           expiresIn: "20d",
         }
       );
@@ -551,7 +555,13 @@ exports.signin = (req, res) => {
       res.cookie("token", token, {
         expire: new Date() + 9999,
       });
-      const { _id, name, email, permission, photoURL } = user;
+      const {
+        _id,
+        name,
+        email,
+        permission,
+        photoURL
+      } = user;
       return res.json({
         token,
         refreshToken,
@@ -601,7 +611,9 @@ exports.isAdmin = (req, res, next) => {
 };
 
 export const checkLoginWithGoogleAccount = (req, res, next) => {
-  const { uid } = req.body;
+  const {
+    uid
+  } = req.body;
   User.findOne({
     uid: uid,
   }).exec((err, data) => {
@@ -623,7 +635,10 @@ export const checkLoginWithGoogleAccount = (req, res, next) => {
 };
 
 export const checkLoginWithGoogleAccountEmail = (req, res, next) => {
-  const { email } = req.googleAccount;
+
+  const {
+    email
+  } = req.googleAccount;
   User.findOne({
     email: email,
   }).exec((err, data) => {

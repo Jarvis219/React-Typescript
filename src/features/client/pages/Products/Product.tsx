@@ -140,7 +140,7 @@ const Product = () => {
                   </span>
                 </div>
                 <p className='leading-relaxed'>{productDetail.description}</p>
-                <div className='xl:absolute bottom-0 right-5 xl:w-full'>
+                <div className='xl:absolute -bottom-4 right-5 xl:w-full'>
                   <div className='flex items-center justify-start'>
                     <div className='xl:ml-[13%]'>
                       <span className='title-font font-medium text-2xl text-gray-900'>

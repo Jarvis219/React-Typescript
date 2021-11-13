@@ -118,7 +118,6 @@ const Product = () => {
     data: ProductModel,
     name: string
   ): Promise<void> => {
-    console.log(products);
     const nameProduct: number = isCheckNameProduct(name).length;
     if (nameProduct !== 0) {
       notifyError("Product already exists!!");
@@ -129,7 +128,7 @@ const Product = () => {
       try {
         setLoading(true);
         const actionResult: any = await dispatch(
-          createProductSlice(Object.assign(data, { photo: null }))
+          createProductSlice(Object.assign(data, { photo: null}))
         );
         const currentProduct = unwrapResult(actionResult);
         setLoading(false);
@@ -147,7 +146,7 @@ const Product = () => {
       setLoading(true);
       photo = await FirebaseUploadPhoto(photo[0]);
       const actionResult: any = await dispatch(
-        createProductSlice(Object.assign(data, { photo }))
+        createProductSlice(Object.assign(data, { photo  }))
       );
       setLoading(false);
       const currentProduct = unwrapResult(actionResult);

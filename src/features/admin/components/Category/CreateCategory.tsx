@@ -1,3 +1,5 @@
+import ButtonUI1 from "components/Button/Button";
+import { ColorBackground } from "constants/color";
 import { Fragment, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
@@ -22,7 +24,9 @@ const CreateCategory = ({ handleShowFromCreate, handleSubmitCreate }: any) => {
         onClick={() => handleShowFromCreate(false)}
         className='absolute inset-0 opacity-25 bg-[#0c1402] '></div>
       <div className=' absolute w-[80%] top-[30%] md:left-20 lg:left-24 xl:left-32'>
-        <section className='max-w-4xl p-6 mx-auto bg-[#9df0a8] rounded-md shadow-md dark:bg-gray-800 '>
+        <section
+          style={{ backgroundColor: ColorBackground.blue }}
+          className='max-w-4xl p-6 mx-auto  rounded-md shadow-md dark:bg-gray-800 '>
           <h1 className='uppercase text-center text-xl font-bold text-white  dark:text-white'>
             create category
           </h1>
@@ -49,12 +53,15 @@ const CreateCategory = ({ handleShowFromCreate, handleSubmitCreate }: any) => {
             <div className='flex justify-end gap-3 mt-6'>
               <button
                 onClick={() => handleShowFromCreate(false)}
-                className='px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600'>
+                className='px-6 py-2 leading-5 shadow-lg text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-600 focus:outline-none focus:bg-gray-600'>
                 Cancel
               </button>
-              <button className='px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-[#26f0b3] rounded-md hover:bg-[#d9f82be5] focus:outline-none focus:bg-gray-600'>
-                Save
-              </button>
+              <ButtonUI1
+                size={"sm"}
+                color={"lightBlue"}
+                className={"mx-1 py-3"}
+                text={"Create"}
+              />
             </div>
           </form>
         </section>

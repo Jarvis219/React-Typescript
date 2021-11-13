@@ -39,6 +39,9 @@ const UserSchema = new mongoose.Schema({
     },
     emailToken: {
         type: String
+    },
+    tokenGoogle:{
+        type:String
     }
 
 }, {

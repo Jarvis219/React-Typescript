@@ -29,10 +29,10 @@ const Search = () => {
             <input
               type='text'
               {...register("name")}
-              className='px-2 py-1 w-40 text-[15px]'
+              className='px-2 py-1 w-40 text-[15px] focus:outline-none '
               placeholder='Search...'
             />
-            <button className='flex items-center justify-center px-3 border-l'>
+            <button className='flex items-center focus:outline-none justify-center px-3 border-l'>
               <svg
                 className='w-5 h-5 text-gray-600'
                 fill='currentColor'

@@ -1,6 +1,6 @@
 import { Fragment, memo } from "react";
 import { useAppSelector } from "app/hook";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 const Menu = () => {
   const categories = useAppSelector((state: any) => {
     return state.category.current;
@@ -21,7 +21,7 @@ const Menu = () => {
             ? categories.map((item: any, index: number) => {
                 return (
                   <li key={index}>
-                    <NavLink
+                    <Link
                       to={`/category/${item._id}`}
                       className='
                   inline-block
@@ -29,9 +29,11 @@ const Menu = () => {
                   hover:text-black hover:underline
                   py-2
                   px-4
+                  bg-white
+                  
                 '>
                       {item.name}
-                    </NavLink>
+                    </Link>
                   </li>
                 );
               })

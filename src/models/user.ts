@@ -25,4 +25,5 @@ export interface DataGoogle {
   name: string;
   email: string;
   confirmed: boolean;
+  tokenGoogle: string;
 }

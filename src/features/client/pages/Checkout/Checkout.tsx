@@ -75,6 +75,7 @@ const Checkout = () => {
           UpdateProduct({
             _id: item.product._id,
             quantity: item.product.quantity - item.amount,
+            sold: item.product.sold + item.amount,
           })
         );
       } catch (error) {
@@ -102,10 +103,10 @@ const Checkout = () => {
 
   const clearCart = async (message: string): Promise<void> => {
     sessionStorage.removeItem("total");
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       resolve(
         carts.forEach(async (item: any) => {
-          return new Promise((resolve, reject) => {
+          return new Promise(() => {
             dispatch(RemoveCart(item._id));
           });
         })

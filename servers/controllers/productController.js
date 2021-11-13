@@ -70,7 +70,6 @@ export const removeProduct = (req, res) => {
 // thêm sp
 export const createProduct = (req, res) => {
   const products = new Product(req.body);
-
   products.save((err, data) => {
     if (err) {
       return res.status(400).json({

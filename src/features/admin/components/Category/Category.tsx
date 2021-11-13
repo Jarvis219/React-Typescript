@@ -1,6 +1,7 @@
 /* eslint-disable array-callback-return */
 import { Fragment } from "react";
-import ButtonUI1 from 'components/Button/Button'
+import ButtonUI1 from "components/Button/Button";
+import { ColorBackground } from "constants/color";
 
 const CategoryList = ({
   categories,
@@ -12,7 +13,9 @@ const CategoryList = ({
     <Fragment>
       <div className='flex flex-1  flex-col md:flex-row lg:flex-row mx-2 text-center'>
         <div className='mb-2 border-solid border-gray-300 rounded border shadow-sm w-full'>
-          <div className='bg-gray-200 px-2 py-3 border-solid border-gray-200 border-b uppercase text-center'>
+          <div
+            style={{ backgroundColor: ColorBackground.blue }}
+            className='font-bold text-white px-2 py-3 border-solid  border-b uppercase text-center'>
             categories
           </div>
           <div className='p-3'>
@@ -24,7 +27,7 @@ const CategoryList = ({
                   <th className='border w-1/2 px-4 py-2'>Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className='text-gray-800'>
                 {categories ? (
                   categories.map((item: any, index: number) => {
                     return (
@@ -40,12 +43,12 @@ const CategoryList = ({
                                   id: item._id,
                                 })
                               }
-                              className='cursor-pointer  mx-1 '>
+                              className='cursor-pointer transform scale-100 hover:scale-125 transition duration-300 mx-1 '>
                               <svg
                                 xmlns='http://www.w3.org/2000/svg'
                                 className='h-6 w-6'
                                 viewBox='0 0 20 20'
-                                fill='#0CE943'>
+                                fill={ColorBackground.blue}>
                                 <path d='M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z' />
                                 <path
                                   fillRule='evenodd'
@@ -61,7 +64,7 @@ const CategoryList = ({
                                   id: item._id,
                                 })
                               }
-                              className='cursor-pointer  mx-1 '>
+                              className='cursor-pointer transform scale-100 hover:scale-125 transition duration-300  mx-1 '>
                               <svg
                                 xmlns='http://www.w3.org/2000/svg'
                                 className='h-6 w-6'
@@ -91,15 +94,28 @@ const CategoryList = ({
           </div>
         </div>
       </div>
-      <div className='ml-[1%] flex gap-[50%] md:gap-[60%] lg:gap-[70%] xl:gap-[75%]'>
+      <div className='absolute xl:bottom-[35%] xl:right-[2%]   sm:bottom-[30%] sm:right-[1.5%] sm:w-[80%] flex justify-between'>
         <div onClick={() => handleShowFromCreate(true)}>
-          <button className='bg-transparent hover:bg-green-500 text-[#48bb78] font-semibold hover:text-white py-2 px-4 border border-green hover:border-transparent rounded'>
-            Create
-          </button>
+          <ButtonUI1
+            size={"sm"}
+            color={"lightBlue"}
+            className={"mx-1 py-3"}
+            text={"Create"}
+          />
         </div>
         <div className='inline-flex '>
-        <ButtonUI1 size={'sm'} color={'lightBlue'} className={'mx-1'} text={'Prev'} />
-        <ButtonUI1 size={'sm'} color={'lightBlue'} className={'mx-1'} text={'Next'} />
+          <ButtonUI1
+            size={"sm"}
+            color={"lightBlue"}
+            className={"mx-1"}
+            text={"Prev"}
+          />
+          <ButtonUI1
+            size={"sm"}
+            color={"lightBlue"}
+            className={"mx-1"}
+            text={"Next"}
+          />
         </div>
       </div>
     </Fragment>

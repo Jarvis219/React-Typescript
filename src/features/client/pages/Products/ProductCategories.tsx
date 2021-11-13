@@ -34,7 +34,7 @@ const ProductCategories = () => {
   return (
     <Fragment>
       <h2 className='text-center uppercase font-bold'>{nameCategory}</h2>
-      <div className='container mx-auto flex items-center flex-wrap mt-8'>
+      <div className='container mx-auto flex justify-center items-center flex-wrap mt-8'>
         <ProductItem products={productState} />
       </div>
     </Fragment>

@@ -19,3 +19,8 @@ export const loginWithGoogleAccount = (user: any) => {
   const url = `login-google`;
   return instance.post(url, user);
 };
+
+export const updateToken = (id: string, token: { tokenGoogle: string }) => {
+  const url = `/update-token/${id}`;
+  return instance.put(url, token);
+};

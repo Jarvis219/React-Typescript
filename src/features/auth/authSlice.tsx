@@ -4,6 +4,7 @@ import {
   register,
   Verify,
   loginWithGoogleAccount,
+  updateToken,
 } from "../../services/auth";
 import { RegisterData, LoginData } from "../../models/user";
 
@@ -49,6 +50,26 @@ export const ActiveAccount = createAsyncThunk(
   async (token: string) => {
     const { data } = await Verify(token);
     return data;
+  }
+);
+
+type typeToken = {
+  id: string;
+  tokenGoogle: string;
+};
+
+export const UpdateToken = createAsyncThunk(
+  "update-token",
+  async (userData: typeToken, thunkApi) => {
+    console.log(userData);
+    try {
+      const { data } = await updateToken(userData.id, {
+        tokenGoogle: userData.tokenGoogle,
+      });
+      return data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
   }
 );
 

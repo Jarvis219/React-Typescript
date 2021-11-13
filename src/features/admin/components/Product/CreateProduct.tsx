@@ -2,6 +2,7 @@ import { Fragment, useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ProductStatus } from "constants/product";
 import CategoryItem from "../Category/CategoryItem";
+import { ColorBackground } from "constants/color";
 
 type Inputs = {
   name: string;
@@ -48,7 +49,9 @@ const CreateProduct = ({
         onClick={() => handleShowFromCreate(false)}
         className='fixed inset-0 opacity-25 bg-[#0c1402] '></div>
       <div className='absolute w-[70%]  top-[7%] left-20  md:left-32 lg:left-40 xl:left-56'>
-        <section className=' p-6  bg-[#9df0a8] rounded-md shadow-md dark:bg-gray-800 0'>
+        <section
+          style={{ backgroundColor: ColorBackground.blue }}
+          className=' p-6  rounded-md shadow-md dark:bg-gray-800 0'>
           <h1 className='uppercase text-center text-xl font-bold text-white  dark:text-white'>
             create product
           </h1>
@@ -195,8 +198,8 @@ const CreateProduct = ({
                   {avatar ? (
                     <img
                       src={avatar.preview}
-                      className='absolute top-1 xl:left-[42%]'
-                      style={{ maxWidth: "70px" }}
+                      className='absolute top-0 xl:left-[60%]'
+                      style={{ maxWidth: "180px", maxHeight: "135px" }}
                       alt=''
                     />
                   ) : (
@@ -242,18 +245,18 @@ const CreateProduct = ({
               <button
                 disabled={loading}
                 onClick={() => handleShowFromCreate(false)}
-                className='px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600'>
+                className='px-6 py-2 leading-5 text-white transition-colors duration-200 shadow-lg transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600'>
                 Cancel
               </button>
               <button
                 disabled={loading}
-                className='px-8 py-2 leading-5 text-white transition-colors duration-200 transform bg-[#26f0b3] rounded-md hover:bg-[#d9f82be5] focus:outline-none focus:bg-gray-600'>
+                className='px-8 py-3 leading-5 text-white transition-colors duration-200 transform bg-[#03a9f4] rounded-md hover:bg-[#0691d1] shadow-lg focus:outline-none focus:bg-gray-600'>
                 {loading && (
                   <div className='flex items-center justify-center absolute top-2 left-2'>
                     <div className='w-5 h-5 border-t-2 border-b-2 border-red-600 rounded-full animate-spin'></div>
                   </div>
                 )}
-                Save
+                Create
               </button>
             </div>
           </form>

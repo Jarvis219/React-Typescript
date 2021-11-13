@@ -1,4 +1,5 @@
 import { useAppSelector } from "app/hook";
+import { ColorBackground } from "constants/color";
 import { OrderModel } from "models/order";
 import { Fragment, memo, useEffect, useState } from "react";
 import { changeDisplayPrices } from "utils/utils";
@@ -40,7 +41,9 @@ const OrderDetail = ({ id, setOrder }: any) => {
             onClick={() => setOrder(false)}
             className='absolute inset-0 opacity-25 bg-[#0c1402] '></div>
           <div className=' absolute  top-[25%] md:left-16 lg:left-24 xl:left-72'>
-            <section className='max-w-4xl p-6 mx-auto bg-[#9df0a8] rounded-md shadow-md dark:bg-gray-800 '>
+            <section
+              style={{ backgroundColor: ColorBackground.blue }}
+              className='text-white max-w-4xl p-6 mx-auto  rounded-md shadow-md dark:bg-gray-800 '>
               <h1 className='uppercase text-center text-xl font-bold text-white  dark:text-white'>
                 Order detail
               </h1>
@@ -67,34 +70,22 @@ const OrderDetail = ({ id, setOrder }: any) => {
                   <table className='w-full'>
                     <thead>
                       <tr>
-                        <th className='px-2 py-1 border border-blue-500'>
-                          Name
-                        </th>
-                        <th className='px-2 py-1 border border-blue-500'>
-                          Photo
-                        </th>
-                        <th className='px-2 py-1 border border-blue-500'>
-                          price
-                        </th>
-                        <th className='px-2 py-1 border border-blue-500'>
-                          Sale
-                        </th>
-                        <th className='px-2 py-1 border border-blue-500'>
-                          Qty
-                        </th>
-                        <th className='px-2 py-1 border border-blue-500'>
-                          Total
-                        </th>
+                        <th className='px-2 py-1 border border-white'>Name</th>
+                        <th className='px-2 py-1 border border-white'>Photo</th>
+                        <th className='px-2 py-1 border border-white'>price</th>
+                        <th className='px-2 py-1 border border-white'>Sale</th>
+                        <th className='px-2 py-1 border border-white'>Qty</th>
+                        <th className='px-2 py-1 border border-white'>Total</th>
                       </tr>
                     </thead>
                     <tbody>
                       {data.product.map((item: any, index: number) => {
                         return (
                           <tr className='text-center' key={index}>
-                            <td className='px-2 py-1 border border-blue-500'>
+                            <td className='px-2 py-1 border border-white'>
                               {item.product.name}
                             </td>
-                            <td className='px-2 py-1 border border-blue-500'>
+                            <td className='px-2 py-1 border border-white'>
                               <img
                                 src={item.product.photo}
                                 width={25}
@@ -102,16 +93,16 @@ const OrderDetail = ({ id, setOrder }: any) => {
                                 alt=''
                               />
                             </td>
-                            <td className='px-2 py-1 border border-blue-500'>
+                            <td className='px-2 py-1 border border-white'>
                               ${item.product.price}
                             </td>
-                            <td className='px-2 py-1 border border-blue-500'>
+                            <td className='px-2 py-1 border border-white'>
                               ${item.product.sale}
                             </td>
-                            <td className='px-2 py-1 border border-blue-500'>
-                              ${item.amount}
+                            <td className='px-2 py-1 border border-white'>
+                              {item.amount}
                             </td>
-                            <td className='px-2 py-1 border border-blue-500'>
+                            <td className='px-2 py-1 border border-white'>
                               $
                               <span className='total-order-detail'>
                                 {(item.product.price - item.product.sale) *
@@ -125,12 +116,12 @@ const OrderDetail = ({ id, setOrder }: any) => {
                       <tr className='text-center'>
                         <td
                           colSpan={2}
-                          className='px-2 py-1 border border-blue-500 font-bold'>
+                          className='px-2 py-1 border border-white font-bold'>
                           SUM
                         </td>
                         <td
                           colSpan={4}
-                          className='px-2 py-1 border border-blue-500 text-red-500 font-bold'>
+                          className='px-2 py-1 border border-white text-red-500 font-bold'>
                           {changeDisplayPrices(sum)}
                         </td>
                       </tr>
@@ -143,7 +134,7 @@ const OrderDetail = ({ id, setOrder }: any) => {
                 className='mt-4 flex justify-end'>
                 <button
                   type='button'
-                  className='bg-transparent hover:bg-green-500 text-[#19b4c9] font-semibold hover:text-white py-2 px-8 border border-green hover:border-transparent rounded'>
+                  className='bg-green-400 transform scale-100 hover:scale-105 transition duration-300  hover:bg-green-500  font-semibold hover:text-white py-2 px-8 border border-green hover:border-transparent rounded'>
                   Ok
                 </button>
               </div>

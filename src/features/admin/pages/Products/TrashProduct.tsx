@@ -8,6 +8,8 @@ import { Fragment, useEffect, useState } from "react";
 import { notifyError, notifySuccess, removeEmptyArray } from "utils/utils";
 import { RemoveProduct, UpdateProduct } from "./ProductSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { ColorBackground } from "constants/color";
+import ButtonUI1 from "components/Button/Button";
 
 const TrashProduct = () => {
   const dispatch = useAppDispatch();
@@ -96,7 +98,9 @@ const TrashProduct = () => {
     <Fragment>
       <div className='flex flex-1  flex-col md:flex-row lg:flex-row mx-2 text-center'>
         <div className='mb-2 border-solid border-gray-300 rounded border shadow-sm w-full'>
-          <div className='bg-gray-200 px-2 py-3 border-solid border-gray-200 border-b uppercase text-center'>
+          <div
+            style={{ backgroundColor: ColorBackground.blue }}
+            className='font-bold text-white px-2 py-3 border-solid  border-b uppercase text-center'>
             Products trash
           </div>
           <div className='p-3'>
@@ -113,7 +117,7 @@ const TrashProduct = () => {
                   <th className='border w-1/5 px-4 py-2'>Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className='text-gray-800'>
                 {removeEmpty ? (
                   removeEmpty.map((item: any, index: number) => {
                     return (
@@ -134,13 +138,13 @@ const TrashProduct = () => {
                           <div className='flex justify-center items-center'>
                             <span
                               onClick={() => undoTrashProduct(item)}
-                              className='cursor-pointer  mx-1 '>
+                              className='cursor-pointer transform scale-100 hover:scale-125 transition duration-300  mx-1 '>
                               <svg
                                 xmlns='http://www.w3.org/2000/svg'
                                 className='h-6 w-6'
                                 fill='none'
                                 viewBox='0 0 24 24'
-                                stroke='#0CE943'>
+                                stroke={ColorBackground.blue}>
                                 <path
                                   strokeLinecap='round'
                                   strokeLinejoin='round'
@@ -152,7 +156,7 @@ const TrashProduct = () => {
 
                             <span
                               onClick={() => handleShowDialogDelete(true, item)}
-                              className='cursor-pointer  mx-1 '>
+                              className='cursor-pointer transform scale-100 hover:scale-125 transition duration-300  mx-1 '>
                               <svg
                                 xmlns='http://www.w3.org/2000/svg'
                                 className='h-6 w-6'
@@ -182,12 +186,18 @@ const TrashProduct = () => {
       </div>
       <div className=' ml-[1%] flex justify-end gap-[60%] lg:gap-[70%] xl:gap-[81%]'>
         <div className='inline-flex '>
-          <button className='bg-gray-200 hover:bg-gray-500 text-gray-900 font-bold py-2 px-4 rounded-l shadow'>
-            Prev
-          </button>
-          <button className='bg-gray-200 hover:bg-gray-500 text-gray-900 font-bold py-2 px-4 rounded-r shadow'>
-            Next
-          </button>
+          <ButtonUI1
+            size={"sm"}
+            color={"blue"}
+            className={"mx-1 "}
+            text={"Prev"}
+          />
+          <ButtonUI1
+            size={"sm"}
+            color={"blue"}
+            className={"mx-1 "}
+            text={"Next"}
+          />
         </div>
       </div>
       {diaLog ? (

@@ -45,6 +45,7 @@ const ProductSchema = new mongoose.Schema({
   status: {
     type: String,
   },
+  namePhoto:{type:String}
 }, {
   timestamps: true,
 });

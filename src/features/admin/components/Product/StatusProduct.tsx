@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useState, memo } from "react";
 import { ProductStatus } from "constants/product";
+import { ColorBackground } from "constants/color";
 
 const StatusProduct = ({ statusItem, data, getDataStatus }: any) => {
   const [status, setStatus] = useState<Array<string>>([]);
@@ -29,7 +30,8 @@ const StatusProduct = ({ statusItem, data, getDataStatus }: any) => {
   return (
     <Fragment>
       <select
-        className='rounded py-2 px-3 bg-blue-100 text-gray-700'
+        style={{ backgroundColor: ColorBackground.blue }}
+        className='rounded py-2 px-3  text-white'
         onChange={(e) => setDataStatus(e)}
         value=''>
         {status.map((item: string, index: number) => {

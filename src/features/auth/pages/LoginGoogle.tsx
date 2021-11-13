@@ -1,33 +1,33 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useEffect } from "react";
 import { signInWithGoogle, auth } from "../../../firebase";
-import { LoginWithGoogleAccount } from "../authSlice";
+import { LoginWithGoogleAccount, UpdateToken } from "../authSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { DataGoogle } from "../../../models/user";
 import { useAppDispatch } from "../../../app/hook";
-import { setToken, setUser } from "utils/utils";
-import { ToastContainer, toast } from "react-toastify";
+import { setToken, setUser, notifySuccess, notifyError } from "utils/utils";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const LoginGoogle = () => {
   const dispatch = useAppDispatch();
-  const notifySuccess = (success: string) =>
-    toast.success(success, { icon: "🚀" });
-  const notifyError = (error: string) => toast.error(error);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user: any) => {
       if (!user) return;
       const { uid, photoURL, displayName, email, emailVerified } = user;
+      const token = await user.getIdToken();
+      setToken(token);
       const dataGoogle: DataGoogle = {
         uid,
         photoURL,
         name: displayName,
         email,
         confirmed: emailVerified,
+        tokenGoogle: token,
       };
-      const token = await user.getIdToken();
-      setToken(token);
+
+      console.log(dataGoogle);
       try {
         const actionResult: any = await dispatch(
           LoginWithGoogleAccount(dataGoogle)
@@ -41,6 +41,10 @@ export const LoginGoogle = () => {
           photoURL: currentUser.data.photoURL,
         };
         setUser(data);
+
+        await dispatch(
+          UpdateToken({ id: currentUser.data._id, tokenGoogle: token })
+        );
         notifySuccess(currentUser.message);
         window.location.href = "/";
       } catch (error) {
@@ -54,12 +58,11 @@ export const LoginGoogle = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="social d-flex text-center">
+    <div className='social d-flex text-center'>
       <a
         onClick={signInWithGoogle}
-        className="px-2 py-2 mr-md-1 rounded cursor-pointer"
-      >
-        <span className="ion-logo-facebook mr-2" /> Google
+        className='px-2 py-2 mr-md-1 rounded cursor-pointer'>
+        <span className='ion-logo-facebook mr-2' /> Google
       </a>
       <ToastContainer />
     </div>
