@@ -4,8 +4,10 @@ import { OrderStatus } from "constants/order";
 import { ProductPagination } from "constants/product";
 import { OrderList } from "features/admin/components/Order/Order";
 import { OrderModel } from "models/order";
+import EditOrder from "../../components/Order/EditOrder";
 import {
   DisabledProductPaginationType,
+  ProductModel,
   ProductPaginationType,
 } from "models/product";
 import { useEffect, useState } from "react";
@@ -17,6 +19,9 @@ const Order = () => {
   const orders = useAppSelector((state: any) => {
     return state.order.current;
   });
+  const [showEdit, setShowEdit] =
+    useState<{ type: boolean; action?: OrderModel }>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<Pagination>({
     limit: 0,
     skip: 3,
@@ -107,14 +112,63 @@ const Order = () => {
     }
   };
 
+  const handleUpdate = async (data: {
+    name: string;
+    address: string;
+    phone: number;
+  }): Promise<void> => {
+    setLoading(true);
+    try {
+      const actionResult: any = await dispatch(UpdateOrder(data));
+      const currentProduct = unwrapResult(actionResult);
+      notifySuccess(currentProduct.message + " 👌");
+    } catch (error) {
+      notifyError("Update  order failure !!!");
+    }
+    setLoading(false);
+  };
+
+  const handleDeleteProduct = async (data: {
+    id: string;
+    product: ProductModel[];
+    status?: string;
+  }): Promise<void> => {
+    if (data.product.length === 0) {
+      data.status = OrderStatus.cancelled;
+      setShowEdit({ type: false });
+    }
+
+    setLoading(true);
+    try {
+      const actionResult: any = await dispatch(UpdateOrder(data));
+      const currentProduct = unwrapResult(actionResult);
+      notifySuccess(currentProduct.message + " 👌");
+    } catch (error) {
+      notifyError("Update  order failure !!!");
+    }
+    setLoading(false);
+  };
+
   return (
     <div>
       {orders.length !== 0 ? (
         <OrderList
+          setShowEdit={setShowEdit}
           handlePagination={handlePagination}
           disablePagination={disablePagination}
           handleUpdateStatusOrder={handleUpdateStatusOrder}
           orderState={orderState}
+        />
+      ) : (
+        ""
+      )}
+      {showEdit?.type ? (
+        <EditOrder
+          handleUpdate={handleUpdate}
+          handleDeleteProduct={handleDeleteProduct}
+          data={showEdit.action}
+          loading={loading}
+          setShowEdit={setShowEdit}
         />
       ) : (
         ""

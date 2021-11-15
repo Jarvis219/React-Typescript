@@ -131,3 +131,26 @@ export const listTotal = (req, res) => {
       });
     });
 };
+
+export const updateDeleteProduct = (req, res) => {
+  let order = req.order;
+  Order.updateOne({
+    _id: order
+  }, {
+    $set: {
+      product: req.body.product,
+    }
+  }).exec((err, data) => {
+    if (err) {
+      return res.status(400).json({
+        err,
+        error: "don't successfully"
+      })
+    }
+    res.json({
+      data,
+      message: "Update order successfully",
+    });
+  })
+
+}

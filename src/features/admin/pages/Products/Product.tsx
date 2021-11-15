@@ -128,7 +128,7 @@ const Product = () => {
       try {
         setLoading(true);
         const actionResult: any = await dispatch(
-          createProductSlice(Object.assign(data, { photo: null}))
+          createProductSlice(Object.assign(data, { photo: null }))
         );
         const currentProduct = unwrapResult(actionResult);
         setLoading(false);
@@ -146,7 +146,7 @@ const Product = () => {
       setLoading(true);
       photo = await FirebaseUploadPhoto(photo[0]);
       const actionResult: any = await dispatch(
-        createProductSlice(Object.assign(data, { photo  }))
+        createProductSlice(Object.assign(data, { photo }))
       );
       setLoading(false);
       const currentProduct = unwrapResult(actionResult);
@@ -261,6 +261,7 @@ const Product = () => {
   return (
     <div>
       <ProductList
+        countPage={countPage}
         products={productState}
         handlePagination={handlePagination}
         handleUpdateStatusProduct={handleUpdateStatusProduct}

@@ -14,6 +14,7 @@ export const OrderList = ({
   handleUpdateStatusOrder,
   handlePagination,
   disablePagination,
+  setShowEdit
 }: any) => {
   const getDataStatus = (data: OrderModel): void => {
     handleUpdateStatusOrder(data);
@@ -129,7 +130,7 @@ export const OrderList = ({
                                   />
                                 </svg>
                               </span>
-                              <span className='cursor-pointer transform scale-100 hover:scale-125 transition duration-300  mx-1 '>
+                              <span onClick={()=>setShowEdit({type:true, action:item})} className='cursor-pointer transform scale-100 hover:scale-125 transition duration-300  mx-1 '>
                                 <svg
                                   xmlns='http://www.w3.org/2000/svg'
                                   className='h-6 w-6'

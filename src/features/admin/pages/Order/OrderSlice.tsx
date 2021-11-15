@@ -5,6 +5,7 @@ import {
   listOrderAPI,
   removeOrderAPI,
   updateOrderAPI,
+  readOrderAPI,
 } from "services/order";
 import { setCountOrder } from "utils/utils";
 
@@ -29,6 +30,18 @@ export const ListOrder = createAsyncThunk("list-order", async (thunkApi) => {
     return error;
   }
 });
+
+export const ReadOrder = createAsyncThunk(
+  "read-order",
+  async (id: string, thunkApi) => {
+    try {
+      const { data }: any = await readOrderAPI(id);
+      return data.data;
+    } catch (error) {
+      return error;
+    }
+  }
+);
 
 export const UpdateOrder = createAsyncThunk(
   "update-order",

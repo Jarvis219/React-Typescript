@@ -24,6 +24,10 @@ export const updateOrderAPI = (id: string, data: string) => {
   const url = `/update-order/${id}/${_id}`;
   return instance.put(url, data);
 };
+export const readOrderAPI = (id: string) => {
+  const url = `/read-order/${id}/${_id}`;
+  return instance.get(url);
+};
 
 export const removeOrderAPI = (id: string) => {
   const url = `/remove-order/${id}/${_id}`;

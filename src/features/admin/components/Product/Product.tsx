@@ -16,6 +16,7 @@ const ProductList = ({
   handleUpdateStatusProduct,
   handlePagination,
   disablePagination,
+  countPage,
   products,
 }: any) => {
   const getDataStatus = (data: ProductModel): void => {
@@ -23,7 +24,7 @@ const ProductList = ({
   };
   const [productShow, setProductShow] = useState<ProductModel>();
   const [result, setResult] = useState<any>();
-
+  const [countPa, setCountPa] = useState<number>(1);
   useEffect(() => {
     try {
       if (!products) return;
@@ -38,6 +39,20 @@ const ProductList = ({
       console.log(error);
     }
   }, [products]);
+  useEffect(() => {
+    if (countPa <= 1) {
+      setCountPa(1);
+    }
+  }, [countPa]);
+
+  const handleCountPage = (data: { type: string }) => {
+    if (data.type === ProductPagination.plus) {
+      setCountPa((pre) => pre + 1);
+    } else {
+      setCountPa((pre) => pre - 1);
+    }
+    handlePagination(data);
+  };
 
   useEffect(() => {
     if (productShow) {
@@ -51,7 +66,11 @@ const ProductList = ({
           <div
             style={{ backgroundColor: ColorBackground.blue }}
             className='relative text-white font-bold bg-gray-200 px-2 py-3 border-solid border-gray-200 border-b uppercase text-center'>
-            Products
+            Products (
+            {products !== undefined
+              ? countPa + "/" + countPage / products.length
+              : ""}
+            )
             <div className='absolute top-3 right-[5%]'>
               <Link to='/admin/trash-products'>
                 <svg
@@ -75,7 +94,6 @@ const ProductList = ({
             <table className='table-responsive w-full rounded'>
               <thead>
                 <tr>
-                  <th className='border w-1/4 px-4 py-2'>STT</th>
                   <th className='border w-1/4 px-4 py-2'>Name</th>
                   <th className='border w-1/6 px-4 py-2'>Category</th>
                   <th className='border w-1/6 px-4 py-2'>Photo</th>
@@ -92,7 +110,6 @@ const ProductList = ({
                   result.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
-                        <td className='border px-4 py-2'>{index + 1}</td>
                         <td className='border px-4 py-2'>{item.name}</td>
                         <td className='border px-4 py-2'>
                           {item.category.name}
@@ -211,7 +228,7 @@ const ProductList = ({
                 ? disablePagination.status
                 : false
             }
-            onClick={() => handlePagination({ type: ProductPagination.minus })}
+            onClick={() => handleCountPage({ type: ProductPagination.minus })}
             className='bg-blue-500 mx-1 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow'>
             Prev
           </button>
@@ -221,7 +238,7 @@ const ProductList = ({
                 ? disablePagination.status
                 : false
             }
-            onClick={() => handlePagination({ type: ProductPagination.plus })}
+            onClick={() => handleCountPage({ type: ProductPagination.plus })}
             className='bg-blue-500 mx-1 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow'>
             Next
           </button>
