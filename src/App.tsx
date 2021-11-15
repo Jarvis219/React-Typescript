@@ -14,6 +14,7 @@ import { ListProduct } from "features/admin/pages/Products/ProductSlice";
 import { ListCartUser } from "features/admin/pages/Cart/CartSlice";
 import { getPermission, getUser } from "utils/utils";
 import { ListOrder } from "features/admin/pages/Order/OrderSlice";
+import { ListUsers } from "features/admin/pages/User/UserSlice";
 const Login = lazy(() => import("./features/auth/pages/Login"));
 const Register = lazy(() => import("./features/auth/pages/Register"));
 function App() {
@@ -27,14 +28,14 @@ function App() {
         console.log(error);
       }
     };
-    const getCategories = async () => {
+    const getCategories = async (): Promise<void> => {
       try {
         await dispatch(listCategory());
       } catch (error) {
         console.log(error);
       }
     };
-    const getProducts = async () => {
+    const getProducts = async (): Promise<void> => {
       try {
         await dispatch(ListProduct());
       } catch (error) {
@@ -42,12 +43,21 @@ function App() {
       }
     };
 
-    const getCartUser = async () => {
+    const getCartUser = async (): Promise<void> => {
       try {
         if (!getUser()) return;
         sessionStorage.removeItem("total");
         const { _id } = getUser();
         await dispatch(ListCartUser(_id));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const getUsers = async (): Promise<void> => {
+      try {
+        if (!getUser()) return;
+        await dispatch(ListUsers());
       } catch (error) {
         console.log(error);
       }
@@ -60,6 +70,7 @@ function App() {
     }
     if (auth && auth === 1) {
       getOrder();
+      getUsers();
     }
   }, [dispatch]);
 

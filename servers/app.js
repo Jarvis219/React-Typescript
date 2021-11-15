@@ -11,6 +11,7 @@ const categoryRouters = require("./routes/category");
 const productRouters = require("./routes/product");
 const cartRouters = require("./routes/cart");
 const orderRouters = require("./routes/order");
+const userRouters = require("./routes/user");
 
 //db connection
 mongoose
@@ -38,7 +39,7 @@ app.use("/api", categoryRouters);
 app.use("/api", productRouters);
 app.use("/api", cartRouters);
 app.use("/api", orderRouters);
-
+app.use("/api", userRouters);
 
 const port = process.env.PORT || 8000;
 app.listen(port, () => {

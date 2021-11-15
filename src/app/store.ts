@@ -4,6 +4,7 @@ import CategorySlice from "features/admin/pages/Categories/CategorySlice";
 import ProductSlice from "features/admin/pages/Products/ProductSlice";
 import CartSlice from "features/admin/pages/Cart/CartSlice";
 import OrderSlice from "features/admin/pages/Order/OrderSlice";
+import UserSlice from "features/admin/pages/User/UserSlice";
 
 const rootReducer = {
   auth: authSlice,
@@ -11,6 +12,7 @@ const rootReducer = {
   product: ProductSlice,
   cart: CartSlice,
   order: OrderSlice,
+  user: UserSlice,
 };
 const store = configureStore({
   reducer: rootReducer,

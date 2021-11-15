@@ -11,6 +11,7 @@ export const listUser = (req, res) => {
     res.json(data);
   });
 };
+
 export const userID = (req, res, next, id) => {
   User.findById(id).exec((err, user) => {
     if (err) {
@@ -62,7 +63,7 @@ export const updateUser = (req, res) => {
       }
       data.hashed_password = undefined;
       data.salt = undefined;
-      res.json(data);
+      res.json({ data, message: "Update user successfully" });
     }
   );
 };

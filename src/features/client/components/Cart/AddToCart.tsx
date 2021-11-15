@@ -31,6 +31,7 @@ export const AddToCart = ({ product, id }: any) => {
   }, []);
 
   useEffect(() => {
+    if (!getUser()) return;
     const { _id } = getUser();
     carts.forEach((item: any) => {
       if (item.user === _id && item.product === id) {
@@ -53,6 +54,7 @@ export const AddToCart = ({ product, id }: any) => {
     setLoading(true);
     if (!user) {
       notifyError("Please login before purchasing!");
+      setLoading(false);
       return;
     }
     if (!cart) return;
