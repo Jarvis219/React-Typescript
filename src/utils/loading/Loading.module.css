@@ -1,70 +1,3 @@
-/* KEYFRAMES */
-
-@keyframes spin {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(359deg);
-  }
-}
-
-@keyframes spin3D {
-  from {
-    transform: rotate3d(0.5, 0.5, 0.5, 360deg);
-  }
-  to {
-    transform: rotate3d(0deg);
-  }
-}
-
-@keyframes configure-clockwise {
-  0% {
-    transform: rotate(0);
-  }
-  25% {
-    transform: rotate(90deg);
-  }
-  50% {
-    transform: rotate(180deg);
-  }
-  75% {
-    transform: rotate(270deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes configure-xclockwise {
-  0% {
-    transform: rotate(45deg);
-  }
-  25% {
-    transform: rotate(-45deg);
-  }
-  50% {
-    transform: rotate(-135deg);
-  }
-  75% {
-    transform: rotate(-225deg);
-  }
-  100% {
-    transform: rotate(-315deg);
-  }
-}
-
-@keyframes pulse {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0.25;
-    transform: scale(0.75);
-  }
-}
-
 /* GRID STYLING */
 
 * {
@@ -102,28 +35,28 @@
   width: 165px;
   height: 165px;
   border: 1px solid #91daffa5;
-  -webkit-animation: spin3D 3s linear 0.2s infinite;
+  -webkit-animation: spin3D_loading 3s linear 0.2s infinite;
 }
 
 .green-orbit_loading {
   width: 120px;
   height: 120px;
   border: 1px solid #91ffbfa5;
-  -webkit-animation: spin3D 2s linear 0s infinite;
+  -webkit-animation: spin3D_loading 2s linear 0s infinite;
 }
 
 .red-orbit_loading {
   width: 90px;
   height: 90px;
   border: 1px solid #ffca91a5;
-  -webkit-animation: spin3D 1s linear 0s infinite;
+  -webkit-animation: spin3D_loading 1s linear 0s infinite;
 }
 
 .white-orbit_loading {
   width: 60px;
   height: 60px;
   border: 1px solid #beee38;
-  -webkit-animation: spin3D 10s linear 0s infinite;
+  -webkit-animation: spin3D_loading 10s linear 0s infinite;
 }
 
 .w1_loading {
@@ -136,4 +69,13 @@
 
 .w3_loading {
   transform: rotate3D(0.5, 1, 2, 90deg);
+}
+
+@keyframes spin3D_loading {
+  from {
+    transform: rotate3D(0.4, 0.4, 0.4, 360deg);
+  }
+  to {
+    transform: rotate3D(0.1deg);
+  }
 }

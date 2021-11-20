@@ -13,9 +13,7 @@ module.exports = {
       serif: ['"Roboto Slab"', 'serif'],
       body: ['Roboto', 'sans-serif'],
     },
-    extend: {
-
-    },
+    extend: {},
   },
   variants: {
     opacity: ['responsive', 'group-hover', 'focus-within', 'hover', 'focus'],
