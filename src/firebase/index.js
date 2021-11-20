@@ -21,7 +21,10 @@ provider.setCustomParameters({
 });
 
 export const signInWithGoogle = () =>
-  auth.signInWithPopup(provider).catch((error) => error);
+  auth.signInWithPopup(provider).catch((error) => {
+    console.log('failure');
+    return error
+  });
 
 
 export default firebase;
