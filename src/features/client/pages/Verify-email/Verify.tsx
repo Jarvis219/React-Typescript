@@ -13,7 +13,6 @@ export const Verify = () => {
       dispatch(ActiveAccount(tokenActive));
     }
     activeAccount();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
