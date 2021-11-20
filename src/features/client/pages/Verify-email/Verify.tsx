@@ -1,4 +1,4 @@
-import styles from "./Verify.module.css";
+import styles from "./verify.module.css";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
