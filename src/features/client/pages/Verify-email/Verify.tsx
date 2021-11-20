@@ -1,8 +1,9 @@
-import "./verify.css";
+import styles from "./Verify.module.css";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { ActiveAccount } from "../../../auth/authSlice";
+import clsx from "clsx";
 
 export const Verify = () => {
   const dispatch = useDispatch();
@@ -16,23 +17,23 @@ export const Verify = () => {
   }, []);
   return (
     <div>
-      <div className='body'>
-        <div className='activation'>
+      <div className={clsx(styles["body"], "mb-8")}>
+        <div className={clsx(styles["activation"])}>
           <h1>Successful Activation</h1>
-          <div className='success-animation'>
+          <div className={clsx(styles["success-animation"])}>
             <svg
-              className='checkmark'
+              className={clsx(styles["checkmark"])}
               xmlns='http://www.w3.org/2000/svg'
               viewBox='0 0 52 52'>
               <circle
-                className='checkmark__circle'
+                className={clsx(styles["checkmark__circle"])}
                 cx={26}
                 cy={26}
                 r={25}
                 fill='none'
               />
               <path
-                className='checkmark__check'
+                className={clsx(styles["checkmark__check"])}
                 fill='none'
                 d='M14.1 27.2l7.1 7.2 16.7-16.8'
               />
@@ -45,7 +46,13 @@ export const Verify = () => {
           <div className=' '>
             <Link
               to='/login'
-              className='btn btn-sm animated-button victoria-two uppercase'>
+              className={clsx(
+                styles["btn"],
+                styles["btn-sm"],
+                styles["animated-button"],
+                styles["victoria-two"],
+                "uppercase"
+              )}>
               Login
             </Link>
           </div>

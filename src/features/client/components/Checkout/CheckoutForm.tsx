@@ -132,37 +132,28 @@ export const CheckoutForm = ({ handleOrder, loading }: any) => {
             )}
           </div>
           <div className='space-x-0 lg:flex lg:space-x-4 mt-4'>
-            <div className='flex items-center mr-4 mb-4'>
-              <input
-                id='radio1'
-                type='radio'
-                className='hidden'
-                value='Payment on delivery'
-                defaultChecked
-                {...register("pay")}
-              />
-              <label
-                htmlFor='radio1'
-                className='flex items-center cursor-pointer'>
-                <span className='w-4 h-4 inline-block mr-1 border border-grey' />
-                Payment on delivery
+            <div className='mt-2'>
+              <label className='inline-flex items-center'>
+                <input
+                  type='radio'
+                  className='form-radio'
+                  value='Payment on delivery'
+                  defaultChecked
+                  {...register("pay")}
+                />
+                <span className='ml-2'>Payment on delivery</span>
+              </label>
+              <label className='inline-flex items-center ml-6'>
+                <input
+                  type='radio'
+                  className='form-radio'
+                  value='Bank transfer'
+                  {...register("pay")}
+                />
+                <span className='ml-2'> Bank transfer</span>
               </label>
             </div>
-            <div className='flex items-center mr-4 mb-4'>
-              <input
-                id='radio2'
-                type='radio'
-                value='Bank transfer'
-                className='hidden'
-                {...register("pay")}
-              />
-              <label
-                htmlFor='radio2'
-                className='flex items-center cursor-pointer'>
-                <span className='w-4 h-4 inline-block mr-1 border border-grey' />
-                Bank transfer
-              </label>
-            </div>
+            <div className='flex items-center mr-4 mb-4'></div>
           </div>
           <div className='mt-4 relative'>
             <button

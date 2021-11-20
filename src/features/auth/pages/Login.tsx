@@ -1,6 +1,5 @@
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import "../css/auth.css";
+import { ToastContainer } from "react-toastify";
+import styles from "../css/Auth.module.css";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { regexEmail } from "../../../helpers/user";
 import { Link } from "react-router-dom";
@@ -8,7 +7,14 @@ import { Login as loginSlice } from "../authSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { LoginGoogle } from "./LoginGoogle";
 import { useAppDispatch } from "../../../app/hook";
-import { setToken, setUser, setRefreshToken } from "utils/utils";
+import {
+  setToken,
+  setUser,
+  setRefreshToken,
+  notifyError,
+  notifySuccess,
+} from "utils/utils";
+import clsx from "clsx";
 
 type Inputs = {
   email: string;
@@ -16,9 +22,6 @@ type Inputs = {
 };
 const Login = () => {
   const dispatch = useAppDispatch();
-  const notifyError = (error: string) => toast.error(error);
-  const notifySuccess = (success: string) =>
-    toast.success(success, { icon: "🚀" });
   const {
     register,
     handleSubmit,
@@ -32,7 +35,7 @@ const Login = () => {
     } else {
       try {
         const actionResult: any = await dispatch(loginSlice(data));
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
         const currentUser = unwrapResult(actionResult);
         setToken(currentUser.token);
         setUser(currentUser.user);
@@ -46,42 +49,48 @@ const Login = () => {
   };
 
   return (
-    <div className="img js-fullheight body-container">
-      <section className="ftco-section">
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-md-6 text-center mb-5">
-              <h2 className="heading-section">Register</h2>
+    <div
+      className={clsx(
+        styles["img"],
+        styles["js-fullheight"],
+        styles["body-container"]
+      )}>
+      <section className={clsx(styles["ftco-section"])}>
+        <div className={clsx(styles["container"])}>
+          <div
+            className={clsx(styles["justify-content-center"], styles["row"])}>
+            <div className='col-md-6 text-center mb-5'>
+              <h2 className='text-white'>Login</h2>
             </div>
           </div>
-          <div className="row justify-content-center">
-            <div className="col-md-6 col-lg-4">
-              <div className="login-wrap p-0">
-                <h3 className="mb-4 text-center text-white hover:text-[#00ff50]">
-                  <Link to="/register">No account?</Link>
+          <div
+            className={clsx(styles["justify-content-center"], styles["row"])}>
+            <div className={clsx(styles["col-md-6"], styles["col-lg-4"])}>
+              <div className={clsx(styles["login-wrap"], styles["p-0"])}>
+                <h3 className='mb-4 text-center text-white hover:text-[#00ff50]'>
+                  <Link to='/register'>No account?</Link>
                 </h3>
                 <form
                   onSubmit={handleSubmit(registerSubmit)}
-                  className="signin-form"
-                >
-                  <div className="form-group text-center">
+                  className={clsx(styles["signin-form"])}>
+                  <div className={clsx(styles["form-group"], " text-center")}>
                     <input
-                      type="email"
-                      className="form-control"
-                      placeholder="Email"
+                      type='email'
+                      className={clsx(styles["form-control"])}
+                      placeholder='Email'
                       {...register("email", { required: true, maxLength: 30 })}
                     />
                     {errors.email && (
-                      <span className="text-[#00ff50] font-serif text-xs block -mb-4 ">
+                      <span className='text-[#00ff50] font-serif text-xs block -mb-4 '>
                         This field is required & maximum 30 characters
                       </span>
                     )}
                   </div>
-                  <div className="form-group text-center">
+                  <div className={clsx(styles["form-group"], " text-center")}>
                     <input
-                      type="password"
-                      className="form-control"
-                      placeholder="Password"
+                      type='password'
+                      className={clsx(styles["form-control"])}
+                      placeholder='Password'
                       {...register("password", {
                         required: true,
                         maxLength: 30,
@@ -89,22 +98,27 @@ const Login = () => {
                       })}
                     />
                     {errors.password && (
-                      <span className="text-[#00ff50] font-serif text-xs block -mb-4 ">
+                      <span className='text-[#00ff50] font-serif text-xs block -mb-4 '>
                         This field is required & allowed characters from 7 to 30
                       </span>
                     )}
-                    <span className="fa fa-fw fa-eye field-icon toggle-password" />
+                    <span className='fa fa-fw fa-eye field-icon toggle-password' />
                   </div>
-                  <div className="form-group">
+                  <div className={clsx(styles["form-group"])}>
                     <button
-                      type="submit"
-                      className="form-control btn btn-primary submit px-3"
-                    >
+                      type='submit'
+                      className={clsx(
+                        styles["form-control"],
+                        styles["btn"],
+                        styles["btn-primary"],
+                        styles["submit"],
+                        "px-3"
+                      )}>
                       Login
                     </button>
                   </div>
                 </form>
-                <p className="w-100 text-center">— Or Sign In With —</p>
+                <p className='w-100 text-center'>— Or Sign In With —</p>
                 <LoginGoogle />
               </div>
             </div>

@@ -1,7 +1,5 @@
-/* eslint-disable array-callback-return */
 import { useAppSelector, useAppDispatch } from "app/hook";
 import { ItemCartCheckout } from "features/client/components/Checkout/ItemCartCheckout";
-import "./checkout.css";
 import { Fragment, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import {

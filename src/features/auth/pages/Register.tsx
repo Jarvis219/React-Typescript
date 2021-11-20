@@ -1,12 +1,13 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 import { regexEmail } from "../../../helpers/user";
-import "../css/auth.css";
+import styles from "../css/Auth.module.css";
 import { Register as registerSlice } from "../authSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useAppDispatch } from "../../../app/hook";
+import { notifyError, notifySuccess } from "utils/utils";
+import clsx from "clsx";
 
 type Inputs = {
   name: string;
@@ -16,9 +17,6 @@ type Inputs = {
 };
 const Register = () => {
   const dispatch = useAppDispatch();
-  const notifyError = (error: string) => toast.error(error);
-  const notifySuccess = (success: string) =>
-    toast.success(success, { icon: "🚀" });
   const {
     register,
     handleSubmit,
@@ -50,27 +48,34 @@ const Register = () => {
   };
 
   return (
-    <div className='img js-fullheight body-container'>
-      <section className='ftco-section'>
-        <div className='container'>
-          <div className='row justify-content-center'>
+    <div
+      className={clsx(
+        styles["img"],
+        styles["js-fullheight"],
+        styles["body-container"]
+      )}>
+      <section className={clsx(styles["ftco-section"])}>
+        <div className={clsx(styles["container"])}>
+          <div
+            className={clsx(styles["justify-content-center"], styles["row"])}>
             <div className='col-md-6 text-center mb-5'>
-              <h2 className='heading-section'>Register</h2>
+              <h2 className='text-white'>Register</h2>
             </div>
           </div>
-          <div className='row justify-content-center'>
-            <div className='col-md-6 col-lg-4'>
-              <div className='login-wrap p-0'>
+          <div
+            className={clsx(styles["justify-content-center"], styles["row"])}>
+            <div className={clsx(styles["col-md-6"], styles["col-lg-4"])}>
+              <div className={clsx(styles["login-wrap"], styles["p-0"])}>
                 <h3 className='mb-4 text-center text-white hover:text-[#00ff50]'>
                   <Link to='/login'>Have an account?</Link>
                 </h3>
                 <form
                   onSubmit={handleSubmit(registerSubmit)}
-                  className='signin-form'>
-                  <div className='form-group text-center'>
+                  className={clsx(styles["signin-form"])}>
+                  <div className={clsx(styles["form-group"], " text-center")}>
                     <input
                       type='text'
-                      className='form-control'
+                      className={clsx(styles["form-control"])}
                       placeholder='Name'
                       {...register("name", { required: true, maxLength: 30 })}
                     />
@@ -80,10 +85,10 @@ const Register = () => {
                       </span>
                     )}
                   </div>
-                  <div className='form-group text-center'>
+                  <div className={clsx(styles["form-group"], " text-center")}>
                     <input
                       type='email'
-                      className='form-control'
+                      className={clsx(styles["form-control"])}
                       placeholder='Email'
                       {...register("email", { required: true, maxLength: 30 })}
                     />
@@ -93,10 +98,10 @@ const Register = () => {
                       </span>
                     )}
                   </div>
-                  <div className='form-group text-center'>
+                  <div className={clsx(styles["form-group"], " text-center")}>
                     <input
                       type='password'
-                      className='form-control'
+                      className={clsx(styles["form-control"])}
                       placeholder='Password'
                       {...register("password", {
                         required: true,
@@ -111,10 +116,10 @@ const Register = () => {
                     )}
                     <span className='fa fa-fw fa-eye field-icon toggle-password' />
                   </div>
-                  <div className='form-group text-center'>
+                  <div className={clsx(styles["form-group"], " text-center")}>
                     <input
                       type='password'
-                      className='form-control'
+                      className={clsx(styles["form-control"])}
                       placeholder='Confirm-Password'
                       {...register("confirmPassword", {
                         required: true,
@@ -129,10 +134,16 @@ const Register = () => {
                     )}
                     <span className='fa fa-fw fa-eye field-icon toggle-password' />
                   </div>
-                  <div className='form-group'>
+                  <div className={clsx(styles["form-group"])}>
                     <button
                       type='submit'
-                      className='form-control btn btn-primary submit px-3'
+                      className={clsx(
+                        styles["form-control"],
+                        styles["btn"],
+                        styles["btn-primary"],
+                        styles["submit"],
+                        "px-3"
+                      )}
                       disabled={isSubmitting}>
                       {isSubmitting && (
                         <span className='text-[#00ff50] spinner-border spinner-border-sm mr-1'></span>

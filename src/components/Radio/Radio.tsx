@@ -1,4 +1,3 @@
-import { async } from "@firebase/util";
 import { UserAuth } from "constants/user";
 import { useEffect, useState } from "react";
 
@@ -24,29 +23,29 @@ export default function Radio({ permission, name, handlePermission }: any) {
     }
   };
   return (
-    <div className="mt-2 flex items-center gap-3">
+    <div className='mt-2 flex items-center gap-3'>
       <div>
-        <label className="inline-flex items-center">
+        <label className='inline-flex items-center'>
           <input
-            type="radio"
+            type='radio'
             name={`radio${name}`}
             value={1}
             checked={admin}
             onChange={(e) => handleRadio(e.target.value)}
           />
-          <span className="ml-2">Admin</span>
+          <span className='ml-2'>Admin</span>
         </label>
       </div>
       <div>
-        <label className="inline-flex items-center">
+        <label className='inline-flex items-center'>
           <input
-            type="radio"
+            type='radio'
             name={`radio${name}`}
             value={0}
             checked={member}
             onChange={(e) => handleRadio(e.target.value)}
           />
-          <span className="ml-2">Member</span>
+          <span className='ml-2'>Member</span>
         </label>
       </div>
     </div>

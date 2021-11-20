@@ -1,5 +1,7 @@
 import { Fragment } from "react";
-import "./banner.css";
+import styles from "./Banner.module.css";
+import clsx from "clsx";
+
 export const Banner = () => {
   return (
     <Fragment>
@@ -9,7 +11,7 @@ export const Banner = () => {
         <div className='carousel-inner relative overflow-hidden w-full'>
           {/*Slide 1*/}
           <input
-            className='carousel-open'
+            className={clsx(styles["carousel-open"])}
             type='radio'
             id='carousel-1'
             name='carousel'
@@ -18,7 +20,7 @@ export const Banner = () => {
             defaultChecked={true}
           />
           <div
-            className='carousel-item absolute opacity-0'
+            className={clsx(styles["carousel-item"], "absolute opacity-0")}
             style={{ height: "60vh" }}>
             <div
               className='
@@ -123,7 +125,7 @@ export const Banner = () => {
           </label>
           {/*Slide 2*/}
           <input
-            className='carousel-open'
+            className={clsx(styles["carousel-open"])}
             type='radio'
             id='carousel-2'
             name='carousel'
@@ -131,7 +133,10 @@ export const Banner = () => {
             hidden
           />
           <div
-            className='carousel-item absolute opacity-0 bg-cover bg-right'
+            className={clsx(
+              styles["carousel-item"],
+              "absolute opacity-0 bg-cover bg-right"
+            )}
             style={{ height: "60vh" }}>
             <div
               className='
@@ -236,7 +241,7 @@ export const Banner = () => {
           </label>
           {/*Slide 3*/}
           <input
-            className='carousel-open'
+            className={clsx(styles["carousel-open"])}
             type='radio'
             id='carousel-3'
             name='carousel'
@@ -244,7 +249,7 @@ export const Banner = () => {
             hidden
           />
           <div
-            className='carousel-item absolute opacity-0'
+            className={clsx(styles["carousel-item"], "absolute opacity-0")}
             style={{ height: "60vh" }}>
             <div
               className='
@@ -347,7 +352,7 @@ export const Banner = () => {
             ›
           </label>
           {/* Add additional indicators for each slide*/}
-          <ol className='carousel-indicators'>
+          <ol className={clsx(styles["carousel-indicators"])}>
             <li className='inline-block mr-3'>
               <label
                 htmlFor='carousel-1'
