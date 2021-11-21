@@ -23,6 +23,7 @@ export const registerControllers = async (req, res) => {
     password,
     emailToken: uuidv4(),
   });
+  users.uid=''
 
   if (!users.email || !users.hashed_password || !users.name) {
     return res.status(400).json({

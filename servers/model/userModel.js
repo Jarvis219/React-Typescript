@@ -3,6 +3,8 @@ import crypto from 'crypto';
 import {
     v4 as uuidv4
 } from 'uuid';
+const beautifyUnique = require('mongoose-beautiful-unique-validation');
+
 const UserSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -12,7 +14,6 @@ const UserSchema = new mongoose.Schema({
     },
     uid: {
         type: String,
-        unique: true,
         trim: true,
     },
     photoURL: {
@@ -48,6 +49,8 @@ const UserSchema = new mongoose.Schema({
     timestamps: true
 })
 
+UserSchema.plugin(beautifyUnique)
+
 // xử lý password truyền vào  mã hóa gán cho hashed_password
 UserSchema.virtual('password')
     .set(function (password) {
@@ -68,4 +71,5 @@ UserSchema.methods = {
         }
     }
 }
+
 module.exports = mongoose.model("User", UserSchema)
