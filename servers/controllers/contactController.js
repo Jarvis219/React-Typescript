@@ -8,7 +8,7 @@ export const listContact = (req, res) => {
         error: "Contact does not exit",
       });
     }
-    res.json(data);
+    res.json({ data, message: "Send contact successfully"});
   });
 };
 export const createContact = (req, res) => {
