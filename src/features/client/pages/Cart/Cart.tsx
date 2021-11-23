@@ -59,6 +59,7 @@ const Cart = ({ handleCart, status }: any) => {
     }
     history.push("/check-out");
   };
+
   return (
     <Fragment>
       <div>

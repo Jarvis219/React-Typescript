@@ -26,8 +26,7 @@ export const getUser = (): DataUser => {
 };
 
 export const logout = (): void => {
-  sessionStorage.removeItem("token");
-  sessionStorage.removeItem("user");
+  sessionStorage.clear();
   auth.signOut();
 };
 

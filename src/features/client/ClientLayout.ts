@@ -1,9 +1,9 @@
 import { lazy } from "react";
+import Contact from "./pages/Contact/Contact";
 import Page404 from "./pages/Page404/Page404";
 import { Verify } from "./pages/Verify-email/Verify";
 const Home = lazy(() => import("./pages/Home/Home"));
 const Product = lazy(() => import("./pages/Products/Product"));
-const About = lazy(() => import("./pages/About/About"));
 const ProductCategories = lazy(
   () => import("./pages/Products/ProductCategories")
 );
@@ -30,8 +30,8 @@ const clientLayout = [
     exact: true,
   },
   {
-    path: "/about",
-    component: About,
+    path: "/contact",
+    component: Contact,
     exact: true,
   },
   {

@@ -20,7 +20,7 @@ export const createContact = (req, res) => {
         error: "send contact failure",
       });
     }
-    res.json(data);
+    res.json({ data, message: "Send contact successfully" });
   });
 };
 export const contactID = (req, res, next, id) => {
