@@ -7,23 +7,24 @@ const Menu = () => {
   });
   return (
     <Fragment>
-      <nav className=''>
+      <nav className="">
         <ul
-          className='
+          className="
           md:flex
           items-center
           justify-between
           text-base text-gray-700
           pt-4
           md:pt-0
-        '>
+        "
+        >
           {categories && Array.isArray(categories)
             ? categories.map((item: any, index: number) => {
                 return (
                   <li key={index}>
                     <Link
                       to={`/category/${item._id}`}
-                      className='
+                      className="
                   inline-block
                   no-underline
                   hover:text-black hover:underline
@@ -31,13 +32,28 @@ const Menu = () => {
                   px-4
                   bg-white
                   
-                '>
+                "
+                    >
                       {item.name}
                     </Link>
                   </li>
                 );
               })
             : ""}
+          <li>
+            <Link
+              to="/contact"
+              className="
+                  inline-block
+                  no-underline
+                  hover:text-black hover:underline
+                  py-2
+                  px-4
+                  bg-white"
+            >
+              Contact
+            </Link>
+          </li>
         </ul>
       </nav>
     </Fragment>

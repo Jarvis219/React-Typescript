@@ -8,6 +8,7 @@ const Order = lazy(() => import("./pages/Order/Order"));
 const TrashOrder = lazy(() => import("./pages/Order/TrashOrder"));
 const CompleteOrder = lazy(() => import("./pages/Order/CompleteOrder"));
 const User = lazy(() => import("./pages/User/User"));
+const Contact = lazy(() => import("./pages/Contact/Contact"));
 
 const adminLayout = [
   {
@@ -33,6 +34,11 @@ const adminLayout = [
   {
     path: "/orders",
     component: Order,
+    exact: true,
+  },
+  {
+    path: "/contacts",
+    component: Contact,
     exact: true,
   },
   {

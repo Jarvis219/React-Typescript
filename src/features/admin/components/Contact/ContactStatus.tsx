@@ -1,38 +1,24 @@
-import { Fragment, useEffect, useState, memo } from "react";
-import { ProductStatus } from "constants/product";
+import { Fragment, memo, useEffect, useState } from "react";
 import { ColorBackground } from "constants/color";
+import { ContactStatuss } from "constants/contact";
 
-const StatusProduct = ({
-  statusItem,
-  data,
-  handleUpdateStatusProduct,
-}: any) => {
+const ContactStatus = ({ statusItem, data, handleUpdateContact }) => {
   const [status, setStatus] = useState<Array<string>>([]);
-  useEffect(() => {
-    if (statusItem === ProductStatus.public) {
-      setStatus([
-        ProductStatus.public,
-        ProductStatus.private,
-        ProductStatus.delete,
-      ]);
-    } else if (statusItem === ProductStatus.private) {
-      setStatus([
-        ProductStatus.private,
-        ProductStatus.public,
-        ProductStatus.delete,
-      ]);
-    } else {
-      setStatus([ProductStatus.delete]);
-    }
-    return () => setStatus([]);
-  }, [statusItem]);
 
+  useEffect(() => {
+    if (statusItem === ContactStatuss.NotSeen) {
+      setStatus([ContactStatuss.NotSeen, ContactStatuss.Seen]);
+    } else {
+      setStatus([ContactStatuss.Seen]);
+    }
+
+    return () => setStatus([]);
+  }, [statusItem, data]);
   const setDataStatus = async (e: any) => {
-    await handleUpdateStatusProduct(
+    await handleUpdateContact(
       Object.assign({}, data, { status: e.target.value })
     );
   };
-
   return (
     <Fragment>
       <select
@@ -52,4 +38,5 @@ const StatusProduct = ({
     </Fragment>
   );
 };
-export default memo(StatusProduct);
+
+export default memo(ContactStatus);

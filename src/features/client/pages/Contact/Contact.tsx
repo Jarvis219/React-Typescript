@@ -9,7 +9,6 @@ const Contact = () => {
   const handleSen = async (data: ContactModel): Promise<void> => {
     try {
       await dispatch(CreateContact(data));
-
       notifySuccess("Send contact successfully 👌");
     } catch (error) {
       console.log(error);
@@ -17,7 +16,7 @@ const Contact = () => {
     }
   };
   return (
-    <div className="container mx-auto flex justify-center  gap-10 mt-40">
+    <div className="container mx-auto flex justify-center  gap-10 mt-40 mb-20">
       <FormContact handleSen={handleSen} />
       <Map />
     </div>

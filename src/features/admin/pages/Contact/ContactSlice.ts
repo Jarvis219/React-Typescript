@@ -22,7 +22,7 @@ export const listContact = createAsyncThunk(
   async (thunkApi) => {
     try {
       const { data }: any = await listContactAPI();
-      return data;
+      return data.data;
     } catch (error) {
       return error;
     }
@@ -33,7 +33,7 @@ export const updateContact = createAsyncThunk(
   "update-contact",
   async (contact: any, thunkApi) => {
     try {
-      const { data }: any = await updateContactAPI(contact.id, contact.name);
+      const { data }: any = await updateContactAPI(contact._id, contact);
       return data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
@@ -84,7 +84,7 @@ const contactSlice = createSlice({
       CreateContact.fulfilled,
       (state: initialStateSlice, action: any) => {
         state.loading = false;
-        state.current.push(action.payload.data);
+        state.current.push(action.payload);
       }
     );
 
@@ -123,6 +123,7 @@ const contactSlice = createSlice({
         const index = state.current.findIndex((tutorial: any) => {
           return tutorial._id === action.payload.data._id;
         });
+
         state.current[index] = {
           ...state.current[index],
           ...action.payload.data,
@@ -146,7 +147,7 @@ const contactSlice = createSlice({
         state.loading = false;
 
         let index = state.current.findIndex(
-          (tutorial: any) => tutorial._id === action.payload.data._id
+          (tutorial: any) => tutorial._id === action.payload._id
         );
         state.current.splice(index, 1);
       }

@@ -1,10 +1,13 @@
 import ButtonUI1 from "components/Button/Button";
-import ImageUI from "components/Image/Image";
 import { ColorBackground } from "constants/color";
-import { Fragment, memo } from "react";
-import Premission from "./Premission";
+import { Fragment } from "react";
+import ContactStatus from "./ContactStatus";
 
-const ListUser = ({ users, handleShowDialogDelete }: any) => {
+const ContactList = ({
+  contacts,
+  handleShowDialogDelete,
+  handleUpdateContact,
+}) => {
   return (
     <Fragment>
       <div className="flex flex-1  flex-col md:flex-row lg:flex-row mx-2 text-center">
@@ -13,7 +16,7 @@ const ListUser = ({ users, handleShowDialogDelete }: any) => {
             style={{ backgroundColor: ColorBackground.blue }}
             className="font-bold text-white px-2 py-3 border-solid  border-b uppercase text-center"
           >
-            categories
+            contacts
           </div>
           <div className="p-3">
             <table className="table-responsive w-full rounded">
@@ -22,29 +25,27 @@ const ListUser = ({ users, handleShowDialogDelete }: any) => {
                   <th className="border w-1/7 px-4 py-2">STT</th>
                   <th className="border w-1/2 px-4 py-2">Name</th>
                   <th className="border w-1/2 px-4 py-2">Email</th>
-                  <th className="border w-1/2 px-4 py-2">Photo</th>
-                  <th className="border w-1/2 px-4 py-2">Permission</th>
-                  <th className="border w-1/2 px-4 py-2">Actions</th>
+                  <th className="border w-1/2 px-4 py-2">Phone</th>
+                  <th className="border w-1/2 px-4 py-2">Content</th>
+                  <th className="border w-1/2 px-4 py-2">Status</th>
+                  <th className="border w-1/2 px-4 py-2">Order</th>
                 </tr>
               </thead>
               <tbody className="text-gray-800">
-                {users ? (
-                  users.map((item: any, index: number) => {
+                {contacts ? (
+                  contacts.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
                         <td className="border px-4 py-2">{index + 1}</td>
                         <td className="border px-4 py-2">{item.name}</td>
                         <td className="border px-4 py-2">{item.email}</td>
+                        <td className="border px-4 py-2">0{item.phone}</td>
+                        <td className="border px-4 py-2">{item.content}</td>
                         <td className="border px-4 py-2">
-                          {" "}
-                          {item.photoURl}
-                          <ImageUI photo={item.photoURL} />
-                        </td>
-                        <td className="border px-4 py-2">
-                          <Premission
-                            _id={item._id}
-                            name={index}
-                            permission={item.permission}
+                          <ContactStatus
+                            statusItem={item.status}
+                            data={item}
+                            handleUpdateContact={handleUpdateContact}
                           />
                         </td>
                         <td className="border px-4 py-2">
@@ -108,4 +109,4 @@ const ListUser = ({ users, handleShowDialogDelete }: any) => {
   );
 };
 
-export default memo(ListUser);
+export default ContactList;

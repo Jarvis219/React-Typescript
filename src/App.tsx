@@ -15,6 +15,7 @@ import { ListCartUser } from "features/admin/pages/Cart/CartSlice";
 import { getPermission, getUser } from "utils/utils";
 import { ListOrder } from "features/admin/pages/Order/OrderSlice";
 import { ListUsers } from "features/admin/pages/User/UserSlice";
+import { listContact } from "features/admin/pages/Contact/ContactSlice";
 const Login = lazy(() => import("./features/auth/pages/Login"));
 const Register = lazy(() => import("./features/auth/pages/Register"));
 function App() {
@@ -54,6 +55,14 @@ function App() {
       }
     };
 
+    const getContacts = async (): Promise<void> => {
+      try {
+        await dispatch(listContact());
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     const getUsers = async (): Promise<void> => {
       try {
         if (!getUser()) return;
@@ -72,6 +81,7 @@ function App() {
     if (auth && auth === 1) {
       getUsers();
       getOrder();
+      getContacts();
     }
   }, [dispatch]);
 
