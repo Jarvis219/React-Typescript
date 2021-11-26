@@ -1,132 +1,139 @@
-import { DataUser } from "models/user";
-import { auth } from "firebase";
-import { toast } from "react-toastify";
+import { DataUser } from 'models/user';
+import { auth } from 'firebase';
+import { toast } from 'react-toastify';
 
 export const notifyError = (error: string) => toast.error(error);
 export const notifySuccess = (success: string) =>
-  toast.success(success, { icon: "🚀" });
+	toast.success(success, { icon: '🚀' });
 
 export const setToken = (token: string): void => {
-  sessionStorage.setItem("token", token);
+	sessionStorage.setItem('token', token);
 };
 
 export const getToken = (): string | null => {
-  return !sessionStorage.getItem("token")
-    ? null
-    : sessionStorage.getItem("token")!;
+	return !sessionStorage.getItem('token')
+		? null
+		: sessionStorage.getItem('token')!;
 };
 
 export const setUser = (userData: DataUser): void => {
-  const data = JSON.stringify(userData);
-  sessionStorage.setItem("user", data);
+	const data = JSON.stringify(userData);
+	sessionStorage.setItem('user', data);
 };
 
 export const getUser = (): DataUser => {
-  return JSON.parse(sessionStorage.getItem("user")!);
+	return JSON.parse(sessionStorage.getItem('user')!);
 };
 
 export const logout = (): void => {
-  sessionStorage.clear();
-  auth.signOut();
+	sessionStorage.clear();
+	auth.signOut();
 };
 
 export const setRefreshToken = (refreshToken: string): void => {
-  sessionStorage.setItem("refreshToken", refreshToken);
+	sessionStorage.setItem('refreshToken', refreshToken);
 };
 
 export const getRefreshToken = (): string | null => {
-  return !sessionStorage.getItem("refreshToken")
-    ? null
-    : sessionStorage.getItem("refreshToken")!;
+	return !sessionStorage.getItem('refreshToken')
+		? null
+		: sessionStorage.getItem('refreshToken')!;
 };
 
 export const getPermission = (): number | null => {
-  if (!sessionStorage.getItem("user")) return null;
-  return JSON.parse(sessionStorage.getItem("user")!).permission;
+	if (!sessionStorage.getItem('user')) return null;
+	return JSON.parse(sessionStorage.getItem('user')!).permission;
 };
 
 export const arrayMove = (arr: any, fromIndex: number, toIndex: number = 0) => {
-  let array = [...arr];
-  let element = arr[fromIndex];
-  array.splice(fromIndex, 1);
-  array.splice(toIndex, 0, element);
-  return array;
+	let array = [...arr];
+	let element = arr[fromIndex];
+	array.splice(fromIndex, 1);
+	array.splice(toIndex, 0, element);
+	return array;
 };
 
 export const removeEmptyArray = (array: any): any => {
-  const filtered = array.filter(function (el: any) {
-    return el != null;
-  });
-  return filtered;
+	const filtered = array.filter(function (el: any) {
+		return el != null;
+	});
+	return filtered;
 };
 
 export const setCountProduct = (count: string): void => {
-  sessionStorage.setItem("countProduct", count);
+	sessionStorage.setItem('countProduct', count);
 };
 
 export const setCountOrder = (count: string): void => {
-  sessionStorage.setItem("countOrder", count);
+	sessionStorage.setItem('countOrder', count);
 };
 
 export const getCountOrder = (): void => {
-  if (sessionStorage.getItem("countOrder")) {
-    return JSON.parse(sessionStorage.getItem("countOrder")!);
-  }
+	if (sessionStorage.getItem('countOrder')) {
+		return JSON.parse(sessionStorage.getItem('countOrder')!);
+	}
 };
 
 export const getCountProduct = (): void => {
-  if (sessionStorage.getItem("countProduct")) {
-    return JSON.parse(sessionStorage.getItem("countProduct")!);
-  }
+	if (sessionStorage.getItem('countProduct')) {
+		return JSON.parse(sessionStorage.getItem('countProduct')!);
+	}
 };
 
 export type Pagination = {
-  limit: number;
-  skip: number;
+	limit: number;
+	skip: number;
 };
 
 export const getSortText = (text: string): string => {
-  if (text.length > 21) {
-    return `${text.substr(0, 25)}...`;
-  }
-  return text;
+	if (text.length > 21) {
+		return `${text.substr(0, 25)}...`;
+	}
+	return text;
 };
 
 export const sortText = (text: string, start: number, end: number): string => {
-  return `${text.substr(start, end)} ...`;
+	return `${text.substr(start, end)} ...`;
 };
 
 export const setTotal = (total: number): void => {
-  sessionStorage.setItem("total", total as unknown as string);
+	sessionStorage.setItem('total', total as unknown as string);
 };
 
 export const getTotal = (): number => {
-  if (!sessionStorage.getItem("total")) return 0;
-  return JSON.parse(sessionStorage.getItem("total")!);
+	if (!sessionStorage.getItem('total')) return 0;
+	return JSON.parse(sessionStorage.getItem('total')!);
 };
 
 export const changeDisplayPrices = (
-  price: string | number
+	price: string | number
 ): string | number => {
-  let x = price.toLocaleString("it-IT", {
-    style: "currency",
-    currency: "USD",
-  });
-  return x.toString().substring(0, x.length - 7) + " USD";
+	let x = price.toLocaleString('it-IT', {
+		style: 'currency',
+		currency: 'USD',
+	});
+	return x.toString().substring(0, x.length - 7) + ' USD';
 };
 
 export const setPrice = () => {
-  const arr: any = [];
-  const price = document.querySelectorAll(".product-price-cart");
-  price.forEach((item: any) => {
-    arr.push(+item.innerHTML);
-  });
+	const arr: any = [];
+	const price = document.querySelectorAll('.product-price-cart');
+	price.forEach((item: any) => {
+		arr.push(+item.innerHTML);
+	});
 
-  if (arr.length === 0) {
-    setTotal(0);
-    return;
-  }
-  const reducer = (previousValue: number, currentValue: number) =>
-    previousValue + currentValue;
-  setTotal(arr.reduce(reducer));
+	if (arr.length === 0) {
+		setTotal(0);
+		return;
+	}
+	const reducer = (previousValue: number, currentValue: number) =>
+		previousValue + currentValue;
+	setTotal(arr.reduce(reducer));
+};
+
+export const sumTotal = (...money: any[]): number => {
+	if (money[0].length === 0) return 0;
+	const reducer = (previousValue: number, currentValue: number) =>
+		previousValue + currentValue;
+	return money[0].reduce(reducer);
 };
