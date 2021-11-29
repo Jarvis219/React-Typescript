@@ -137,3 +137,12 @@ export const sumTotal = (...money: any[]): number => {
 		previousValue + currentValue;
 	return money[0].reduce(reducer);
 };
+export const setExpiresIn = (expiresIn: string): void => {
+	if (!expiresIn) return;
+	sessionStorage.setItem('expiresIn', expiresIn);
+};
+
+export const getExpiresIn = (): number => {
+	const expiresIn = sessionStorage.getItem('expiresIn');
+	return Number(expiresIn);
+};

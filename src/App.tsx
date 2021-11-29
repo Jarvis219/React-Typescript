@@ -16,6 +16,7 @@ import { getPermission, getUser } from 'utils/utils';
 import { ListOrder } from 'features/admin/pages/Order/OrderSlice';
 import { ListUsers } from 'features/admin/pages/User/UserSlice';
 import { listContact } from 'features/admin/pages/Contact/ContactSlice';
+import { setInterval } from 'timers';
 const Login = lazy(() => import('./features/auth/pages/Login'));
 const Register = lazy(() => import('./features/auth/pages/Register'));
 function App() {
@@ -84,6 +85,17 @@ function App() {
 		}
 	}, [dispatch]);
 
+	useEffect(() => {
+		const time = sessionStorage.getItem('expiresIn');
+		if (!time) return;
+		const expiresIn = time.slice(0, -1);
+		JSON.stringify(sessionStorage.setItem('exTime', expiresIn));
+		const exTime = setInterval(() => {
+			const ex = (Number(sessionStorage.getItem('exTime')) - 100).toString();
+			JSON.stringify(sessionStorage.setItem('exTime', ex));
+		}, 1000);
+		return () => clearInterval(exTime);
+	}, []);
 	return (
 		<div className='App'>
 			<AuthProvider>
