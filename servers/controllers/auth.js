@@ -526,14 +526,14 @@ exports.signin = (req, res) => {
 					error: 'Email and password not match',
 				});
 			}
-			const expiresIn = '36000s';
+			const expires = '36000s';
 			const token = jwt.sign(
 				{
 					_id: user._id,
 				},
 				process.env.JWT_SECRET,
 				{
-					expiresIn: expiresIn,
+					expiresIn: expires,
 				}
 			);
 
@@ -557,7 +557,7 @@ exports.signin = (req, res) => {
 			return res.json({
 				token,
 				refreshToken,
-				expiresIn,
+				expires,
 				user: {
 					_id,
 					email,
