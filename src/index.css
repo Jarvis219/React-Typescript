@@ -698,6 +698,10 @@ video {
 	height: 5rem;
 }.h-4{
 	height: 1rem;
+}.h-\[100px\]{
+	height: 100px;
+}.h-\[80px\]{
+	height: 80px;
 }.min-h-screen{
 	min-height: 100vh;
 }.w-6{
@@ -2146,6 +2150,10 @@ video {
 		bottom: 7%;
 	}.xl\:ml-\[13\%\]{
 		margin-left: 13%;
+	}.xl\:h-\[500px\]{
+		height: 500px;
+	}.xl\:h-\[300px\]{
+		height: 300px;
 	}.xl\:w-1\/4{
 		width: 25%;
 	}.xl\:w-full{

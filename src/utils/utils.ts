@@ -92,7 +92,12 @@ export const getSortText = (text: string): string => {
 	return text;
 };
 
-export const sortText = (text: string, start: number, end: number): string => {
+export const sortText = (
+	text: string,
+	start: number = 0,
+	end: number
+): string => {
+	if (text.length < 20) return text;
 	return `${text.substr(start, end)} ...`;
 };
 
