@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
-
 import { v4 as uuidv4 } from 'uuid';
 const User = require('../model/userModel');
 const nodemailer = require('nodemailer');
